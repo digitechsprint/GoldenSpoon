@@ -69,7 +69,7 @@ ${allRoutes.map(r => `  <url><loc>${siteUrl}${r}</loc><changefreq>weekly</change
   app.use('/admin', async (req, res) => {
     try {
       if (isProd) {
-        return res.sendFile(path.join(root, 'dist/client/admin.html'))
+        return res.sendFile(path.join(root, 'dist/admin.html'))
       }
       let html = fs.readFileSync(path.join(root, 'admin.html'), 'utf-8')
       html = await vite.transformIndexHtml(req.originalUrl, html)
@@ -100,7 +100,7 @@ ${allRoutes.map(r => `  <url><loc>${siteUrl}${r}</loc><changefreq>weekly</change
         template = await vite.transformIndexHtml(url, template)
         render = (await vite.ssrLoadModule('/src/entry-server.jsx')).render
       } else {
-        template = fs.readFileSync(path.join(root, 'dist/client/index.html'), 'utf-8')
+        template = fs.readFileSync(path.join(root, 'dist/index.html'), 'utf-8')
         render = (await import(path.join(root, 'dist/server/entry-server.js'))).render
       }
 

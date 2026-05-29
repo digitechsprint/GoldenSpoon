@@ -2,11 +2,11 @@
   "version": 2,
   "buildCommand": "npm run build",
   "installCommand": "npm install --include=dev",
-  "outputDirectory": "dist/client",
+  "outputDirectory": "dist",
   "framework": null,
   "functions": {
     "api/index.js": {
-      "includeFiles": "dist/server/**,dist/client/index.html,dist/client/admin.html",
+      "includeFiles": "dist/server/**,dist/index.html,dist/admin.html",
       "maxDuration": 30
     }
   },
