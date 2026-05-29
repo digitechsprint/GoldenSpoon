@@ -82,6 +82,13 @@ ${allRoutes.map(r => `  <url><loc>${siteUrl}${r}</loc><changefreq>weekly</change
     }
   })
 
+  // ── Cache render function + template once at startup (prod only) ─────────
+  let prodTemplate, prodRender
+  if (isProd) {
+    prodTemplate = fs.readFileSync(path.join(root, 'dist/client/index.html'), 'utf-8')
+    prodRender = (await import(path.join(root, 'dist/server/entry-server.js'))).render
+  }
+
   // ── Main site SSR ─────────────────────────────────────────────────────────
   app.use(async (req, res) => {
     try {
@@ -102,8 +109,8 @@ ${allRoutes.map(r => `  <url><loc>${siteUrl}${r}</loc><changefreq>weekly</change
         template = await vite.transformIndexHtml(url, template)
         render = (await vite.ssrLoadModule('/src/entry-server.jsx')).render
       } else {
-        template = fs.readFileSync(path.join(root, 'dist/client/index.html'), 'utf-8')
-        render = (await import(path.join(root, 'dist/server/entry-server.js'))).render
+        template = prodTemplate
+        render = prodRender
       }
 
       const appHtml = await render(url, pageData)
