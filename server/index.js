@@ -3,12 +3,11 @@ import express from 'express'
 import compression from 'compression'
 import fs from 'fs'
 import path from 'path'
-import { fileURLToPath } from 'url'
 import { createSupabaseServerClient } from './lib/supabase.js'
 import { getPageData, buildHead, clearSiteContentCache } from './lib/pageData.js'
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url))
-const root = path.join(__dirname, '..')
+// process.cwd() is the project root both locally and on Vercel (/var/task)
+const root = process.cwd()
 const isProd = process.env.NODE_ENV === 'production'
 const port = process.env.PORT || 3000
 
@@ -26,10 +25,9 @@ export async function createApp() {
       appType: 'custom',
     })
     app.use(vite.middlewares)
-  } else {
-    const sirv = (await import('sirv')).default
-    app.use(sirv(path.join(root, 'dist/client'), { extensions: [] }))
   }
+  // In production, static assets are served by Vercel CDN (outputDirectory in vercel.json)
+  // sirv is not used here.
 
   // ── Sitemap ───────────────────────────────────────────────────────────────
   app.get('/sitemap.xml', async (req, res) => {

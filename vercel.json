@@ -2,6 +2,7 @@
   "version": 2,
   "buildCommand": "npm run build",
   "installCommand": "npm install --include=dev",
+  "outputDirectory": "dist/client",
   "framework": null,
   "functions": {
     "api/index.js": {
@@ -9,10 +10,8 @@
       "maxDuration": 30
     }
   },
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/api/index.js"
-    }
+  "routes": [
+    { "handle": "filesystem" },
+    { "src": "/(.*)", "dest": "/api/index.js" }
   ]
 }
