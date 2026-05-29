@@ -137,27 +137,7 @@ const Menu = () => {
                             </button>
                         ))}
                     </div>
-                    {/* ── Category Image Grid ── */}
-                    {!search && activeCategory==='all' && (
-                    <div className="row" style={{marginBottom:32}}>
-                        <div className="col-lg-12">
-                            <div className="special-menu-list" style={{flexWrap:'wrap',gap:12}}>
-                                {(dbCategories.length>0?dbCategories:MENU_SECTIONS.map(s=>({id:s.id,name:s.name,slug:s.id,image_url:null}))).map((cat,i) => (
-                                    <div key={cat.id} className="special-menu-item wow fadeInUp" data-wow-delay={i*0.05+'s'}
-                                        style={{cursor:'pointer'}} onClick={()=>{setActiveCategory(cat.slug||cat.id);setTimeout(()=>document.getElementById(cat.slug||cat.id)?.scrollIntoView({behavior:'smooth'}),100);}}>
-                                        <div className="special-menu-img">
-                                            <figure className="image-anime">
-                                                <img src={cat.image_url||'/images/golden-spoon-logo.png'} style={{width:'140px',height:'140px',objectFit:'cover'}} alt={cat.name}
-                                                    onError={e=>{e.target.src='/images/golden-spoon-logo.png'}} />
-                                            </figure>
-                                        </div>
-                                        <div className="special-menu-item-content"><h3>{cat.name}</h3></div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-                    )}
+
                 </div>
             </div>
 
