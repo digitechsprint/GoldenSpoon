@@ -61,6 +61,16 @@ const Menu = () => {
         return dbItems.filter(item => item.category_id === categoryId);
     }
 
+    const filteredSections = MENU_SECTIONS
+        .filter(s => activeCategory === 'all' || s.id === activeCategory)
+        .map(s => ({
+            ...s,
+            items: search
+                ? s.items.filter(i => i.name.toLowerCase().includes(search.toLowerCase()))
+                : s.items,
+        }))
+        .filter(s => s.items.length > 0);
+
     return (
         <main>
             <div className="page-header" style={{ position: 'relative', overflow: 'hidden', backgroundImage: 'none', height: '100vh' }}>
