@@ -14,6 +14,6 @@ export default async function handler(req, res) {
     app(req, res)
   } catch (err) {
     console.error('[api/index] app init failed:', err)
-    if (!res.headersSent) res.status(500).send('Internal Server Error')
+    if (!res.headersSent) res.status(500).send(`Error: ${err?.message || String(err)}`)
   }
 }
