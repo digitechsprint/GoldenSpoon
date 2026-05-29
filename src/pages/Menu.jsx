@@ -128,7 +128,21 @@ const Menu = () => {
                         </div>
                     </div>
                     {/* ── Category Filter Pills ── */}
-                    <div className="wow fadeInUp" style={{overflowX:'auto',whiteSpace:'nowrap',padding:'4px 0 16px',marginBottom:8}}>
+                    <style>{`
+                        .gs-filter-scroll{overflow-x:auto;-ms-overflow-style:none;scrollbar-width:none;cursor:grab;}
+                        .gs-filter-scroll::-webkit-scrollbar{display:none;}
+                        .gs-filter-scroll:active{cursor:grabbing;}
+                    `}</style>
+                    <div className="wow fadeInUp gs-filter-scroll" style={{whiteSpace:'nowrap',padding:'4px 0 8px',marginBottom:8}}
+                        ref={el => {
+                            if (!el) return;
+                            let isDown = false, startX, scrollLeft;
+                            el.onmousedown = e => { isDown=true; startX=e.pageX-el.offsetLeft; scrollLeft=el.scrollLeft; };
+                            el.onmouseleave = () => { isDown=false; };
+                            el.onmouseup = () => { isDown=false; };
+                            el.onmousemove = e => { if(!isDown) return; e.preventDefault(); el.scrollLeft = scrollLeft-(e.pageX-el.offsetLeft-startX); };
+                        }}
+                    >
                         <button onClick={() => setActiveCategory('all')} style={{marginRight:10,padding:'9px 22px',borderRadius:50,fontSize:14,fontWeight:600,cursor:'pointer',transition:'all 0.2s',border:activeCategory==='all'?'none':'1.5px solid rgba(255,255,255,0.15)',background:activeCategory==='all'?'#d4a843':'transparent',color:activeCategory==='all'?'#111':'inherit',whiteSpace:'nowrap'}}>All Items</button>
                         {(dbCategories.length > 0 ? dbCategories : MENU_SECTIONS.map(s => ({id:s.id,name:s.name,slug:s.id}))).map(cat => (
                             <button key={cat.id} onClick={() => { setActiveCategory(cat.slug||cat.id); setTimeout(()=>document.getElementById(cat.slug||cat.id)?.scrollIntoView({behavior:'smooth'}),100); }}
