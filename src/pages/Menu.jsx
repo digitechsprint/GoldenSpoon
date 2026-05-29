@@ -78,7 +78,7 @@ const Menu = () => {
                         zIndex: -1 
                     }}
                 >
-                    <source src="/Gallery/video Project 4.mp4" type="video/mp4" />
+                    <source src="/Gallery/video1.mp4" type="video/mp4" />
                 </video>
                 
                 {/* Scroll Down Indicator */}

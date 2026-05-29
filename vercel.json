@@ -5,7 +5,7 @@
   "framework": null,
   "functions": {
     "api/index.js": {
-      "includeFiles": "dist/**",
+      "includeFiles": "dist/server/**,dist/client/index.html,dist/client/admin.html",
       "maxDuration": 30
     }
   },
