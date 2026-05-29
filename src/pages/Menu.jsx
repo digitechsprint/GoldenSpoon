@@ -12,6 +12,8 @@ const Menu = () => {
     const [dbCategories, setDbCategories] = useState([]);
     const [dbItems, setDbItems] = useState([]);
     const [menuLoaded, setMenuLoaded] = useState(false);
+    const [search, setSearch] = useState('');
+    const [activeCategory, setActiveCategory] = useState('all');
     const [added, setAdded] = useState({});
     const { addItem, itemCount, total, setIsOpen } = useCart();
 
@@ -100,91 +102,59 @@ const Menu = () => {
                         </div>
                     </div>
                     
-                    <div className="row">
-                        <div className="col-lg-12">
-                            <div className="special-menu-list">
-                                <div className="special-menu-item wow fadeInUp" data-wow-delay="0s">
-                                    <div className="special-menu-img">
-                                        <a href="#tandoor" data-cursor-text="View">
-                                            <figure className="image-anime">
-                                                <img src="/menu/tandoori-platter.jpeg" style={{width: '200px', height: '200px', objectFit: 'cover'}} alt="Tandoor" />
-                                            </figure>
-                                        </a>
-                                    </div>
-                                    <div className="special-menu-item-content">
-                                        <h3><a href="#tandoor">Tandoor</a></h3>
-                                    </div>
-                                </div>
-                                <div className="special-menu-item wow fadeInUp" data-wow-delay="0.2s">
-                                    <div className="special-menu-img">
-                                        <a href="#wrap-roll" data-cursor-text="View">
-                                            <figure className="image-anime">
-                                                <img src="/menu/veg-roll.jpeg" style={{width: '200px', height: '200px', objectFit: 'cover'}} alt="Wrap & Roll" />
-                                            </figure>
-                                        </a>
-                                    </div>
-                                    <div className="special-menu-item-content">
-                                        <h3><a href="#wrap-roll">Wrap & Roll</a></h3>
-                                    </div>
-                                </div>
-                                <div className="special-menu-item wow fadeInUp" data-wow-delay="0.4s">
-                                    <div className="special-menu-img">
-                                        <a href="#roti-rasoi" data-cursor-text="View">
-                                            <figure className="image-anime">
-                                                <img src="/menu/butter-naan.jpeg" style={{width: '200px', height: '200px', objectFit: 'cover'}} alt="Roti Rasoi" />
-                                            </figure>
-                                        </a>
-                                    </div>
-                                    <div className="special-menu-item-content">
-                                        <h3><a href="#roti-rasoi">Roti Rasoi</a></h3>
-                                    </div>
-                                </div>
-                                <div className="special-menu-item wow fadeInUp" data-wow-delay="0.6000000000000001s">
-                                    <div className="special-menu-img">
-                                        <a href="#sandwiches-burgers" data-cursor-text="View">
-                                            <figure className="image-anime">
-                                                <img src="/menu/veg-burger.jpeg" style={{width: '200px', height: '200px', objectFit: 'cover'}} alt="Sandwiches & Burgers" />
-                                            </figure>
-                                        </a>
-                                    </div>
-                                    <div className="special-menu-item-content">
-                                        <h3><a href="#sandwiches-burgers">Sandwiches & Burgers</a></h3>
-                                    </div>
-                                </div>
-                                <div className="special-menu-item wow fadeInUp" data-wow-delay="0.8s">
-                                    <div className="special-menu-img">
-                                        <a href="#pizza" data-cursor-text="View">
-                                            <figure className="image-anime">
-                                                <img src="/menu/farmhouse-pizza.png" style={{width: '200px', height: '200px', objectFit: 'cover'}} alt="Pizza" />
-                                            </figure>
-                                        </a>
-                                    </div>
-                                    <div className="special-menu-item-content">
-                                        <h3><a href="#pizza">Pizza</a></h3>
-                                    </div>
-                                </div>
-                                <div className="special-menu-item wow fadeInUp" data-wow-delay="1s">
-                                    <div className="special-menu-img">
-                                        <a href="#snacks" data-cursor-text="View">
-                                            <figure className="image-anime">
-                                                <img src="/menu/french-fries.jpeg" style={{width: '200px', height: '200px', objectFit: 'cover'}} alt="Snacks" />
-                                            </figure>
-                                        </a>
-                                    </div>
-                                    <div className="special-menu-item-content">
-                                        <h3><a href="#snacks">Snacks</a></h3>
-                                    </div>
-                                </div>
+                    {/* ── Search Bar ── */}
+                    <div className="row wow fadeInUp" style={{marginBottom:16}}>
+                        <div className="col-lg-6 col-md-8 mx-auto">
+                            <div style={{position:'relative'}}>
+                                <i className="fas fa-search" style={{position:'absolute',left:16,top:'50%',transform:'translateY(-50%)',opacity:0.4,zIndex:1}}></i>
+                                <input
+                                    type="text"
+                                    value={search}
+                                    onChange={e => setSearch(e.target.value)}
+                                    placeholder="Search menu items…"
+                                    style={{width:'100%',padding:'12px 16px 12px 44px',border:'1.5px solid rgba(255,255,255,0.12)',borderRadius:50,background:'rgba(255,255,255,0.05)',color:'inherit',fontSize:15,outline:'none',boxSizing:'border-box'}}
+                                />
                             </div>
                         </div>
                     </div>
+                    {/* ── Category Filter Pills ── */}
+                    <div className="wow fadeInUp" style={{overflowX:'auto',whiteSpace:'nowrap',padding:'4px 0 16px',marginBottom:8}}>
+                        <button onClick={() => setActiveCategory('all')} style={{marginRight:10,padding:'9px 22px',borderRadius:50,fontSize:14,fontWeight:600,cursor:'pointer',transition:'all 0.2s',border:activeCategory==='all'?'none':'1.5px solid rgba(255,255,255,0.15)',background:activeCategory==='all'?'#d4a843':'transparent',color:activeCategory==='all'?'#111':'inherit',whiteSpace:'nowrap'}}>All Items</button>
+                        {(dbCategories.length > 0 ? dbCategories : MENU_SECTIONS.map(s => ({id:s.id,name:s.name,slug:s.id}))).map(cat => (
+                            <button key={cat.id} onClick={() => { setActiveCategory(cat.slug||cat.id); setTimeout(()=>document.getElementById(cat.slug||cat.id)?.scrollIntoView({behavior:'smooth'}),100); }}
+                                style={{marginRight:10,padding:'9px 22px',borderRadius:50,fontSize:14,fontWeight:600,cursor:'pointer',transition:'all 0.2s',border:activeCategory===(cat.slug||cat.id)?'none':'1.5px solid rgba(255,255,255,0.15)',background:activeCategory===(cat.slug||cat.id)?'#d4a843':'transparent',color:activeCategory===(cat.slug||cat.id)?'#111':'inherit',whiteSpace:'nowrap'}}>
+                                {cat.name}
+                            </button>
+                        ))}
+                    </div>
+                    {/* ── Category Image Grid ── */}
+                    {!search && activeCategory==='all' && (
+                    <div className="row" style={{marginBottom:32}}>
+                        <div className="col-lg-12">
+                            <div className="special-menu-list" style={{flexWrap:'wrap',gap:12}}>
+                                {(dbCategories.length>0?dbCategories:MENU_SECTIONS.map(s=>({id:s.id,name:s.name,slug:s.id,image_url:null}))).map((cat,i) => (
+                                    <div key={cat.id} className="special-menu-item wow fadeInUp" data-wow-delay={i*0.05+'s'}
+                                        style={{cursor:'pointer'}} onClick={()=>{setActiveCategory(cat.slug||cat.id);setTimeout(()=>document.getElementById(cat.slug||cat.id)?.scrollIntoView({behavior:'smooth'}),100);}}>
+                                        <div className="special-menu-img">
+                                            <figure className="image-anime">
+                                                <img src={cat.image_url||'/images/golden-spoon-logo.png'} style={{width:'140px',height:'140px',objectFit:'cover'}} alt={cat.name}
+                                                    onError={e=>{e.target.src='/images/golden-spoon-logo.png'}} />
+                                            </figure>
+                                        </div>
+                                        <div className="special-menu-item-content"><h3>{cat.name}</h3></div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                    )}
                 </div>
             </div>
 
             {/* ── Dynamic menu from Supabase (admin-managed) ─────────── */}
             {menuLoaded && dbCategories.length > 0 && (
                 <div className="our-food-menu">
-                    {dbCategories.map(cat => {
+                    {dbCategories.filter(cat => activeCategory === "all" || (cat.slug||cat.id) === activeCategory).map(cat => {
                         const catItems = itemsByCategory(cat.id);
                         if (catItems.length === 0) return null;
                         return (
@@ -262,7 +232,7 @@ const Menu = () => {
             {/* ── Hardcoded menu with Add-to-Cart ── */}
             {(!menuLoaded || dbCategories.length === 0) && (
             <div className="our-food-menu">
-                {MENU_SECTIONS.map(section => (
+                {filteredSections.map(section => (
                     <div className="food-menu-item" id={section.id} key={section.id}>
                         <div className="container">
                             <div className="row">
