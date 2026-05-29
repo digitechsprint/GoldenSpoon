@@ -1,7 +1,10 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { usePageData } from '../context/PageDataContext';
 
 const ImageGallery = () => {
+    const { content: pageContent = {} } = usePageData();
+    const header = pageContent.header || {};
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
@@ -16,7 +19,7 @@ const ImageGallery = () => {
                     <div className="row">
                         <div className="col-lg-12">
                             <div className="page-header-box">
-                                <h1 className="text-anime-style-2" data-cursor="-opaque">gallery</h1>
+                                <h1 className="text-anime-style-2" data-cursor="-opaque">{header.title || 'Image Gallery'}</h1>
                                 <nav className="wow fadeInUp">
                                     <ol className="breadcrumb">
                                         <li className="breadcrumb-item"><Link to="/">home</Link></li>

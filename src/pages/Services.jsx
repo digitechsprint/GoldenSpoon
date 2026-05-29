@@ -1,8 +1,11 @@
 
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { usePageData } from '../context/PageDataContext';
 
 const Services = () => {
+    const { content: pageContent = {} } = usePageData();
+    const header = pageContent.header || {};
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);

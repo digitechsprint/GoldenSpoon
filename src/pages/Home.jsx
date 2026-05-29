@@ -2,8 +2,15 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { googleReviews } from '../data/googleReviews';
+import { usePageData } from '../context/PageDataContext';
 
 const Home = () => {
+    const { content = {} } = usePageData();
+    const hero = content.hero || {};
+    const about = content.about || {};
+    const stats = content.stats || [];
+    const whyChoose = content.why_choose || {};
+
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
@@ -73,20 +80,22 @@ const Home = () => {
                 <div className="col-lg-6">
                     
                     <div className="hero-content">
-                        
                         <div className="section-title">
-                            <h3 className="wow fadeInUp" style={{ textShadow: "1px 1px 4px rgba(0,0,0,0.8)" }}>golden spoon restaurant, noida</h3>
-                            <h1 className="text-anime-style-2" data-cursor="-opaque" style={{ textShadow: "2px 2px 8px rgba(0,0,0,0.8)" }}>Dining in Noida, <span>made memorable</span></h1>
-                            <p className="wow fadeInUp" data-wow-delay="0.2s" style={{ textShadow: "1px 1px 4px rgba(0,0,0,0.9), 0px 0px 10px rgba(0,0,0,0.8)", fontWeight: "500", color: "#ffffff", letterSpacing: "0.5px" }}>At Golden Spoon Restaurant, Noida, every meal is prepared with care, served with warmth, and designed to leave a lasting impression. From everyday cravings to special occasions, we make dining feel easy, flavorful, and inviting.</p>
+                            <h3 className="wow fadeInUp">{hero.badge || 'Golden Spoon Restaurant, Noida'}</h3>
+                            <h1 className="text-anime-style-2" data-cursor="-opaque">
+                                {(hero.title || 'Dining in Noida,\nMade Memorable').split('\n').map((line, i) => (
+                                    <span key={i}>{i === 1 ? <span>{line}</span> : line}{i === 0 && <br />}</span>
+                                ))}
+                            </h1>
+                            <p className="wow fadeInUp" data-wow-delay="0.2s">
+                                {hero.description || 'At Golden Spoon Restaurant, Noida, every meal is prepared with care, served with warmth, and designed to leave a lasting impression.'}
+                            </p>
                         </div>
-                        
-
-                        
                         <div className="hero-btn wow fadeInUp" data-wow-delay="0.4s">
-                            <Link to="/contact" className="btn-default">book a table</Link>
-                            
+                            <Link to={hero.cta_link || '/contact'} className="btn-default">
+                                {hero.cta_text || 'Book A Table'}
+                            </Link>
                         </div>
-                        
                     </div>
                                        
                 </div>

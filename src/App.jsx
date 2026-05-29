@@ -1,6 +1,8 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout';
+import { CartProvider } from './context/CartContext';
+import CartDrawer from './components/CartDrawer';
 import Home from './pages/Home';
 import About from './pages/About';
 import Menu from './pages/Menu';
@@ -19,16 +21,21 @@ import Services from './pages/Services';
 import ServiceSingle from './pages/ServiceSingle';
 import Testimonial from './pages/Testimonial';
 import VideoGallery from './pages/VideoGallery';
+import OrderPage from './pages/OrderPage';
+import Checkout from './pages/Checkout';
+import OrderConfirmation from './pages/OrderConfirmation';
 
 function App() {
   return (
-    <Router>
+    <CartProvider>
+      <CartDrawer />
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="about" element={<About />} />
           <Route path="menu" element={<Menu />} />
           <Route path="blog" element={<Blog />} />
+          <Route path="blog/:slug" element={<BlogSingle />} />
           <Route path="blog-single" element={<BlogSingle />} />
           <Route path="chefs" element={<Chefs />} />
           <Route path="chef-single" element={<ChefSingle />} />
@@ -40,14 +47,17 @@ function App() {
           <Route path="index-slider" element={<IndexSlider />} />
           <Route path="index-video" element={<IndexVideo />} />
           <Route path="404" element={<Page404 />} />
-          <Route path="*" element={<Page404 />} />
           <Route path="services" element={<Services />} />
           <Route path="service-single" element={<ServiceSingle />} />
           <Route path="testimonial" element={<Testimonial />} />
           <Route path="video-gallery" element={<VideoGallery />} />
+          <Route path="order" element={<OrderPage />} />
+          <Route path="checkout" element={<Checkout />} />
+          <Route path="order-confirmation" element={<OrderConfirmation />} />
+          <Route path="*" element={<Page404 />} />
         </Route>
       </Routes>
-    </Router>
+    </CartProvider>
   );
 }
 

@@ -48,7 +48,7 @@
 	--accent-color: #D29829;
 	--divider-color: #FFFFFF1A;
 	--dark-divider-color: #0E110D;
-	--media-overlay-color: rgba(14, 17, 13, 0.30);
+	--media-overlay-color: rgba(14, 17, 13, 0.55);
 	--error-color: rgb(230, 87, 87);
 	--default-font: "Hanken Grotesk", serif;
 }
@@ -64,7 +64,7 @@ html[data-theme='light'] {
 	--accent-color: #D29829;
 	--divider-color: rgba(23, 19, 17, 0.14);
 	--dark-divider-color: #FFFFFF;
-	--media-overlay-color: rgba(14, 17, 13, 0.36);
+	--media-overlay-color: rgba(14, 17, 13, 0.58);
 	color-scheme: light;
 }
 
@@ -75,7 +75,7 @@ html[data-theme='light'] {
 body {
 	position: relative;
 	font-family: var(--default-font);
-	font-size: 18px;
+	font-size: clamp(16px, 1.2vw, 18px);
 	font-weight: 400;
 	line-height: 1em;
 	background-color: var(--dark-divider-color);
@@ -417,7 +417,7 @@ html[data-theme='light'] .btn-default:hover:after {
 }
 
 .section-title h1 {
-	font-size: 68px;
+	font-size: clamp(30px, 3.8vw, 62px);
 	font-weight: 800;
 	line-height: 1.1em;
 	text-transform: uppercase;
@@ -426,7 +426,7 @@ html[data-theme='light'] .btn-default:hover:after {
 }
 
 .section-title h2 {
-	font-size: 42px;
+	font-size: clamp(22px, 2.5vw, 40px);
 	font-weight: 800;
 	text-transform: uppercase;
 	margin-bottom: 0;
@@ -1010,6 +1010,16 @@ html[data-theme='light'] .team-item:hover .team-social-list ul li:hover a {
 .hero-content {
 	position: relative;
 	z-index: 2;
+	background: rgba(8, 10, 8, 0.68);
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
+	border-radius: 16px;
+	padding: 36px 40px;
+	border: 1px solid rgba(212, 168, 67, 0.18);
+	border-left: 4px solid #d4a843;
+	box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
+	display: inline-block;
+	max-width: 600px;
 }
 
 .hero-content .section-title {
@@ -1017,17 +1027,12 @@ html[data-theme='light'] .team-item:hover .team-social-list ul li:hover a {
 }
 
 .hero-content .section-title p {
-	display: inline-block;
-	max-width: 640px;
-	padding: 14px 18px;
-	border-radius: 14px;
-	background: rgba(14, 17, 13, 0.42);
-	border: 1px solid rgba(255, 255, 255, 0.08);
-	box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
-	backdrop-filter: blur(3px);
-	-webkit-backdrop-filter: blur(3px);
+	display: block;
+	max-width: 100%;
 	line-height: 1.8;
-	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55);
+	color: #f0f0f0;
+	text-shadow: none;
+	margin-bottom: 0;
 }
 
 .hero-btn {
@@ -2682,15 +2687,28 @@ html[data-theme='light'] .footer-social-icon ul li:hover a i {
 	background: var(--media-overlay-color);
 }
 
+.page-header .col-lg-12 {
+	text-align: center;
+}
+
 .page-header-box {
 	position: relative;
 	text-align: center;
 	z-index: 1;
+	display: inline-block;
+	background: rgba(8, 10, 8, 0.72);
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
+	border: 1px solid rgba(212, 168, 67, 0.25);
+	border-bottom: 3px solid #d4a843;
+	border-radius: 16px;
+	padding: 36px 52px 28px;
+	box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
 }
 
 .page-header-box h1 {
 	display: inline-block;
-	font-size: 68px;
+	font-size: clamp(28px, 4vw, 62px);
 	font-weight: 800;
 	line-height: 1.1em;
 	text-transform: uppercase;
@@ -4485,11 +4503,11 @@ html[data-theme='light'] .footer-social-icon ul li:hover a i {
 	}
 
 	.section-title h1 {
-		font-size: 50px;
+		font-size: clamp(26px, 3.8vw, 38px);
 	}
 
 	.section-title h2 {
-		font-size: 34px;
+		font-size: clamp(20px, 2.8vw, 30px);
 	}
 
 	.section-btn {
@@ -4921,7 +4939,7 @@ html[data-theme='light'] .footer-social-icon ul li:hover a i {
 	}
 
 	.page-header-box h1 {
-		font-size: 50px;
+		font-size: clamp(26px, 4vw, 40px);
 	}
 
 	.our-approach {
@@ -5388,11 +5406,11 @@ html[data-theme='light'] .footer-social-icon ul li:hover a i {
 	}
 
 	.section-title h1 {
-		font-size: 30px;
+		font-size: clamp(22px, 6vw, 30px);
 	}
 
 	.section-title h2 {
-		font-size: 24px;
+		font-size: clamp(18px, 4.5vw, 24px);
 	}
 
 	.hero-btn {
@@ -5756,7 +5774,7 @@ html[data-theme='light'] .footer-social-icon ul li:hover a i {
 	}
 
 	.page-header-box h1 {
-		font-size: 30px;
+		font-size: clamp(22px, 6vw, 30px);
 	}
 
 	.our-approach::before {
@@ -6102,24 +6120,23 @@ html[data-theme='light'] .reserve-table-form {
     background: #ffffff !important;
 }
 
-/* Force visible border for all input/select fields in both themes */
+/* Form inputs — dark theme card is white, so use dark/visible styles */
 .reserve-table-form .form-control,
 .reserve-table-form .form-select {
-    border: 1px solid rgba(255, 255, 255, 0.25) !important;
-    background-color: rgba(255, 255, 255, 0.05) !important;
-    color: #ffffff !important;
+    border: 1px solid rgba(23, 19, 17, 0.22) !important;
+    background-color: #f8f5f0 !important;
+    color: #1F2120 !important;
     transition: all 0.3s ease !important;
 }
 
-/* Focus styles for inputs in dark theme */
 .reserve-table-form .form-control:focus,
 .reserve-table-form .form-select:focus {
     border-color: var(--accent-color) !important;
-    box-shadow: 0 0 8px rgba(210, 152, 41, 0.4) !important;
-    background-color: rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 0 8px rgba(210, 152, 41, 0.35) !important;
+    background-color: #ffffff !important;
+    outline: none !important;
 }
 
-/* Force visible border for light theme inputs */
 html[data-theme='light'] .reserve-table-form .form-control,
 html[data-theme='light'] .reserve-table-form .form-select {
     border: 1px solid #c1b696 !important;
@@ -6127,7 +6144,6 @@ html[data-theme='light'] .reserve-table-form .form-select {
     color: #171311 !important;
 }
 
-/* Focus styles for light theme inputs */
 html[data-theme='light'] .reserve-table-form .form-control:focus,
 html[data-theme='light'] .reserve-table-form .form-select:focus {
     border-color: var(--accent-color) !important;
@@ -6135,12 +6151,19 @@ html[data-theme='light'] .reserve-table-form .form-select:focus {
     background-color: #ffffff !important;
 }
 
-/* Ensure placeholder is visible in both themes */
 .reserve-table-form .form-control::placeholder {
-    color: rgba(255, 255, 255, 0.5) !important;
+    color: #a89f84 !important;
 }
 html[data-theme='light'] .reserve-table-form .form-control::placeholder {
     color: #a89f84 !important;
+}
+
+/* Dark theme form label fix — card is white so use dark text */
+.reserve-table-form .form-label {
+    color: #1F2120 !important;
+}
+html[data-theme='light'] .reserve-table-form .form-label {
+    color: #171311 !important;
 }
 
 
@@ -6156,4 +6179,219 @@ html[data-theme='light'] .reserve-table-form .form-control::placeholder {
 /* Fix "Reserve Now" button hover text color in light theme (prevent invisible white text on cream background) */
 html[data-theme='light'] .reserve-table-btn .btn-default:hover {
     color: #171311 !important;
+}
+
+/************************************/
+/***  Responsive: 1400px (large)  ***/
+/************************************/
+
+@media only screen and (max-width: 1400px) {
+    .main-menu ul li a {
+        padding: 12px 14px !important;
+    }
+}
+
+/************************************/
+/***  Responsive: 1199px (medium) ***/
+/************************************/
+
+@media only screen and (max-width: 1199px) {
+    .main-menu ul li a {
+        font-size: 14px;
+        padding: 10px 10px !important;
+    }
+
+    .header-social-links {
+        gap: 8px;
+        margin-right: 8px;
+    }
+
+    .header-social-link {
+        width: 38px !important;
+        height: 38px !important;
+        font-size: 16px !important;
+    }
+
+    .theme-toggle-btn {
+        width: 38px;
+        height: 38px;
+    }
+
+    .theme-toggle-btn i {
+        font-size: 16px;
+    }
+
+    .header-btn .btn-default {
+        font-size: 14px;
+        padding: 14px 44px 14px 20px;
+    }
+
+    .navbar-brand img,
+    .site-logo--header {
+        max-height: 64px;
+    }
+
+    body {
+        font-size: 16px;
+    }
+
+    p {
+        font-size: 15px;
+    }
+}
+
+/************************************/
+/***  Responsive: 1099px          ***/
+/************************************/
+
+@media only screen and (max-width: 1099px) {
+    .header-social-links {
+        display: none;
+    }
+
+    .main-menu ul li a {
+        font-size: 13px;
+        padding: 10px 8px !important;
+    }
+
+    .header-btn .btn-default {
+        font-size: 13px;
+        padding: 12px 40px 12px 18px;
+    }
+}
+
+/************************************/
+/***  Responsive: 575px (mobile)  ***/
+/************************************/
+
+@media only screen and (max-width: 575px) {
+    header.main-header {
+        top: 10px !important;
+        width: 96% !important;
+        padding: 0 10px !important;
+    }
+
+    .section-title h1 {
+        font-size: 26px;
+    }
+
+    .section-title h2 {
+        font-size: 20px;
+    }
+
+    body {
+        font-size: 15px;
+    }
+
+    .reserve-table {
+        padding: 40px 0 0;
+    }
+
+    .reserve-table-form {
+        padding: 24px 16px;
+    }
+
+    .reserve-table-form .form-group.col-md-6,
+    .reserve-table-form .form-group.col-md-4 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    .hero {
+        padding: 120px 0 40px;
+    }
+
+    .hero-images {
+        max-width: 90%;
+        padding: 0 20px;
+    }
+
+    .btn-default {
+        font-size: 14px;
+        padding: 13px 46px 13px 22px;
+    }
+}
+
+/************************************/
+/***  Responsive: 420px (xs)      ***/
+/************************************/
+
+@media only screen and (max-width: 420px) {
+    .section-title h1 {
+        font-size: 22px;
+    }
+
+    .section-title h2 {
+        font-size: 18px;
+    }
+
+    .navbar-brand img,
+    .site-logo--header {
+        max-height: 52px;
+    }
+
+    .hero-circle-img-1,
+    .hero-circle-img-2 {
+        display: none;
+    }
+
+    .about-us-image {
+        padding: 0 20px;
+    }
+
+    .about-content-btn {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .daily-offer-btn {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .reserve-table-form {
+        padding: 20px 12px;
+    }
+}
+
+/* ── Readable text box – applied globally to all parallaxie/hero text ── */
+.parallaxie .hero-content,
+.hero .hero-content {
+    display: inline-block;
+    max-width: 600px;
+}
+
+/* Inner pages: about, services, contact, etc. – section text over bg images */
+.parallaxie .section-title:not(.hero-content .section-title),
+.about-content .section-title,
+.contact-info-box,
+.reserve-table-form {
+    position: relative;
+    z-index: 2;
+}
+
+/* Hero heading colors stay white on parallax */
+.hero-content .section-title h1,
+.hero-content .section-title h2,
+.hero-content .section-title h3 {
+    color: #ffffff;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+}
+
+/* Mobile adjustments for the box */
+@media (max-width: 768px) {
+    .hero-content {
+        padding: 24px 20px;
+        max-width: 100%;
+        border-left-width: 3px;
+    }
+
+    .page-header-box {
+        padding: 24px 20px 18px;
+        border-radius: 12px;
+        width: calc(100% - 32px);
+    }
 }
