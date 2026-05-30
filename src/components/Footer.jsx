@@ -42,7 +42,7 @@ const Footer = () => {
                                         <i className="fa-regular fa-clock" style={{color: 'var(--accent-color)', fontSize: '20px'}}></i>
                                     </div>
                                     <div className="footer-contact-content">
-                                        <p>11:00am to 7:00pm</p>
+                                        <p>11:00am to 11:00pm</p>
                                     </div>
                                 </div>
                                 {/* Timing Item End */}

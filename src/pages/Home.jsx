@@ -149,17 +149,6 @@ const Home = () => {
                         </div>
                         
 
-                        
-                        <div className="company-experience">
-                            <div className="icon-box">
-                                <img src="/images/icon-company-experience.svg" alt="" />
-                            </div>
-
-                            <div className="company-experience-content">
-                                <h3><span className="counter">30</span>+ years of experience</h3>
-                            </div>
-                        </div>
-                        
 
                         
                         <div className="about-author-img">
@@ -656,59 +645,6 @@ const Home = () => {
                     
                 </div>
 
-                <div className="col-lg-12 order-3">
-                    
-                    <div className="ingredient-counter-list">
-                        
-                        <div className="ingredient-counter-item">
-                            <div className="icon-box">
-                                <img src="/images/icon-ingredient-counter-1.svg" alt="" />
-                            </div>
-                            <div className="ingredient-counter-content">
-                                <h2><span className="counter">309</span></h2>
-                                <p>Professional chefs</p>
-                            </div>
-                        </div>
-                        
-                        
-                        
-                        <div className="ingredient-counter-item">
-                            <div className="icon-box">
-                                <img src="/images/icon-ingredient-counter-2.svg" alt="" />
-                            </div>
-                            <div className="ingredient-counter-content">
-                                <h2><span className="counter">453</span></h2>
-                                <p>Items of food</p>
-                            </div>
-                        </div>
-                        
-                        
-                        
-                        <div className="ingredient-counter-item">
-                            <div className="icon-box">
-                                <img src="/images/icon-ingredient-counter-3.svg" alt="" />
-                            </div>
-                            <div className="ingredient-counter-content">
-                                <h2><span className="counter">25</span>+</h2>
-                                <p>Years of experience</p>
-                            </div>
-                        </div>
-                        
-                        
-                        
-                        <div className="ingredient-counter-item">
-                            <div className="icon-box">
-                                <img src="/images/icon-ingredient-counter-4.svg" alt="" />
-                            </div>
-                            <div className="ingredient-counter-content">
-                                <h2><span className="counter">300</span>+</h2>
-                                <p>Satisfied clients</p>
-                            </div>
-                        </div>
-                        
-                    </div>
-                    
-                </div>
             </div>
         </div>
     </div>
@@ -874,7 +810,7 @@ const Home = () => {
                         <div className="reserve-table-body wow fadeInUp" data-wow-delay="0.2s">
                             <h3>open hours</h3>
                             <ul>
-                                <li>Mon - Sat <span>11:00 AM - 07:00 PM</span></li>
+                                <li>Mon - Sat <span>11:00 AM - 11:00 PM</span></li>
                             </ul>
                         </div>
                         
@@ -915,12 +851,19 @@ const Home = () => {
                                     <label className="form-label">time</label>
                                     <select name="time" className="form-control form-select" id="time" required>
                                         <option value="" disabled defaultValue>Select time</option>
-                                        <option value="6_30pm">06:30 PM</option>
+                                        <option value="11_00am">11:00 AM</option>
+                                        <option value="12_00pm">12:00 PM</option>
+                                        <option value="1_00pm">01:00 PM</option>
+                                        <option value="2_00pm">02:00 PM</option>
+                                        <option value="3_00pm">03:00 PM</option>
+                                        <option value="4_00pm">04:00 PM</option>
+                                        <option value="5_00pm">05:00 PM</option>
+                                        <option value="6_00pm">06:00 PM</option>
                                         <option value="7_00pm">07:00 PM</option>
-                                        <option value="7_30pm">07:30 PM</option>
                                         <option value="8_00pm">08:00 PM</option>
-                                        <option value="8_30pm">08:30 PM</option>
                                         <option value="9_00pm">09:00 PM</option>
+                                        <option value="10_00pm">10:00 PM</option>
+                                        <option value="11_00pm">11:00 PM</option>
                                     </select>
                                     <div className="help-block with-errors"></div>
                                 </div>

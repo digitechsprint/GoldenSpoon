@@ -13,22 +13,16 @@ const getInitialTheme = () => {
 };
 
 const NAV_LINKS = [
-    { label: 'Home', to: '/', children: [
-        { label: 'Home – Image', to: '/index-2' },
-        { label: 'Home – Video', to: '/index-video' },
-        { label: 'Home – Slider', to: '/index-slider' },
-    ]},
+    { label: 'Home', to: '/' },
     { label: 'About Us', to: '/about' },
     { label: 'Services', to: '/services' },
     { label: 'Menu', to: '/menu' },
     { label: 'Pages', to: '#', children: [
-        { label: 'Our Chefs', to: '/chefs' },
         { label: 'Blog', to: '/blog' },
         { label: 'FAQs', to: '/faqs' },
         { label: 'Image Gallery', to: '/image-gallery' },
         { label: 'Video Gallery', to: '/video-gallery' },
         { label: 'Testimonials', to: '/testimonial' },
-        { label: '404 Page', to: '/404' },
     ]},
     { label: 'Contact Us', to: '/contact' },
 ];
