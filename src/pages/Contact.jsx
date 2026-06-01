@@ -93,45 +93,9 @@ const Contact = () => {
             <div className="page-contact-us">
                 <div className="container">
                     <div className="row align-items-center">
-                        <div className="col-lg-6">
 
-                            <div className="contact-us-content">
-
-                                <div className="section-title">
-                                    <h3 className="wow fadeInUp">contact us</h3>
-                                    <h2 className="text-anime-style-2" data-cursor="-opaque">Get in touch <span>with us</span></h2>
-                                    <p className="wow fadeInUp" data-wow-delay="0.2s">Have questions or feedback? Reach out to us through the form below, call us, or visit our restaurant. We're here to help and look forward to connecting with you!</p>
-                                </div>
-
-
-
-                                <div className="contact-info-list wow fadeInUp" data-wow-delay="0.4s">
-                                    <ul>
-                                        <li style={{display:'flex',alignItems:'flex-start',gap:10}}>
-                                            <i className="fas fa-map-marker-alt" style={{color:'#d4a843',marginTop:3,flexShrink:0}}></i>
-                                            <span>Golden Spoon Restaurant, 111, F Block, Sector 8, Noida, Uttar Pradesh 201301</span>
-                                        </li>
-                                        <li style={{display:'flex',alignItems:'center',gap:10}}>
-                                            <i className="fas fa-phone" style={{color:'#d4a843',flexShrink:0}}></i>
-                                            <a href="tel:9217014763">9217014763</a>
-                                        </li>
-                                    </ul>
-                                </div>
-
-
-
-                                <div className="contact-social-list wow fadeInUp" data-wow-delay="0.6s">
-                                    <ul>
-                                        <li><a href="#"><i className="fa-brands fa-facebook-f"></i></a></li>
-                                        <li><a href="https://www.instagram.com/golden_spoon_restaurrant?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer"><i className="fa-brands fa-instagram"></i></a></li>
-                                    </ul>
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                        <div className="col-lg-6">
+                        {/* Form column — shown FIRST on mobile via order classes */}
+                        <div className="col-lg-6 order-1 order-lg-2">
                             <div className="contact-form">
                                 {contactStatus === 'success' ? (
                                     <div className="wow fadeInUp" style={{textAlign:'center',padding:'40px 20px'}}>
@@ -176,6 +140,40 @@ const Contact = () => {
                                 )}
                             </div>
                         </div>
+
+                        {/* Info column — shown SECOND on mobile */}
+                        <div className="col-lg-6 order-2 order-lg-1">
+                            <div className="contact-us-content">
+
+                                <div className="section-title">
+                                    <h3 className="wow fadeInUp">contact us</h3>
+                                    <h2 className="text-anime-style-2" data-cursor="-opaque">Get in touch <span>with us</span></h2>
+                                    <p className="wow fadeInUp" data-wow-delay="0.2s">Have questions or feedback? Reach out to us through the form below, call us, or visit our restaurant. We're here to help and look forward to connecting with you!</p>
+                                </div>
+
+                                <div className="contact-info-list wow fadeInUp" data-wow-delay="0.4s">
+                                    <ul>
+                                        <li style={{display:'flex',alignItems:'flex-start',gap:10}}>
+                                            <i className="fas fa-map-marker-alt" style={{color:'#d4a843',marginTop:3,flexShrink:0}}></i>
+                                            <span>Golden Spoon Restaurant, 111, F Block, Sector 8, Noida, Uttar Pradesh 201301</span>
+                                        </li>
+                                        <li style={{display:'flex',alignItems:'center',gap:10}}>
+                                            <i className="fas fa-phone" style={{color:'#d4a843',flexShrink:0}}></i>
+                                            <a href="tel:9217014763">9217014763</a>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div className="contact-social-list wow fadeInUp" data-wow-delay="0.6s">
+                                    <ul>
+                                        <li><a href="#"><i className="fa-brands fa-facebook-f"></i></a></li>
+                                        <li><a href="https://www.instagram.com/golden_spoon_restaurrant?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer"><i className="fa-brands fa-instagram"></i></a></li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>

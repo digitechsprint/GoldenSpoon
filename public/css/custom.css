@@ -6408,6 +6408,19 @@ html[data-theme='light'] .reserve-table-btn .btn-default:hover {
 @media (max-width: 768px) {
     .page-header {
         height: 50vh !important;
-        min-height: 280px !important;
+        min-height: 260px !important;
+    }
+}
+@media (max-width: 480px) {
+    .page-header {
+        height: 40vh !important;
+        min-height: 220px !important;
+    }
+    .page-contact-us {
+        padding: 36px 0 !important;
+    }
+    .contact-us-content {
+        margin-top: 32px;
+        margin-bottom: 0 !important;
     }
 }
