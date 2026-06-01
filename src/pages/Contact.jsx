@@ -107,8 +107,14 @@ const Contact = () => {
 
                                 <div className="contact-info-list wow fadeInUp" data-wow-delay="0.4s">
                                     <ul>
-                                        <li>Golden Spoon Restaurant, 111, F Block, Sector 8, Noida, Uttar Pradesh 201301</li>
-                                        <li><a href="tel:9217014763">9217014763</a></li>
+                                        <li style={{display:'flex',alignItems:'flex-start',gap:10}}>
+                                            <i className="fas fa-map-marker-alt" style={{color:'#d4a843',marginTop:3,flexShrink:0}}></i>
+                                            <span>Golden Spoon Restaurant, 111, F Block, Sector 8, Noida, Uttar Pradesh 201301</span>
+                                        </li>
+                                        <li style={{display:'flex',alignItems:'center',gap:10}}>
+                                            <i className="fas fa-phone" style={{color:'#d4a843',flexShrink:0}}></i>
+                                            <a href="tel:9217014763">9217014763</a>
+                                        </li>
                                     </ul>
                                 </div>
 

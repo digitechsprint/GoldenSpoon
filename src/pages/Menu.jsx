@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { usePageData } from '../context/PageDataContext';
 import { supabase } from '../lib/supabase';
 import { useCart } from '../context/CartContext';
@@ -290,7 +289,7 @@ const Menu = () => {
                 ))}
             </div>
             )}
-            {itemCount > 0 ? (
+            {itemCount > 0 && (
                 <button
                     onClick={() => setIsOpen(true)}
                     style={{
@@ -308,23 +307,6 @@ const Menu = () => {
                     <i className="fas fa-shopping-basket"></i>
                     View Cart ({itemCount} item{itemCount !== 1 ? 's' : ''} · ₹{total.toFixed(0)})
                 </button>
-            ) : (
-                <Link
-                    to="/order"
-                    style={{
-                        position: 'fixed', bottom: 32, right: 32, zIndex: 1000,
-                        background: '#d4a843', color: '#111', borderRadius: 50,
-                        padding: '14px 24px', fontSize: 15, fontWeight: 700,
-                        boxShadow: '0 8px 32px rgba(212,168,67,0.5)',
-                        display: 'flex', alignItems: 'center', gap: 10,
-                        textDecoration: 'none', transition: 'transform 0.2s',
-                    }}
-                    onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.05)'}
-                    onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
-                >
-                    <i className="fas fa-utensils"></i>
-                    Order Online
-                </Link>
             )}
         </main>
     );

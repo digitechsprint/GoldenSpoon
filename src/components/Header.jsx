@@ -168,7 +168,8 @@ const Header = () => {
                 .gs-mobile-overlay.open { display: block; }
                 .gs-mobile-menu {
                     position: fixed; top: 0; right: -100%; width: 280px; height: 100%;
-                    background: var(--bg-color, #1a1a1a);
+                    background: var(--secondary-color, #1F2120);
+                    color: var(--primary-color, #ffffff);
                     border-left: 1px solid rgba(255,255,255,0.1);
                     z-index: 999; transition: right 0.3s ease;
                     overflow-y: auto; padding: 20px 0 40px;
@@ -178,26 +179,26 @@ const Header = () => {
                 .gs-mobile-menu-header {
                     display: flex; align-items: center;
                     justify-content: space-between; padding: 0 20px 20px;
-                    border-bottom: 1px solid rgba(255,255,255,0.1);
+                    border-bottom: 1px solid rgba(128,128,128,0.2);
                     margin-bottom: 8px;
                 }
                 .gs-mobile-close {
                     background: none; border: none; font-size: 22px;
-                    cursor: pointer; color: inherit; padding: 4px;
+                    cursor: pointer; color: var(--primary-color, #ffffff); padding: 4px;
                 }
                 .gs-mobile-nav { list-style: none; margin: 0; padding: 0; }
                 .gs-mobile-nav li a {
                     display: flex; align-items: center; justify-content: space-between;
                     padding: 13px 20px; font-size: 15px; font-weight: 600;
-                    text-decoration: none; color: inherit;
-                    border-bottom: 1px solid rgba(255,255,255,0.06);
+                    text-decoration: none; color: var(--primary-color, #ffffff);
+                    border-bottom: 1px solid rgba(128,128,128,0.15);
                     transition: color 0.15s;
                 }
                 .gs-mobile-nav li a:hover { color: #d4a843; }
-                .gs-mobile-sub { list-style: none; margin: 0; padding: 0; background: rgba(255,255,255,0.03); }
+                .gs-mobile-sub { list-style: none; margin: 0; padding: 0; background: rgba(128,128,128,0.06); }
                 .gs-mobile-sub li a {
                     padding: 10px 20px 10px 36px; font-size: 14px;
-                    font-weight: 500; color: inherit; opacity: 0.8;
+                    font-weight: 500; color: var(--primary-color, #ffffff); opacity: 0.8;
                 }
                 .gs-mobile-footer {
                     padding: 20px 20px 0;

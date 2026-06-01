@@ -6395,3 +6395,19 @@ html[data-theme='light'] .reserve-table-btn .btn-default:hover {
         width: calc(100% - 32px);
     }
 }
+
+/* Prevent menu item images from stretching in flex containers */
+.our-menu-image {
+    flex-shrink: 0;
+}
+.our-menu-image figure {
+    overflow: hidden;
+}
+
+/* Reduce full-height video hero on mobile to avoid overwhelming small screens */
+@media (max-width: 768px) {
+    .page-header {
+        height: 50vh !important;
+        min-height: 280px !important;
+    }
+}
