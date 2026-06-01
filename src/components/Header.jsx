@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Link, useLocation } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 
@@ -167,7 +168,7 @@ const Header = () => {
                 }
                 .gs-mobile-overlay.open { display: block; }
                 .gs-mobile-menu {
-                    position: fixed; top: 0; right: -100%; width: 280px; height: 100%;
+                    position: fixed; top: 0; right: -100%; width: 280px; height: 100vh;
                     background: var(--secondary-color, #1F2120);
                     color: var(--primary-color, #ffffff);
                     border-left: 1px solid rgba(255,255,255,0.1);
@@ -308,61 +309,66 @@ const Header = () => {
                     </div>
                 </div>
 
-                {/* Mobile overlay */}
-                <div className={`gs-mobile-overlay${menuOpen ? ' open' : ''}`} onClick={() => setMenuOpen(false)} />
-
-                {/* Mobile drawer */}
-                <nav className={`gs-mobile-menu${menuOpen ? ' open' : ''}`} aria-label="Mobile navigation">
-                    <div className="gs-mobile-menu-header">
-                        <Link to="/" onClick={() => setMenuOpen(false)}>
-                            <img src="/images/golden-spoon-logo.png" alt="Golden Spoon" style={{height:44}} />
-                        </Link>
-                        <button type="button" className="gs-mobile-close" onClick={() => setMenuOpen(false)} aria-label="Close menu">
-                            <i className="fas fa-times"></i>
-                        </button>
-                    </div>
-
-                    <ul className="gs-mobile-nav">
-                        {NAV_LINKS.map(item => (
-                            <li key={item.label}>
-                                {item.children ? (
-                                    <>
-                                        <a href="#" onClick={e => { e.preventDefault(); setOpenDropdown(openDropdown === item.label ? null : item.label); }}>
-                                            {item.label}
-                                            <i className={`fas fa-chevron-${openDropdown === item.label ? 'up' : 'down'}`} style={{fontSize:12,opacity:0.6}}></i>
-                                        </a>
-                                        {openDropdown === item.label && (
-                                            <ul className="gs-mobile-sub">
-                                                {item.children.map(child => (
-                                                    <li key={child.label}>
-                                                        <Link to={child.to} onClick={() => setMenuOpen(false)}>{child.label}</Link>
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        )}
-                                    </>
-                                ) : (
-                                    <Link to={item.to} onClick={() => setMenuOpen(false)}>{item.label}</Link>
-                                )}
-                            </li>
-                        ))}
-                    </ul>
-
-                    <div className="gs-mobile-footer">
-                        <Link to="/contact" className="gs-mobile-book" onClick={() => setMenuOpen(false)}>
-                            Book A Table
-                        </Link>
-                        <div className="gs-mobile-social">
-                            <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
-                                <i className="fa-brands fa-facebook-f"></i>
-                            </a>
-                            <a href="https://www.instagram.com/golden_spoon_restaurrant?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-                                <i className="fa-brands fa-instagram"></i>
-                            </a>
-                        </div>
-                    </div>
-                </nav>
             </header>
+
+            {/* Portal: render overlay + drawer directly on body so position:fixed
+                isn't clipped by the header's transform/backdrop-filter */}
+            {createPortal(
+                <>
+                    <div className={`gs-mobile-overlay${menuOpen ? ' open' : ''}`} onClick={() => setMenuOpen(false)} />
+                    <nav className={`gs-mobile-menu${menuOpen ? ' open' : ''}`} aria-label="Mobile navigation">
+                        <div className="gs-mobile-menu-header">
+                            <Link to="/" onClick={() => setMenuOpen(false)}>
+                                <img src="/images/golden-spoon-logo.png" alt="Golden Spoon" style={{height:44}} />
+                            </Link>
+                            <button type="button" className="gs-mobile-close" onClick={() => setMenuOpen(false)} aria-label="Close menu">
+                                <i className="fas fa-times"></i>
+                            </button>
+                        </div>
+
+                        <ul className="gs-mobile-nav">
+                            {NAV_LINKS.map(item => (
+                                <li key={item.label}>
+                                    {item.children ? (
+                                        <>
+                                            <a href="#" onClick={e => { e.preventDefault(); setOpenDropdown(openDropdown === item.label ? null : item.label); }}>
+                                                {item.label}
+                                                <i className={`fas fa-chevron-${openDropdown === item.label ? 'up' : 'down'}`} style={{fontSize:12,opacity:0.6}}></i>
+                                            </a>
+                                            {openDropdown === item.label && (
+                                                <ul className="gs-mobile-sub">
+                                                    {item.children.map(child => (
+                                                        <li key={child.label}>
+                                                            <Link to={child.to} onClick={() => setMenuOpen(false)}>{child.label}</Link>
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            )}
+                                        </>
+                                    ) : (
+                                        <Link to={item.to} onClick={() => setMenuOpen(false)}>{item.label}</Link>
+                                    )}
+                                </li>
+                            ))}
+                        </ul>
+
+                        <div className="gs-mobile-footer">
+                            <Link to="/contact" className="gs-mobile-book" onClick={() => setMenuOpen(false)}>
+                                Book A Table
+                            </Link>
+                            <div className="gs-mobile-social">
+                                <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                                    <i className="fa-brands fa-facebook-f"></i>
+                                </a>
+                                <a href="https://www.instagram.com/golden_spoon_restaurrant?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                                    <i className="fa-brands fa-instagram"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </nav>
+                </>,
+                document.body
+            )}
         </>
     );
 };
