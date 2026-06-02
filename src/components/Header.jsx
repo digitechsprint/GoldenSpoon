@@ -88,14 +88,16 @@ const Header = () => {
                     list-style: none; margin: 0; padding: 0;
                 }
                 .gs-nav-links > li { position: relative; }
-                .gs-nav-links > li > a {
+                .gs-nav-links > li > a,
+                .gs-nav-links > li > span.nav-link {
                     display: flex; align-items: center; gap: 4px;
                     padding: 8px 10px; font-size: 15px; font-weight: 600;
                     white-space: nowrap; text-decoration: none;
                     color: inherit; border-radius: 6px;
                     transition: color 0.2s;
                 }
-                .gs-nav-links > li > a:hover { color: #d4a843; }
+                .gs-nav-links > li > a:hover,
+                .gs-nav-links > li > span.nav-link:hover { color: #d4a843; }
                 .gs-nav-links > li > a .chevron {
                     font-size: 10px; opacity: 0.6; transition: transform 0.2s;
                 }
@@ -229,7 +231,8 @@ const Header = () => {
 
                 @media (max-width: 1100px) {
                     .gs-social { display: none; }
-                    .gs-nav-links > li > a { padding: 8px 8px; font-size: 14px; }
+                    .gs-nav-links > li > a,
+                    .gs-nav-links > li > span.nav-link { padding: 8px 8px; font-size: 14px; }
                 }
                 @media (max-width: 900px) {
                     .gs-desktop-nav { display: none !important; }

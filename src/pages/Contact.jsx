@@ -42,6 +42,8 @@ const Contact = () => {
             email: contactForm.email,
             phone: contactForm.phone,
             booking_date: new Date().toISOString().split('T')[0],
+            guests: 1,
+            message: contactForm.message || null,
             status: 'pending',
         }]);
         if (error) {

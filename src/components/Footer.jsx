@@ -20,7 +20,7 @@ const Footer = () => {
                                         <img src="/images/icon-location.svg" alt="Location" />
                                     </div>
                                     <div className="footer-contact-content">
-                                        <p>Golden Spoon Restaurrant, 111, F Block, Sector 8, Noida, Uttar Pradesh 201301</p>
+                                        <p>Golden Spoon Restaurant, 111, F Block, Sector 8, Noida, Uttar Pradesh 201301</p>
                                     </div>
                                 </div>
                                 {/* Footer Contact Item End */}
@@ -70,7 +70,7 @@ const Footer = () => {
                         <div className="col-lg-6 col-md-6">
                             {/* Footer Copyright Start */}
                             <div className="footer-copyright-text">
-                                <p>Copyright © 2026 Golden Spoon Restaurrant. All Rights Reserved.</p>
+                                <p>Copyright © 2026 Golden Spoon Restaurant. All Rights Reserved.</p>
                             </div>
                             {/* Footer Copyright End */}
                         </div>

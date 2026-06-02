@@ -1,11 +1,45 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { usePageData } from '../context/PageDataContext';
+import { supabase } from '../lib/supabase';
+
+const TODAY = new Date().toISOString().split('T')[0];
 
 const Faqs = () => {
     const { content: pageContent = {} } = usePageData();
     const header = pageContent.header || {};
+
+    const [faqBooking, setFaqBooking] = useState({ name: '', email: '', phone: '', date: TODAY, time: '', person: '1' });
+    const [faqBookingStatus, setFaqBookingStatus] = useState('');
+
+    function setFaqField(k, v) { setFaqBooking(f => ({ ...f, [k]: v })); }
+
+    async function handleFaqBooking(e) {
+        e.preventDefault();
+        const persons = parseInt(faqBooking.person) || 1;
+        if (persons > 6) {
+            alert('For groups larger than 6, please call us directly at +91 92170 14763 for special arrangements.');
+            return;
+        }
+        setFaqBookingStatus('submitting');
+        const { error } = await supabase.from('bookings').insert([{
+            name: faqBooking.name,
+            email: faqBooking.email,
+            phone: faqBooking.phone,
+            booking_date: faqBooking.date,
+            booking_time: faqBooking.time || null,
+            guests: persons,
+            status: 'pending',
+        }]);
+        if (error) {
+            setFaqBookingStatus('error');
+        } else {
+            setFaqBookingStatus('success');
+            setFaqBooking({ name: '', email: '', phone: '', date: TODAY, time: '', person: '1' });
+        }
+    }
+
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
@@ -72,7 +106,7 @@ const Faqs = () => {
 
                             
                             <div className="cta-contact-btn">
-                                <a href="tel:9217014763" className="btn-default btn-highlighted"><img src="/images/icon-sidebar-cta-phone.svg" alt="" /> +91 92170 14763</a>
+                                <a href="tel:9217014763" className="btn-default btn-highlighted"><i className="fas fa-phone"></i> +91 92170 14763</a>
                             </div>
                             
                         </div>
@@ -463,67 +497,90 @@ const Faqs = () => {
                 <div className="col-lg-6">
                     
                     <div className="reserve-table-form">
-                        <form id="appointmentForm" action="#" method="POST" data-toggle="validator" className="wow fadeInUp">
-                            <div className="row">
-                                <div className="form-group col-md-12 mb-4">
-                                    <label className="form-label">your name</label>
-                                    <input type="text" name="name" className="form-control" id="name" placeholder="e.g. John" required />
-                                    <div className="help-block with-errors"></div>
-                                </div>
+                        {faqBookingStatus === 'success' ? (
+                            <div className="wow fadeInUp" style={{textAlign:'center',padding:'40px 20px'}}>
+                                <i className="fas fa-check-circle" style={{fontSize:48,color:'#d4a843',marginBottom:16,display:'block'}}></i>
+                                <h3 style={{marginBottom:8}}>Reservation Received!</h3>
+                                <p style={{opacity:0.8}}>We'll confirm your table shortly. See you soon!</p>
+                                <button className="btn-default" style={{marginTop:20}} onClick={() => setFaqBookingStatus('')}>Make Another</button>
+                            </div>
+                        ) : (
+                            <form onSubmit={handleFaqBooking} className="wow fadeInUp">
+                                <div className="row">
+                                    <div className="form-group col-md-12 mb-4">
+                                        <label className="form-label">your name</label>
+                                        <input type="text" className="form-control" placeholder="e.g. John" required
+                                            value={faqBooking.name} onChange={e => setFaqField('name', e.target.value)} />
+                                    </div>
 
-                                <div className="form-group col-md-6 mb-4">
-                                    <label className="form-label">email address</label>
-                                    <input type="email" name ="email" className="form-control" id="email" placeholder="e.g. John@example.com" required />
-                                    <div className="help-block with-errors"></div>
-                                </div>
-                                
-                                <div className="form-group col-md-6 mb-4">
-                                    <label className="form-label">phone number</label>
-                                    <input type="text" name="phone" className="form-control" id="phone" placeholder="e.g. +9217014763" required />
-                                    <div className="help-block with-errors"></div>
-                                </div>
+                                    <div className="form-group col-md-6 mb-4">
+                                        <label className="form-label">email address</label>
+                                        <input type="email" className="form-control" placeholder="e.g. John@example.com" required
+                                            value={faqBooking.email} onChange={e => setFaqField('email', e.target.value)} />
+                                    </div>
 
-                                <div className="form-group col-md-4 mb-4">
-                                    <label className="form-label">date</label>
-                                    <input type="date" name="date" className="form-control" id="date" required />
-                                    <div className="help-block with-errors"></div>
-                                </div>
+                                    <div className="form-group col-md-6 mb-4">
+                                        <label className="form-label">phone number</label>
+                                        <input type="text" className="form-control" placeholder="e.g. +91 92170 14763" required
+                                            value={faqBooking.phone} onChange={e => setFaqField('phone', e.target.value)} />
+                                    </div>
 
-                                <div className="form-group col-md-4 mb-4">
-                                    <label className="form-label">time</label>
-                                    <select name="time" className="form-control form-select" id="time" required>
-                                        <option value="" disabled defaultValue>Select time</option>
-                                        <option value="09:00">09:00 AM</option>
-                                        <option value="10:00">10:00 AM</option>
-                                        <option value="11:00">11:00 AM</option>
-                                        <option value="12:00">12:00 PM</option>
-                                        <option value="13:00">01:00 PM</option>
-                                        <option value="14:00">02:00 PM</option>
-                                        <option value="15:00">03:00 PM</option>
-                                        <option value="16:00">04:00 PM</option>
-                                        <option value="17:00">05:00 PM</option>
-                                        <option value="18:00">06:00 PM</option>
-                                        <option value="19:00">07:00 PM</option>
-                                        <option value="20:00">08:00 PM</option>
-                                        <option value="21:00">09:00 PM</option>
-                                    </select>
-                                    <div className="help-block with-errors"></div>
-                                </div>
+                                    <div className="form-group col-md-4 mb-4">
+                                        <label className="form-label">date</label>
+                                        <input type="date" className="form-control" required
+                                            min={TODAY}
+                                            value={faqBooking.date}
+                                            onChange={e => setFaqField('date', e.target.value)} />
+                                    </div>
 
-                                <div className="form-group col-md-4 mb-4">
-                                    <label className="form-label">Number Of Person</label>
-                                    <input type="number" name="person" className="form-control" id="person" placeholder="Type number of person" min="1" required />
-                                    <div className="help-block with-errors"></div>
-                                </div>
+                                    <div className="form-group col-md-4 mb-4">
+                                        <label className="form-label">time</label>
+                                        <select className="form-control form-select" required
+                                            value={faqBooking.time} onChange={e => setFaqField('time', e.target.value)}>
+                                            <option value="" disabled>Select time</option>
+                                            <option value="09:00">09:00 AM</option>
+                                            <option value="10:00">10:00 AM</option>
+                                            <option value="11:00">11:00 AM</option>
+                                            <option value="12:00">12:00 PM</option>
+                                            <option value="13:00">01:00 PM</option>
+                                            <option value="14:00">02:00 PM</option>
+                                            <option value="15:00">03:00 PM</option>
+                                            <option value="16:00">04:00 PM</option>
+                                            <option value="17:00">05:00 PM</option>
+                                            <option value="18:00">06:00 PM</option>
+                                            <option value="19:00">07:00 PM</option>
+                                            <option value="20:00">08:00 PM</option>
+                                            <option value="21:00">09:00 PM</option>
+                                        </select>
+                                    </div>
 
-                                <div className="col-lg-12">
-                                    <div className="reserve-table-btn">
-                                        <button type="submit" className="btn-default">reserve now</button>
-                                        <div id="msgSubmit" className="h3 hidden"></div>
+                                    <div className="form-group col-md-4 mb-2">
+                                        <label className="form-label">Number Of Persons</label>
+                                        <input type="number" className="form-control" min="1" max="6" required
+                                            value={faqBooking.person} onChange={e => setFaqField('person', e.target.value)} />
+                                    </div>
+
+                                    <div className="col-12 mb-4">
+                                        <p style={{fontSize:12,opacity:0.6,margin:0}}>
+                                            <i className="fas fa-info-circle" style={{marginRight:4,color:'#d4a843'}}></i>
+                                            For groups larger than 6, please <a href="tel:9217014763" style={{color:'#d4a843'}}>call us directly</a> for special arrangements.
+                                        </p>
+                                    </div>
+
+                                    {faqBookingStatus === 'error' && (
+                                        <div className="col-12 mb-3" style={{color:'#e74c3c',fontSize:14}}>Something went wrong. Please try again.</div>
+                                    )}
+
+                                    <div className="col-lg-12">
+                                        <div className="reserve-table-btn">
+                                            <button type="submit" className="btn-default" disabled={faqBookingStatus === 'submitting'}>
+                                                {faqBookingStatus === 'submitting' ? 'Reserving…' : 'reserve now'}
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </form>
+                            </form>
+                        )}
                     </div>
                     
                 </div>
