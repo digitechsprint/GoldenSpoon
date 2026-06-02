@@ -72,7 +72,7 @@ const Services = () => {
                         </div>
                         <div className="service-item-content">
                             <h3>Online Table Reservations</h3>
-                            <p>Reserve your table effortlessly through our online booking system for a seamless dining experience.</p>
+                            <p>Submit your table reservation request through our online reservation form and our team will assist you with your booking.</p>
                         </div>
                         <div className="service-readmore-btn">
                             <Link to="/service-single" className="readmore-btn">read more</Link>

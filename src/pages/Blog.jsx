@@ -4,12 +4,12 @@ import { usePageData } from '../context/PageDataContext';
 import { supabase } from '../lib/supabase';
 
 const FALLBACK_POSTS = [
-  { id: '1', title: '5 Tips for Perfecting Your Home Dining Experience', slug: null, featured_image: '/images/post-1.jpg', excerpt: '' },
-  { id: '2', title: 'Why Locally Sourced Ingredients Make a Difference', slug: null, featured_image: '/images/post-2.jpg', excerpt: '' },
-  { id: '3', title: 'Creating Memorable Dining Moments with Friends', slug: null, featured_image: '/images/post-3.jpg', excerpt: '' },
-  { id: '4', title: 'Elevate Your Table Setting with Simple Touches', slug: null, featured_image: '/images/post-4.jpg', excerpt: '' },
-  { id: '5', title: 'Secrets to Cooking Restaurant-Style Meals at Home', slug: null, featured_image: '/images/post-5.jpg', excerpt: '' },
-  { id: '6', title: 'Bringing Family Together Over Delicious Meals', slug: null, featured_image: '/images/post-6.jpg', excerpt: '' },
+  { id: '1', title: '5 Tips for Perfecting Your Home Dining Experience', slug: '5-tips-perfecting-home-dining', featured_image: '/images/post-1.jpg', excerpt: '' },
+  { id: '2', title: 'Why Locally Sourced Ingredients Make a Difference', slug: 'locally-sourced-ingredients', featured_image: '/images/post-2.jpg', excerpt: '' },
+  { id: '3', title: 'Creating Memorable Dining Moments with Friends', slug: 'memorable-dining-moments', featured_image: '/images/post-3.jpg', excerpt: '' },
+  { id: '4', title: 'Elevate Your Table Setting with Simple Touches', slug: 'elevate-table-setting', featured_image: '/images/post-4.jpg', excerpt: '' },
+  { id: '5', title: 'Secrets to Cooking Restaurant-Style Meals at Home', slug: 'restaurant-style-meals-at-home', featured_image: '/images/post-5.jpg', excerpt: '' },
+  { id: '6', title: 'Bringing Family Together Over Delicious Meals', slug: 'family-together-delicious-meals', featured_image: '/images/post-6.jpg', excerpt: '' },
 ];
 
 const Blog = () => {

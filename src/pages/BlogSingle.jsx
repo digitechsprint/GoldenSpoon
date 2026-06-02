@@ -21,9 +21,9 @@ const BlogSingle = () => {
 					<div className="page-header-box">
 						<h1 className="text-anime-style-2" data-cursor="-opaque">5 tips for perfecting your...</h1>
 						<div className="post-single-meta wow fadeInUp">
-							<ol className="breadcrumb">
-                                <li><i className="fa-regular fa-user"></i> admin</li>
-								<li><i className="fa-regular fa-clock"></i> 22 jan 2025</li>
+							<ol className="breadcrumb" style={{color:'#fff'}}>
+                                <li style={{color:'#fff'}}><i className="fa-regular fa-user"></i> admin</li>
+								<li style={{color:'#fff'}}><i className="fa-regular fa-clock"></i> 22 jan 2026</li>
                             </ol>
 						</div>
 					</div>

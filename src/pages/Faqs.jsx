@@ -72,7 +72,7 @@ const Faqs = () => {
 
                             
                             <div className="cta-contact-btn">
-                                <a href="tel:9217014763" className="btn-default btn-highlighted"><img src="/images/icon-sidebar-cta-phone.svg" alt="" /> +9217014763</a>
+                                <a href="tel:9217014763" className="btn-default btn-highlighted"><img src="/images/icon-sidebar-cta-phone.svg" alt="" /> +91 92170 14763</a>
                             </div>
                             
                         </div>
@@ -100,7 +100,7 @@ const Faqs = () => {
                                     </h2>
                                     <div id="collapse1" className="accordion-collapse collapse show" aria-labelledby="heading1" data-bs-parent="#accordion">
                                         <div className="accordion-body">
-                                            <p>We are open Monday to Saturday from 11:00 AM to 07:00 PM. We are closed on Sundays.</p>
+                                            <p>We are open every day (Monday to Sunday) from 9:00 AM to 10:00 PM.</p>
                                         </div>
                                     </div>
                                 </div>
@@ -115,7 +115,7 @@ const Faqs = () => {
                                     </h2>
                                     <div id="collapse2" className="accordion-collapse collapse" aria-labelledby="heading2" data-bs-parent="#accordion">
                                         <div className="accordion-body">
-                                            <p>Yes, we offer both takeout and direct delivery services! You can call us at +91 9217014763 to place your order.</p>
+                                            <p>Yes, we offer both takeout and direct delivery services! You can call us at +91 92170 14763 to place your order.</p>
                                         </div>
                                     </div>
                                 </div>
@@ -358,7 +358,7 @@ const Faqs = () => {
                                     </h2>
                                     <div id="collapse16" className="accordion-collapse collapse show" aria-labelledby="heading16" data-bs-parent="#accordion3">
                                         <div className="accordion-body">
-                                            <p>You can place an order by calling us directly at +91 9217014763 or by visiting our website to place a direct home delivery order.</p>
+                                            <p>You can place an order by calling us directly at +91 92170 14763 or by visiting our website to place a direct home delivery order.</p>
                                         </div>
                                     </div>
                                 </div>
@@ -418,7 +418,7 @@ const Faqs = () => {
                                     </h2>
                                     <div id="collapse20" className="accordion-collapse collapse" aria-labelledby="heading20" data-bs-parent="#accordion3">
                                         <div className="accordion-body">
-                                            <p>If your order is delayed, please contact us immediately at +91 9217014763. We will track the rider and update you on the delivery status.</p>
+                                            <p>If your order is delayed, please contact us immediately at +91 92170 14763. We will track the rider and update you on the delivery status.</p>
                                         </div>
                                     </div>
                                 </div>
@@ -451,7 +451,7 @@ const Faqs = () => {
                         <div className="reserve-table-body wow fadeInUp" data-wow-delay="0.2s">
                             <h3>open hours</h3>
                             <ul>
-                                <li>Mon - Sat <span>11:00 AM - 07:00 PM</span></li>
+                                <li>Mon - Sun <span>09:00 AM - 10:00 PM</span></li>
                                
                             </ul>
                         </div>

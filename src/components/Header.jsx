@@ -18,7 +18,7 @@ const NAV_LINKS = [
     { label: 'About Us', to: '/about' },
     { label: 'Services', to: '/services' },
     { label: 'Menu', to: '/menu' },
-    { label: 'Pages', to: '#', children: [
+    { label: 'Explore', to: '#', children: [
         { label: 'Blog', to: '/blog' },
         { label: 'FAQs', to: '/faqs' },
         { label: 'Image Gallery', to: '/image-gallery' },
