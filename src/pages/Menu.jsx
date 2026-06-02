@@ -52,7 +52,15 @@ const Menu = () => {
             supabase.from('menu_categories').select('*').eq('is_active', true).order('sort_order'),
             supabase.from('menu_items').select('*, menu_categories(name, slug)').eq('is_active', true).order('sort_order'),
         ]);
-        if (!catsRes.error && catsRes.data?.length > 0) setDbCategories(catsRes.data);
+        if (!catsRes.error && catsRes.data?.length > 0) {
+            setDbCategories(catsRes.data);
+            // Auto-select first category so only one section shows at a time
+            const firstSlug = catsRes.data[0]?.slug || catsRes.data[0]?.id;
+            if (firstSlug) setActiveCategory(firstSlug);
+        } else {
+            // Fallback: auto-select first hardcoded section
+            setActiveCategory(MENU_SECTIONS[0]?.id || 'all');
+        }
         if (!itemsRes.error) setDbItems(itemsRes.data || []);
         setMenuLoaded(true);
     }
@@ -150,9 +158,8 @@ const Menu = () => {
                             el.onmousemove = e => { if(!isDown) return; e.preventDefault(); el.scrollLeft = scrollLeft-(e.pageX-el.offsetLeft-startX); };
                         }}
                     >
-                        <button onClick={() => setActiveCategory('all')} style={{marginRight:10,padding:'9px 22px',borderRadius:50,fontSize:14,fontWeight:600,cursor:'pointer',transition:'all 0.2s',border:activeCategory==='all'?'none':'1.5px solid rgba(255,255,255,0.15)',background:activeCategory==='all'?'#d4a843':'transparent',color:activeCategory==='all'?'#111':'inherit',whiteSpace:'nowrap'}}>All Items</button>
                         {(dbCategories.length > 0 ? dbCategories : MENU_SECTIONS.map(s => ({id:s.id,name:s.name,slug:s.id}))).map(cat => (
-                            <button key={cat.id} onClick={() => { setActiveCategory(cat.slug||cat.id); setTimeout(()=>document.getElementById(cat.slug||cat.id)?.scrollIntoView({behavior:'smooth'}),100); }}
+                            <button key={cat.id} onClick={() => { setActiveCategory(cat.slug||cat.id); window.scrollTo({top:280,behavior:'smooth'}); }}
                                 style={{marginRight:10,padding:'9px 22px',borderRadius:50,fontSize:14,fontWeight:600,cursor:'pointer',transition:'all 0.2s',border:activeCategory===(cat.slug||cat.id)?'none':'1.5px solid rgba(255,255,255,0.15)',background:activeCategory===(cat.slug||cat.id)?'#d4a843':'transparent',color:activeCategory===(cat.slug||cat.id)?'#111':'inherit',whiteSpace:'nowrap'}}>
                                 {cat.name}
                             </button>
@@ -174,75 +181,50 @@ const Menu = () => {
                     </div>
                 );
                 return (
-                <div className="our-food-menu">
+                <div style={{padding:'0 0 40px'}}>
                     {visibleCats.map(cat => {
                         const catItems = itemsByCategory(cat.id);
                         if (catItems.length === 0) return null;
                         return (
-                            <div className="food-menu-item" id={cat.slug} key={cat.id}>
+                            <div key={cat.id} id={cat.slug} style={{marginTop:8}}>
                                 <div className="container">
-                                    <div className="row">
-                                        <div className="col-lg-3">
-                                            <div className="food-menu-sidebar">
-                                                <div className="section-title">
-                                                    <h3 className="wow fadeInUp">menu &amp; pricing</h3>
-                                                    <h2 className="text-anime-style-2" data-cursor="-opaque">{cat.name}</h2>
-                                                    {cat.description && <p className="wow fadeInUp" data-wow-delay="0.2s">{cat.description}</p>}
+                                    {/* Compact 2-column grid — no heavy sidebar */}
+                                    <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(320px,1fr))',gap:'12px 20px',padding:'8px 0'}}>
+                                        {catItems.map(item => (
+                                            <div key={item.id} style={{display:'flex',alignItems:'center',gap:14,padding:'14px 16px',background:'var(--secondary-color,rgba(255,255,255,0.03))',borderRadius:14,border:'1px solid rgba(128,128,128,0.1)'}}>
+                                                <img src={item.image_url || '/images/logo.png'}
+                                                    style={{width:72,height:72,objectFit:'cover',borderRadius:'50%',flexShrink:0}}
+                                                    alt={item.name} />
+                                                <div style={{flex:1,minWidth:0}}>
+                                                    <div style={{display:'flex',alignItems:'center',gap:6,flexWrap:'wrap'}}>
+                                                        <span style={{fontWeight:700,fontSize:15}}>
+                                                            {item.name}
+                                                            {item.is_vegetarian && <span style={{marginLeft:4,fontSize:11}}>🌱</span>}
+                                                        </span>
+                                                    </div>
+                                                    {item.description && <p style={{margin:'3px 0 0',fontSize:12,opacity:0.6,lineHeight:1.4,display:'-webkit-box',WebkitLineClamp:2,WebkitBoxOrient:'vertical',overflow:'hidden'}}>{item.description}</p>}
+                                                </div>
+                                                <div style={{display:'flex',flexDirection:'column',alignItems:'flex-end',gap:8,flexShrink:0}}>
+                                                    {item.price && <span style={{fontWeight:700,color:'#d4a843',fontSize:15}}>₹{Number(item.price).toFixed(0)}</span>}
+                                                    {item.price && (
+                                                        getCartQty(item.id) > 0 ? (
+                                                            <div style={{display:'flex',alignItems:'center',background:'#d4a843',borderRadius:8,overflow:'hidden'}}>
+                                                                <button onClick={() => updateQuantity(item.id, getCartQty(item.id) - 1)}
+                                                                    style={{background:'transparent',border:'none',color:'#111',padding:'5px 10px',fontSize:16,fontWeight:700,cursor:'pointer'}}>−</button>
+                                                                <span style={{color:'#111',fontWeight:700,fontSize:14,minWidth:18,textAlign:'center'}}>{getCartQty(item.id)}</span>
+                                                                <button onClick={() => updateQuantity(item.id, getCartQty(item.id) + 1)}
+                                                                    style={{background:'transparent',border:'none',color:'#111',padding:'5px 10px',fontSize:16,fontWeight:700,cursor:'pointer'}}>+</button>
+                                                            </div>
+                                                        ) : (
+                                                            <button onClick={() => handleAdd(item)}
+                                                                style={{background:'#d4a843',color:'#111',border:'none',borderRadius:8,padding:'6px 14px',fontSize:13,fontWeight:700,cursor:'pointer'}}>
+                                                                + Add
+                                                            </button>
+                                                        )
+                                                    )}
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div className="col-lg-9">
-                                            <div className="our-menu-list">
-                                                {catItems.map((item, idx) => (
-                                                    <div key={item.id} className="our-menu-item wow fadeInUp" data-wow-delay={`${(idx % 5) * 0.2}s`}>
-                                                        <div className="our-menu-image">
-                                                            <figure>
-                                                                <img
-                                                                    src={item.image_url || '/images/logo.png'}
-                                                                    style={{width:'100px',height:'100px',objectFit:'cover',borderRadius:'50%'}}
-                                                                    alt={item.name}
-                                                                />
-                                                            </figure>
-                                                        </div>
-                                                        <div className="menu-item-body">
-                                                            <div className="menu-item-title" style={{alignItems:'center'}}>
-                                                                <h3>
-                                                                    {item.name}
-                                                                    {item.is_vegetarian && <span style={{marginLeft:6,fontSize:12,opacity:0.7}}>🌱</span>}
-                                                                </h3>
-                                                                <hr style={{alignSelf:'center',flex:1,margin:'0 15px'}} />
-                                                                <div style={{display:'flex',alignItems:'center',gap:12,whiteSpace:'nowrap'}}>
-                                                                    <span style={{fontWeight:700}}>
-                                                                        {item.price ? `₹${Number(item.price).toFixed(0)}` : ''}
-                                                                    </span>
-                                                                    {item.price && (
-                                                                        getCartQty(item.id) > 0 ? (
-                                                                            <div style={{display:'flex',alignItems:'center',gap:0,background:'#d4a843',borderRadius:8,overflow:'hidden'}}>
-                                                                                <button onClick={() => updateQuantity(item.id, getCartQty(item.id) - 1)}
-                                                                                    style={{background:'transparent',border:'none',color:'#111',padding:'7px 12px',fontSize:16,fontWeight:700,cursor:'pointer',lineHeight:1}}>−</button>
-                                                                                <span style={{color:'#111',fontWeight:700,fontSize:14,minWidth:20,textAlign:'center'}}>{getCartQty(item.id)}</span>
-                                                                                <button onClick={() => updateQuantity(item.id, getCartQty(item.id) + 1)}
-                                                                                    style={{background:'transparent',border:'none',color:'#111',padding:'7px 12px',fontSize:16,fontWeight:700,cursor:'pointer',lineHeight:1}}>+</button>
-                                                                            </div>
-                                                                        ) : (
-                                                                            <button onClick={() => handleAdd(item)}
-                                                                                style={{background:'#d4a843',color:'#111',border:'none',borderRadius:8,padding:'7px 16px',fontSize:13,fontWeight:700,cursor:'pointer',transition:'all 0.2s'}}>
-                                                                                + Add
-                                                                            </button>
-                                                                        )
-                                                                    )}
-                                                                </div>
-                                                            </div>
-                                                            {item.description && (
-                                                                <div className="menu-item-content">
-                                                                    <p>{item.description}</p>
-                                                                </div>
-                                                            )}
-                                                        </div>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </div>
+                                        ))}
                                     </div>
                                 </div>
                             </div>
@@ -256,34 +238,17 @@ const Menu = () => {
 
             {/* ── Hardcoded menu with Add-to-Cart ── */}
             {(!menuLoaded || dbCategories.length === 0) && (
-            <div className="our-food-menu">
+            <div style={{padding:'0 0 40px'}}>
                 {filteredSections.map(section => (
-                    <div className="food-menu-item" id={section.id} key={section.id}>
+                    <div id={section.id} key={section.id} style={{marginTop:8}}>
                         <div className="container">
-                            <div className="row">
-                                <div className="col-lg-3">
-                                    <div className="food-menu-sidebar">
-                                        <div className="section-title">
-                                            <h3 className="wow fadeInUp">menu &amp; pricing</h3>
-                                            <h2 className="text-anime-style-2" data-cursor="-opaque">{section.name}</h2>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="col-lg-9">
-                                    <div className="our-menu-list">
-                                        {section.items.map((item, idx) => (
-                                            <div key={item.name} className="our-menu-item wow fadeInUp" data-wow-delay={`${(idx % 5) * 0.2}s`}>
-                                                <div className="our-menu-image">
-                                                    <figure>
-                                                        <img src={item.img} style={{width:'100px',height:'100px',objectFit:'cover',borderRadius:'50%'}} alt={item.name} onError={e => { e.target.src = '/images/logo.png' }} />
-                                                    </figure>
-                                                </div>
-                                                <div className="menu-item-body">
-                                                    <div className="menu-item-title" style={{display:'flex',alignItems:'center',flexWrap:'nowrap'}}>
-                                                        <h3 style={{margin:0}}>{item.name}</h3>
-                                                        <hr style={{flex:1,margin:'0 12px',minWidth:16,alignSelf:'center'}} />
-                                                    </div>
-                                                    <div style={{display:'flex',alignItems:'center',gap:8,marginTop:10}}>
+                            <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(320px,1fr))',gap:'12px 20px',padding:'8px 0'}}>
+                                        {section.items.map((item) => (
+                                            <div key={item.name} style={{display:'flex',alignItems:'center',gap:14,padding:'14px 16px',background:'var(--secondary-color,rgba(255,255,255,0.03))',borderRadius:14,border:'1px solid rgba(128,128,128,0.1)'}}>
+                                                <img src={item.img} style={{width:72,height:72,objectFit:'cover',borderRadius:'50%',flexShrink:0}} alt={item.name} onError={e => { e.target.src = '/images/logo.png' }} />
+                                                <div style={{flex:1,minWidth:0}}>
+                                                    <span style={{fontWeight:700,fontSize:15}}>{item.name}</span>
+                                                    <div style={{display:'flex',alignItems:'center',gap:8,marginTop:8,flexWrap:'wrap'}}>
                                                         {item.prices.Half && (() => {
                                                             const hid = item.name + '-half';
                                                             const qty = getCartQty(hid);
@@ -324,7 +289,7 @@ const Menu = () => {
                                             </div>
                                         ))}
                                     </div>
-                                </div>
+                                ))}
                             </div>
                         </div>
                     </div>
