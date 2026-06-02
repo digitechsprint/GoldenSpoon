@@ -530,7 +530,8 @@ const Faqs = () => {
                                         <input type="date" className="form-control" required
                                             min={TODAY}
                                             value={faqBooking.date}
-                                            onChange={e => setFaqField('date', e.target.value)} />
+                                            onChange={e => setFaqField('date', e.target.value)}
+                                            onKeyDown={e => e.preventDefault()} />
                                     </div>
 
                                     <div className="form-group col-md-4 mb-4">

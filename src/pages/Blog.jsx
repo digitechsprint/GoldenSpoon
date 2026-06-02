@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { usePageData } from '../context/PageDataContext';
 import { supabase } from '../lib/supabase';
 
+const TODAY = new Date().toISOString().split('T')[0];
+
 const FALLBACK_POSTS = [
   { id: '1', title: '5 Tips for Perfecting Your Home Dining Experience', slug: '5-tips-perfecting-home-dining', featured_image: '/images/post-1.jpg', excerpt: '' },
   { id: '2', title: 'Why Locally Sourced Ingredients Make a Difference', slug: 'locally-sourced-ingredients', featured_image: '/images/post-2.jpg', excerpt: '' },
@@ -17,7 +19,7 @@ const Blog = () => {
     const header = pageContent.header || {};
     const [posts, setPosts] = useState(FALLBACK_POSTS);
     const [loadingPosts, setLoadingPosts] = useState(true);
-    const [bookingForm, setBookingForm] = useState({ name: '', email: '', phone: '', date: '', time: '', person: '' });
+    const [bookingForm, setBookingForm] = useState({ name: '', email: '', phone: '', date: TODAY, time: '', person: '1' });
     const [bookingStatus, setBookingStatus] = useState(''); // '' | 'submitting' | 'success' | 'error'
 
     useEffect(() => {
@@ -48,6 +50,11 @@ const Blog = () => {
 
     async function handleBooking(e) {
         e.preventDefault();
+        const persons = parseInt(bookingForm.person) || 1;
+        if (persons > 6) {
+            alert('For groups larger than 6, please call us at +91 92170 14763 for special arrangements.');
+            return;
+        }
         setBookingStatus('submitting');
 
         const { error } = await supabase.from('bookings').insert([{
@@ -56,7 +63,7 @@ const Blog = () => {
             phone: bookingForm.phone,
             booking_date: bookingForm.date,
             booking_time: bookingForm.time || null,
-            guests: parseInt(bookingForm.person) || 2,
+            guests: persons,
             status: 'pending',
         }]);
 
@@ -64,7 +71,7 @@ const Blog = () => {
             setBookingStatus('error');
         } else {
             setBookingStatus('success');
-            setBookingForm({ name: '', email: '', phone: '', date: '', time: '', person: '' });
+            setBookingForm({ name: '', email: '', phone: '', date: TODAY, time: '', person: '1' });
         }
     }
 
@@ -183,8 +190,10 @@ const Blog = () => {
                                             </div>
                                             <div className="form-group col-md-4 mb-4">
                                                 <label className="form-label">date</label>
-                                                <input type="date" className="form-control" required
-                                                    value={bookingForm.date} onChange={e => setBookingField('date', e.target.value)} />
+                                                <input type="date" className="form-control" required min={TODAY}
+                                                    value={bookingForm.date}
+                                                    onChange={e => setBookingField('date', e.target.value)}
+                                                    onKeyDown={e => e.preventDefault()} />
                                             </div>
                                             <div className="form-group col-md-4 mb-4">
                                                 <label className="form-label">time</label>
@@ -204,8 +213,9 @@ const Blog = () => {
                                             </div>
                                             <div className="form-group col-md-4 mb-4">
                                                 <label className="form-label">Number Of Persons</label>
-                                                <input type="number" className="form-control" placeholder="No. of guests" min="1" required
-                                                    value={bookingForm.person} onChange={e => setBookingField('person', e.target.value)} />
+                                                <input type="number" className="form-control" min="1" max="6" required
+                                                    value={bookingForm.person}
+                                                    onChange={e => setBookingField('person', String(Math.min(6, Math.max(1, parseInt(e.target.value) || 1))))} />
                                             </div>
                                             {bookingStatus === 'error' && (
                                                 <div className="col-12 mb-3" style={{color:'#e74c3c',fontSize:14}}>
