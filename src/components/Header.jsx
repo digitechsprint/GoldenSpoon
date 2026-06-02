@@ -254,10 +254,14 @@ const Header = () => {
                         <ul className="gs-nav-links gs-desktop-nav">
                             {NAV_LINKS.map(item => (
                                 <li key={item.label} className={item.children ? 'nav-item submenu' : 'nav-item'}>
-                                    <Link className="nav-link" to={item.to}>
-                                        {item.label}
-                                        {item.children && <i className="fas fa-chevron-down chevron" style={{fontSize:10,marginLeft:4}}></i>}
-                                    </Link>
+                                    {item.children ? (
+                                        <span className="nav-link" style={{cursor:'pointer'}}>
+                                            {item.label}
+                                            <i className="fas fa-chevron-down chevron" style={{fontSize:10,marginLeft:4}}></i>
+                                        </span>
+                                    ) : (
+                                        <Link className="nav-link" to={item.to}>{item.label}</Link>
+                                    )}
                                     {item.children && (
                                         <ul className="gs-dropdown">
                                             {item.children.map(child => (

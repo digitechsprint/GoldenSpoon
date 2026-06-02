@@ -109,7 +109,7 @@ const Home = () => {
                     
                     <div className="hero-content">
                         <div className="section-title">
-                            <h3 className="wow fadeInUp">{hero.badge || 'Golden Spoon Restaurrant, Noida'}</h3>
+                            <h3 className="wow fadeInUp">{(hero.badge || 'Golden Spoon Restaurrant, Noida').replace('Restaurant', 'Restaurrant')}</h3>
                             <h1 className="text-anime-style-2" data-cursor="-opaque">
                                 {(hero.title || 'Dining in Noida,\nMade Memorable').split('\n').map((line, i) => (
                                     <span key={i}>{i === 1 ? <span>{line}</span> : line}{i === 0 && <br />}</span>
@@ -712,7 +712,7 @@ const Home = () => {
                     
                     <div className="post-item wow fadeInUp">
                         <div className="post-featured-image">
-                            <Link to="/blog-single" data-cursor-text="View">
+                            <Link to="/blog/5-tips-perfecting-home-dining" data-cursor-text="View">
                                 <figure className="image-anime">
                                     <img src="/images/post-1.jpg" alt="" />
                                 </figure>
@@ -720,21 +720,21 @@ const Home = () => {
                         </div>
                         <div className="blog-item-body">
                             <div className="post-item-content">
-                                <h3><Link to="/blog-single">5 Tips for Perfecting Your Home Dining Experience</Link></h3>
+                                <h3><Link to="/blog/5-tips-perfecting-home-dining">5 Tips for Perfecting Your Home Dining Experience</Link></h3>
                             </div>
                             <div className="blog-item-btn">
-                                <Link to="/blog-single" className="readmore-btn">read more</Link>
+                                <Link to="/blog/5-tips-perfecting-home-dining" className="readmore-btn">read more</Link>
                             </div>
                         </div>
                     </div>
-                    
+
                 </div>
 
                 <div className="col-lg-4 col-md-6">
-                    
+
                     <div className="post-item wow fadeInUp" data-wow-delay="0.2s">
                         <div className="post-featured-image">
-                            <Link to="/blog-single" data-cursor-text="View">
+                            <Link to="/blog/locally-sourced-ingredients" data-cursor-text="View">
                                 <figure className="image-anime">
                                     <img src="/images/post-2.jpg" alt="" />
                                 </figure>
@@ -742,21 +742,21 @@ const Home = () => {
                         </div>
                         <div className="blog-item-body">
                             <div className="post-item-content">
-                                <h3><Link to="/blog-single">Why Locally Sourced Ingredients Make a Difference</Link></h3>
+                                <h3><Link to="/blog/locally-sourced-ingredients">Why Locally Sourced Ingredients Make a Difference</Link></h3>
                             </div>
                             <div className="blog-item-btn">
-                                <Link to="/blog-single" className="readmore-btn">read more</Link>
+                                <Link to="/blog/locally-sourced-ingredients" className="readmore-btn">read more</Link>
                             </div>
                         </div>
                     </div>
-                    
+
                 </div>
 
                 <div className="col-lg-4 col-md-6">
-                    
+
                     <div className="post-item wow fadeInUp" data-wow-delay="0.4s">
                         <div className="post-featured-image">
-                            <Link to="/blog-single" data-cursor-text="View">
+                            <Link to="/blog/memorable-dining-moments" data-cursor-text="View">
                                 <figure className="image-anime">
                                     <img src="/images/post-3.jpg" alt="" />
                                 </figure>
@@ -764,10 +764,10 @@ const Home = () => {
                         </div>
                         <div className="blog-item-body">
                             <div className="post-item-content">
-                                <h3><Link to="/blog-single">Creating Memorable Dining Moments with Friends</Link></h3>
+                                <h3><Link to="/blog/memorable-dining-moments">Creating Memorable Dining Moments with Friends</Link></h3>
                             </div>
                             <div className="blog-item-btn">
-                                <Link to="/blog-single" className="readmore-btn">read more</Link>
+                                <Link to="/blog/memorable-dining-moments" className="readmore-btn">read more</Link>
                             </div>
                         </div>
                     </div>

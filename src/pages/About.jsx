@@ -388,17 +388,17 @@ const About = () => {
                         
                         <div className="daily-offer-list wow fadeInUp" data-wow-delay="0.4s">
                             <ul>
-                                <li>seasonal & locally sourced ingredients</li>
-                                <li>vegetarian & dietary-friendly options</li>
-                                <li>exquisite pairings & unique flavors</li>
+                                <li>special discounts every day</li>
+                                <li>freshly prepared signature dishes</li>
+                                <li>great value for every appetite</li>
                             </ul>
                         </div>
-                        
 
-                        
+
+
                         <div className="daily-offer-btn wow fadeInUp" data-wow-delay="0.6s">
-                            <Link to="/contact" className="btn-default">book table</Link>
-                            <Link to="/menu" className="btn-default btn-highlighted">explore menu</Link>
+                            <Link to="/menu" className="btn-default">explore menu</Link>
+                            <Link to="/contact" className="btn-default btn-highlighted">book table</Link>
                         </div>
                         
                     </div>

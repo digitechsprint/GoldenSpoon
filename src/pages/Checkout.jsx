@@ -12,7 +12,7 @@ function generateOrderNumber() {
 
 const EMPTY_FORM = {
   name: '', phone: '', email: '',
-  orderType: 'takeaway', // takeaway | dine-in | delivery
+  orderType: 'takeaway', // takeaway | delivery
   tableNumber: '',
   address: '',
   paymentMethod: 'cod', // upi | cod
@@ -177,7 +177,6 @@ export default function Checkout() {
                   <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
                     {[
                       { value: 'takeaway', label: 'Takeaway', icon: 'fa-shopping-bag', desc: 'Pick up from restaurant' },
-                      { value: 'dine-in', label: 'Dine-In', icon: 'fa-utensils', desc: 'Eat at the restaurant' },
                       { value: 'delivery', label: 'Delivery', icon: 'fa-motorcycle', desc: 'Deliver to my address' },
                     ].map(type => (
                       <div
@@ -200,12 +199,6 @@ export default function Checkout() {
                       </div>
                     ))}
                   </div>
-                  {form.orderType === 'dine-in' && (
-                    <div style={{ marginTop: 16 }}>
-                      <label className="form-label">Table Number</label>
-                      <input className="form-control" value={form.tableNumber} onChange={e => setField('tableNumber', e.target.value)} placeholder="e.g. Table 5" />
-                    </div>
-                  )}
                   {form.orderType === 'delivery' && (
                     <div style={{ marginTop: 16 }}>
                       <label className="form-label">Delivery Address *</label>
@@ -226,7 +219,7 @@ export default function Checkout() {
                   <div style={{ display: 'flex', gap: 14, marginBottom: 20, flexWrap: 'wrap' }}>
                     {[
                       { value: 'upi', label: 'UPI Payment', icon: '/images/upi-icon.png', fallbackIcon: 'fa-mobile-alt', desc: 'Pay via any UPI app' },
-                      { value: 'cod', label: 'Cash on Delivery', icon: null, fallbackIcon: 'fa-money-bill-wave', desc: form.orderType === 'dine-in' ? 'Pay at the table' : 'Pay on pickup/delivery' },
+                      { value: 'cod', label: form.orderType === 'takeaway' ? 'Pay on Pickup' : 'Cash on Delivery', icon: null, fallbackIcon: 'fa-money-bill-wave', desc: form.orderType === 'takeaway' ? 'Pay cash when you pick up' : 'Pay on delivery' },
                     ].map(method => (
                       <div
                         key={method.value}
