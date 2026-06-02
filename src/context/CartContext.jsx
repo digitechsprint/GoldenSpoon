@@ -27,7 +27,6 @@ export function CartProvider({ children }) {
       }
       return [...prev, { ...item, quantity: 1 }]
     })
-    setIsOpen(true)
   }, [])
 
   const removeItem = useCallback((id) => {

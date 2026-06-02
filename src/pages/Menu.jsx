@@ -14,7 +14,8 @@ const Menu = () => {
     const [search, setSearch] = useState('');
     const [activeCategory, setActiveCategory] = useState('all');
     const [added, setAdded] = useState({});
-    const { addItem, itemCount, total, setIsOpen } = useCart();
+    const { items: cartItems, addItem, updateQuantity, itemCount, total, setIsOpen } = useCart();
+    const getCartQty = (id) => cartItems.find(i => i.id === id)?.quantity || 0;
 
     function handleAdd(item) {
         addItem({
@@ -198,17 +199,20 @@ const Menu = () => {
                                                                         {item.price ? `₹${Number(item.price).toFixed(0)}` : ''}
                                                                     </span>
                                                                     {item.price && (
-                                                                        <button
-                                                                            onClick={() => handleAdd(item)}
-                                                                            style={{
-                                                                                background: added[item.id] ? '#16a34a' : '#d4a843',
-                                                                                color: '#111', border: 'none', borderRadius: 8,
-                                                                                padding: '7px 16px', fontSize: 13, fontWeight: 700,
-                                                                                cursor: 'pointer', transition: 'all 0.2s',
-                                                                            }}
-                                                                        >
-                                                                            {added[item.id] ? '✓ Added' : '+ Add'}
-                                                                        </button>
+                                                                        getCartQty(item.id) > 0 ? (
+                                                                            <div style={{display:'flex',alignItems:'center',gap:0,background:'#d4a843',borderRadius:8,overflow:'hidden'}}>
+                                                                                <button onClick={() => updateQuantity(item.id, getCartQty(item.id) - 1)}
+                                                                                    style={{background:'transparent',border:'none',color:'#111',padding:'7px 12px',fontSize:16,fontWeight:700,cursor:'pointer',lineHeight:1}}>−</button>
+                                                                                <span style={{color:'#111',fontWeight:700,fontSize:14,minWidth:20,textAlign:'center'}}>{getCartQty(item.id)}</span>
+                                                                                <button onClick={() => updateQuantity(item.id, getCartQty(item.id) + 1)}
+                                                                                    style={{background:'transparent',border:'none',color:'#111',padding:'7px 12px',fontSize:16,fontWeight:700,cursor:'pointer',lineHeight:1}}>+</button>
+                                                                            </div>
+                                                                        ) : (
+                                                                            <button onClick={() => handleAdd(item)}
+                                                                                style={{background:'#d4a843',color:'#111',border:'none',borderRadius:8,padding:'7px 16px',fontSize:13,fontWeight:700,cursor:'pointer',transition:'all 0.2s'}}>
+                                                                                + Add
+                                                                            </button>
+                                                                        )
                                                                     )}
                                                                 </div>
                                                             </div>
@@ -262,18 +266,38 @@ const Menu = () => {
                                                         <hr style={{flex:1,margin:'0 12px',minWidth:16,alignSelf:'center'}} />
                                                     </div>
                                                     <div style={{display:'flex',alignItems:'center',gap:8,marginTop:10}}>
-                                                        {item.prices.Half && (
-                                                            <button onClick={() => handleAdd({...item, name: item.name + ' (Half)', price: item.prices.Half, id: item.name + '-half'})}
-                                                                style={{background: added[item.name+'-half'] ? '#16a34a' : 'transparent', color: added[item.name+'-half'] ? '#fff' : '#d4a843', border:'1.5px solid #d4a843', borderRadius:6, padding:'5px 12px', fontSize:12, fontWeight:700, cursor:'pointer', whiteSpace:'nowrap', transition:'all 0.2s'}}>
-                                                                {added[item.name+'-half'] ? '✓' : '+'} Half ₹{item.prices.Half}
-                                                            </button>
-                                                        )}
-                                                        {item.prices.Full && (
-                                                            <button onClick={() => handleAdd({...item, name: item.name + (item.prices.Half ? ' (Full)' : ''), price: item.prices.Full, id: item.name + '-full'})}
-                                                                style={{background: added[item.name+'-full'] ? '#16a34a' : '#d4a843', color: added[item.name+'-full'] ? '#fff' : '#111', border:'none', borderRadius:6, padding:'5px 12px', fontSize:12, fontWeight:700, cursor:'pointer', whiteSpace:'nowrap', transition:'all 0.2s'}}>
-                                                                {added[item.name+'-full'] ? '✓ Added' : (item.prices.Half ? 'Full ₹' + item.prices.Full : '+ Add ₹' + item.prices.Full)}
-                                                            </button>
-                                                        )}
+                                                        {item.prices.Half && (() => {
+                                                            const hid = item.name + '-half';
+                                                            const qty = getCartQty(hid);
+                                                            return qty > 0 ? (
+                                                                <div style={{display:'flex',alignItems:'center',gap:0,background:'transparent',border:'1.5px solid #d4a843',borderRadius:6,overflow:'hidden'}}>
+                                                                    <button onClick={() => updateQuantity(hid, qty - 1)} style={{background:'transparent',border:'none',color:'#d4a843',padding:'4px 10px',fontSize:15,fontWeight:700,cursor:'pointer'}}>−</button>
+                                                                    <span style={{color:'#d4a843',fontWeight:700,fontSize:13,minWidth:18,textAlign:'center'}}>{qty}</span>
+                                                                    <button onClick={() => updateQuantity(hid, qty + 1)} style={{background:'transparent',border:'none',color:'#d4a843',padding:'4px 10px',fontSize:15,fontWeight:700,cursor:'pointer'}}>+</button>
+                                                                </div>
+                                                            ) : (
+                                                                <button onClick={() => handleAdd({...item, name: item.name + ' (Half)', price: item.prices.Half, id: hid})}
+                                                                    style={{background:'transparent',color:'#d4a843',border:'1.5px solid #d4a843',borderRadius:6,padding:'5px 12px',fontSize:12,fontWeight:700,cursor:'pointer',whiteSpace:'nowrap'}}>
+                                                                    + Half ₹{item.prices.Half}
+                                                                </button>
+                                                            );
+                                                        })()}
+                                                        {item.prices.Full && (() => {
+                                                            const fid = item.name + '-full';
+                                                            const qty = getCartQty(fid);
+                                                            return qty > 0 ? (
+                                                                <div style={{display:'flex',alignItems:'center',gap:0,background:'#d4a843',borderRadius:6,overflow:'hidden'}}>
+                                                                    <button onClick={() => updateQuantity(fid, qty - 1)} style={{background:'transparent',border:'none',color:'#111',padding:'4px 10px',fontSize:15,fontWeight:700,cursor:'pointer'}}>−</button>
+                                                                    <span style={{color:'#111',fontWeight:700,fontSize:13,minWidth:18,textAlign:'center'}}>{qty}</span>
+                                                                    <button onClick={() => updateQuantity(fid, qty + 1)} style={{background:'transparent',border:'none',color:'#111',padding:'4px 10px',fontSize:15,fontWeight:700,cursor:'pointer'}}>+</button>
+                                                                </div>
+                                                            ) : (
+                                                                <button onClick={() => handleAdd({...item, name: item.name + (item.prices.Half ? ' (Full)' : ''), price: item.prices.Full, id: fid})}
+                                                                    style={{background:'#d4a843',color:'#111',border:'none',borderRadius:6,padding:'5px 12px',fontSize:12,fontWeight:700,cursor:'pointer',whiteSpace:'nowrap'}}>
+                                                                    {item.prices.Half ? 'Full ₹' + item.prices.Full : '+ Add ₹' + item.prices.Full}
+                                                                </button>
+                                                            );
+                                                        })()}
                                                         {!item.prices.Half && !item.prices.Full && (
                                                             <span style={{fontSize:12,opacity:0.5}}>Price on request</span>
                                                         )}
