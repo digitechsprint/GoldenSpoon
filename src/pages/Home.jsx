@@ -121,7 +121,7 @@ const Home = () => {
                         </div>
                         <div className="hero-btn wow fadeInUp" data-wow-delay="0.4s">
                             <a href="#reserve-table" className="btn-default" onClick={e => { e.preventDefault(); document.getElementById('reserve-table')?.scrollIntoView({ behavior: 'smooth' }); }}>
-                                {hero.cta_text || 'Book A Table'} <i className="fas fa-arrow-right" style={{color:'#111'}}></i>
+                                {hero.cta_text || 'Book A Table'}
                             </a>
                         </div>
                     </div>
