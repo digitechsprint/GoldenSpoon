@@ -119,7 +119,7 @@ const About = () => {
 
 
                         <div className="about-content-btn wow fadeInUp" data-wow-delay="0.6s">
-                            <Link to="/menu" className="btn-default">order now <i className="fas fa-arrow-right" style={{color:'#111'}}></i></Link>
+                            <Link to="/menu" className="btn-default">order now</Link>
                             <Link to="/contact" className="btn-default btn-highlighted">book a table</Link>
                         </div>
                         

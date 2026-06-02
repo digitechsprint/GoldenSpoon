@@ -212,8 +212,8 @@ const Home = () => {
 
                         
                         <div className="about-content-btn wow fadeInUp" data-wow-delay="0.6s">
-                            <Link to="/menu" className="btn-default">order now <i className="fas fa-arrow-right" style={{color:'#111'}}></i></Link>
-                            <Link to="/about" className="btn-default btn-highlighted">read more <i className="fas fa-arrow-right" style={{color:'#fff'}}></i></Link>
+                            <Link to="/menu" className="btn-default">order now</Link>
+                            <Link to="/about" className="btn-default btn-highlighted">read more</Link>
                         </div>
                         
                     </div>
@@ -419,7 +419,7 @@ const Home = () => {
 
 
                         <div className="daily-offer-btn wow fadeInUp" data-wow-delay="0.6s">
-                            <Link to="/menu" className="btn-default">explore menu <i className="fas fa-arrow-right" style={{color:'#111'}}></i></Link>
+                            <Link to="/menu" className="btn-default">explore menu</Link>
                             <a href="#reserve-table" className="btn-default btn-highlighted" onClick={e => { e.preventDefault(); document.getElementById('reserve-table')?.scrollIntoView({ behavior: 'smooth' }); }}>book table</a>
                         </div>
                         
