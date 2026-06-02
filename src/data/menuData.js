@@ -1,11 +1,11 @@
-export const MENU_SECTIONS = [
+﻿export const MENU_SECTIONS = [
   {
     "id": "tandoor",
     "name": "Tandoor",
     "items": [
       {
         "name": "Achari Chaap",
-        "img": "/menu/achari-chaap.jpeg",
+        "img": "/menu/achari-chaap.webp",
         "prices": {
           "Half": 120,
           "Full": 180
@@ -13,14 +13,14 @@ export const MENU_SECTIONS = [
       },
       {
         "name": "Achari Mushroom Tikka",
-        "img": "/menu/achari-mushroom-tikka.jpeg",
+        "img": "/menu/achari-mushroom-tikka.webp",
         "prices": {
           "Full": 220
         }
       },
       {
         "name": "Achari Paneer Tikka",
-        "img": "/menu/achari-paneer-tikka.jpeg",
+        "img": "/menu/achari-paneer-tikka.webp",
         "prices": {
           "Half": 130,
           "Full": 210
@@ -28,7 +28,7 @@ export const MENU_SECTIONS = [
       },
       {
         "name": "Afghani Chaap",
-        "img": "/menu/afghani-chaap.jpeg",
+        "img": "/menu/afghani-chaap.webp",
         "prices": {
           "Half": 130,
           "Full": 190
@@ -36,14 +36,14 @@ export const MENU_SECTIONS = [
       },
       {
         "name": "Dahi Ke Sholey",
-        "img": "/menu/dahi-ke-sholey.jpeg",
+        "img": "/menu/dahi-ke-sholey.webp",
         "prices": {
           "Full": 150
         }
       },
       {
         "name": "Haryali Chaap",
-        "img": "/menu/haryali-chaap.jpeg",
+        "img": "/menu/haryali-chaap.webp",
         "prices": {
           "Half": 120,
           "Full": 180
@@ -51,7 +51,7 @@ export const MENU_SECTIONS = [
       },
       {
         "name": "Haryali Paneer Tikka",
-        "img": "/menu/haryali-paneer-tikka.jpeg",
+        "img": "/menu/haryali-paneer-tikka.webp",
         "prices": {
           "Half": 140,
           "Full": 210
@@ -59,7 +59,7 @@ export const MENU_SECTIONS = [
       },
       {
         "name": "Malai Chaap",
-        "img": "/menu/malai-chaap.jpeg",
+        "img": "/menu/malai-chaap.webp",
         "prices": {
           "Half": 120,
           "Full": 180
@@ -67,7 +67,7 @@ export const MENU_SECTIONS = [
       },
       {
         "name": "Malai Paneer Tikka",
-        "img": "/menu/malai-paneer-tikka.jpeg",
+        "img": "/menu/malai-paneer-tikka.webp",
         "prices": {
           "Half": 140,
           "Full": 210
@@ -75,14 +75,14 @@ export const MENU_SECTIONS = [
       },
       {
         "name": "Mushroom Tikka",
-        "img": "/menu/mushroom-tikka.jpeg",
+        "img": "/menu/mushroom-tikka.webp",
         "prices": {
           "Full": 220
         }
       },
       {
         "name": "Stuffed Malai Chaap",
-        "img": "/menu/stuffed-malai-chaap.jpeg",
+        "img": "/menu/stuffed-malai-chaap.webp",
         "prices": {
           "Half": 150,
           "Full": 220
@@ -90,7 +90,7 @@ export const MENU_SECTIONS = [
       },
       {
         "name": "Stuffed Tandoori Chaap",
-        "img": "/menu/stuffed-tandoori-chaap.jpeg",
+        "img": "/menu/stuffed-tandoori-chaap.webp",
         "prices": {
           "Half": 150,
           "Full": 220
@@ -98,7 +98,7 @@ export const MENU_SECTIONS = [
       },
       {
         "name": "Tandoori Masala Chaap",
-        "img": "/menu/tandoori-masala-chaap.jpeg",
+        "img": "/menu/tandoori-masala-chaap.webp",
         "prices": {
           "Half": 110,
           "Full": 170
@@ -106,7 +106,7 @@ export const MENU_SECTIONS = [
       },
       {
         "name": "Tandoori Paneer Tikka",
-        "img": "/menu/tandoori-paneer-tikka.jpeg",
+        "img": "/menu/tandoori-paneer-tikka.webp",
         "prices": {
           "Half": 130,
           "Full": 210
@@ -114,7 +114,7 @@ export const MENU_SECTIONS = [
       },
       {
         "name": "Tandoori Platter",
-        "img": "/menu/tandoori-platter.jpeg",
+        "img": "/menu/tandoori-platter.webp",
         "prices": {
           "Full": 399
         }
@@ -127,56 +127,56 @@ export const MENU_SECTIONS = [
     "items": [
       {
         "name": "Afghani Chaap Roll",
-        "img": "/menu/afghani-chaap-roll.jpeg",
+        "img": "/menu/afghani-chaap-roll.webp",
         "prices": {
           "Full": 90
         }
       },
       {
         "name": "Chilli Mushroom Wrap",
-        "img": "/menu/chilli-mushroom-wrap.jpeg",
+        "img": "/menu/chilli-mushroom-wrap.webp",
         "prices": {
           "Full": 90
         }
       },
       {
         "name": "Chilli Paneer Wrap",
-        "img": "/menu/chilli-paneer-wrap.jpeg",
+        "img": "/menu/chilli-paneer-wrap.webp",
         "prices": {
           "Full": 90
         }
       },
       {
         "name": "Malai Chaap Roll",
-        "img": "/menu/malai-chaap-roll.png",
+        "img": "/menu/malai-chaap-roll.webp",
         "prices": {
           "Full": 90
         }
       },
       {
         "name": "Paneer Roll",
-        "img": "/menu/paneer-roll.png",
+        "img": "/menu/paneer-roll.webp",
         "prices": {
           "Full": 70
         }
       },
       {
         "name": "Tandoori Chaap Roll",
-        "img": "/menu/tandoori-chaap-roll.jpeg",
+        "img": "/menu/tandoori-chaap-roll.webp",
         "prices": {
           "Full": 80
         }
       },
       {
         "name": "Veg Manchurian Roll",
-        "img": "/menu/veg-manchurian-roll.jpeg",
+        "img": "/menu/veg-manchurian-roll.webp",
         "prices": {
           "Full": 80
         }
       },
       {
         "name": "Veg Roll",
-        "img": "/menu/veg-roll.jpeg",
+        "img": "/menu/veg-roll.webp",
         "prices": {
           "Full": 50
         }
@@ -189,161 +189,161 @@ export const MENU_SECTIONS = [
     "items": [
       {
         "name": "Aloo Naan",
-        "img": "/menu/aloo-naan.jpeg",
+        "img": "/menu/aloo-naan.webp",
         "prices": {
           "Full": 45
         }
       },
       {
         "name": "Aloo Paratha",
-        "img": "/menu/aloo-paratha.jpeg",
+        "img": "/menu/aloo-paratha.webp",
         "prices": {
           "Full": 40
         }
       },
       {
         "name": "Aloo Pyaaz Paratha",
-        "img": "/menu/aloo-pyaaz-paratha.jpeg",
+        "img": "/menu/aloo-pyaaz-paratha.webp",
         "prices": {
           "Full": 60
         }
       },
       {
         "name": "Amritsari Kulcha",
-        "img": "/menu/amritsari-kulcha.png",
+        "img": "/menu/amritsari-kulcha.webp",
         "prices": {
           "Full": 80
         }
       },
       {
         "name": "Butter Naan",
-        "img": "/menu/butter-naan.jpeg",
+        "img": "/menu/butter-naan.webp",
         "prices": {
           "Full": 40
         }
       },
       {
         "name": "Classic Boondi Raita",
-        "img": "/menu/classic-boondi-raita.jpeg",
+        "img": "/menu/classic-boondi-raita.webp",
         "prices": {
           "Full": 56
         }
       },
       {
         "name": "Garlic Naan",
-        "img": "/menu/garlic-naan.jpeg",
+        "img": "/menu/garlic-naan.webp",
         "prices": {
           "Full": 50
         }
       },
       {
         "name": "Lachcha Paratha",
-        "img": "/menu/lachcha-paratha.jpeg",
+        "img": "/menu/lachcha-paratha.webp",
         "prices": {
           "Full": 40
         }
       },
       {
         "name": "Masala Missi Roti",
-        "img": "/menu/masala-missi-roti.jpeg",
+        "img": "/menu/masala-missi-roti.webp",
         "prices": {
           "Full": 35
         }
       },
       {
         "name": "Missi Roti",
-        "img": "/menu/missi-roti.jpeg",
+        "img": "/menu/missi-roti.webp",
         "prices": {
           "Full": 30
         }
       },
       {
         "name": "Mix Veg Paratha",
-        "img": "/menu/mix-veg-paratha.jpeg",
+        "img": "/menu/mix-veg-paratha.webp",
         "prices": {
           "Full": 70
         }
       },
       {
         "name": "Mix Veg Raita",
-        "img": "/menu/mix-veg-raita.jpeg",
+        "img": "/menu/mix-veg-raita.webp",
         "prices": {
           "Full": 64
         }
       },
       {
         "name": "Onion Missi Roti",
-        "img": "/menu/onion-missi-roti.png",
+        "img": "/menu/onion-missi-roti.webp",
         "prices": {
           "Full": 30
         }
       },
       {
         "name": "Paneer Naan",
-        "img": "/menu/paneer-naan.jpeg",
+        "img": "/menu/paneer-naan.webp",
         "prices": {
           "Full": 70
         }
       },
       {
         "name": "Paneer Paratha",
-        "img": "/menu/paneer-paratha.jpeg",
+        "img": "/menu/paneer-paratha.webp",
         "prices": {
           "Full": 70
         }
       },
       {
         "name": "Plain Naan",
-        "img": "/menu/plain-naan.jpeg",
+        "img": "/menu/plain-naan.webp",
         "prices": {
           "Full": 30
         }
       },
       {
         "name": "Pudina Naan",
-        "img": "/menu/pudina-naan.jpeg",
+        "img": "/menu/pudina-naan.webp",
         "prices": {
           "Full": 45
         }
       },
       {
         "name": "Rumali Roti",
-        "img": "/menu/rumali-roti.png",
+        "img": "/menu/rumali-roti.webp",
         "prices": {
           "Full": 10
         }
       },
       {
         "name": "Special Pineapple Raita",
-        "img": "/menu/special-pineapple-raita.jpeg",
+        "img": "/menu/special-pineapple-raita.webp",
         "prices": {
           "Full": 72
         }
       },
       {
         "name": "Stuffed Kulcha",
-        "img": "/menu/stuffed-kulcha.jpeg",
+        "img": "/menu/stuffed-kulcha.webp",
         "prices": {
           "Full": 80
         }
       },
       {
         "name": "Stuffed Naan",
-        "img": "/menu/stuffed-naan.jpeg",
+        "img": "/menu/stuffed-naan.webp",
         "prices": {
           "Full": 60
         }
       },
       {
         "name": "Tandoori Plain Roti",
-        "img": "/menu/tandoori-plain-roti.jpeg",
+        "img": "/menu/tandoori-plain-roti.webp",
         "prices": {
           "Full": 12
         }
       },
       {
         "name": "Tandoori Roti Butter",
-        "img": "/menu/tandoori-roti-butter.jpeg",
+        "img": "/menu/tandoori-roti-butter.webp",
         "prices": {
           "Full": 15
         }
@@ -356,63 +356,63 @@ export const MENU_SECTIONS = [
     "items": [
       {
         "name": "Aloo Sandwich",
-        "img": "/menu/aloo-sandwich.jpeg",
+        "img": "/menu/aloo-sandwich.webp",
         "prices": {
           "Full": 50
         }
       },
       {
         "name": "Cheese Burger",
-        "img": "/menu/cheese-burger.jpeg",
+        "img": "/menu/cheese-burger.webp",
         "prices": {
           "Full": 60
         }
       },
       {
         "name": "Cheese Corn Sandwich",
-        "img": "/menu/cheese-corn-sandwich.jpeg",
+        "img": "/menu/cheese-corn-sandwich.webp",
         "prices": {
           "Full": 60
         }
       },
       {
         "name": "Chilli Paneer Sandwich",
-        "img": "/menu/chilli-paneer-sandwich.jpeg",
+        "img": "/menu/chilli-paneer-sandwich.webp",
         "prices": {
           "Full": 70
         }
       },
       {
         "name": "Double Patty Burger",
-        "img": "/menu/double-patty-burger.jpeg",
+        "img": "/menu/double-patty-burger.webp",
         "prices": {
           "Full": 80
         }
       },
       {
         "name": "Grilled Sandwich",
-        "img": "/menu/grilled-sandwich.jpeg",
+        "img": "/menu/grilled-sandwich.webp",
         "prices": {
           "Full": 70
         }
       },
       {
         "name": "Veg Burger",
-        "img": "/menu/veg-burger.jpeg",
+        "img": "/menu/veg-burger.webp",
         "prices": {
           "Full": 50
         }
       },
       {
         "name": "Veg Kurkure Burger",
-        "img": "/menu/veg-kurkure-burger.jpeg",
+        "img": "/menu/veg-kurkure-burger.webp",
         "prices": {
           "Full": 90
         }
       },
       {
         "name": "Veggie Delight Burger",
-        "img": "/menu/veggie-delight-burger.jpeg",
+        "img": "/menu/veggie-delight-burger.webp",
         "prices": {
           "Full": 70
         }
@@ -425,42 +425,42 @@ export const MENU_SECTIONS = [
     "items": [
       {
         "name": "American Remix Pizza",
-        "img": "/menu/american-remix-pizza.jpeg",
+        "img": "/menu/american-remix-pizza.webp",
         "prices": {}
       },
       {
         "name": "Capsicum Cheese Pizza",
-        "img": "/menu/capsicum-cheese-pizza.jpeg",
+        "img": "/menu/capsicum-cheese-pizza.webp",
         "prices": {}
       },
       {
         "name": "Exotic Veg Pizza",
-        "img": "/menu/exotic-veg-pizza.jpeg",
+        "img": "/menu/exotic-veg-pizza.webp",
         "prices": {}
       },
       {
         "name": "Farmhouse Pizza",
-        "img": "/menu/farmhouse-pizza.png",
+        "img": "/menu/farmhouse-pizza.webp",
         "prices": {}
       },
       {
         "name": "Golden Corn Pizza",
-        "img": "/menu/golden-corn-pizza.jpeg",
+        "img": "/menu/golden-corn-pizza.webp",
         "prices": {}
       },
       {
         "name": "Margherita Pizza",
-        "img": "/menu/margherita-pizza.png",
+        "img": "/menu/margherita-pizza.webp",
         "prices": {}
       },
       {
         "name": "Onion Capsicum Pizza",
-        "img": "/menu/onion-capsicum-pizza.jpeg",
+        "img": "/menu/onion-capsicum-pizza.webp",
         "prices": {}
       },
       {
         "name": "Paneer Tikka Pizza",
-        "img": "/menu/paneer-tikka-pizza.jpeg",
+        "img": "/menu/paneer-tikka-pizza.webp",
         "prices": {}
       }
     ]
@@ -471,14 +471,14 @@ export const MENU_SECTIONS = [
     "items": [
       {
         "name": "Cheesy Fries",
-        "img": "/menu/cheesy-fries.jpeg",
+        "img": "/menu/cheesy-fries.webp",
         "prices": {
           "Full": 90
         }
       },
       {
         "name": "Chilli Baby Corn",
-        "img": "/menu/chilli-baby-corn.jpeg",
+        "img": "/menu/chilli-baby-corn.webp",
         "prices": {
           "Half": 90,
           "Full": 150
@@ -486,7 +486,7 @@ export const MENU_SECTIONS = [
       },
       {
         "name": "Chilli Chaap",
-        "img": "/menu/chilli-chaap.jpeg",
+        "img": "/menu/chilli-chaap.webp",
         "prices": {
           "Half": 70,
           "Full": 90
@@ -494,14 +494,14 @@ export const MENU_SECTIONS = [
       },
       {
         "name": "Chilli Mushroom",
-        "img": "/menu/chilli-mushroom.jpeg",
+        "img": "/menu/chilli-mushroom.webp",
         "prices": {
           "Full": 128
         }
       },
       {
         "name": "Chilli Paneer Dry",
-        "img": "/menu/chilli-paneer-dry.jpeg",
+        "img": "/menu/chilli-paneer-dry.webp",
         "prices": {
           "Half": 90,
           "Full": 150
@@ -509,7 +509,7 @@ export const MENU_SECTIONS = [
       },
       {
         "name": "Chilli Paneer Gravy",
-        "img": "/menu/chilli-paneer-gravy.jpeg",
+        "img": "/menu/chilli-paneer-gravy.webp",
         "prices": {
           "Half": 100,
           "Full": 160
@@ -517,7 +517,7 @@ export const MENU_SECTIONS = [
       },
       {
         "name": "Chilli Potato",
-        "img": "/menu/chilli-potato.jpeg",
+        "img": "/menu/chilli-potato.webp",
         "prices": {
           "Half": 70,
           "Full": 90
@@ -525,21 +525,21 @@ export const MENU_SECTIONS = [
       },
       {
         "name": "Crispy Corn",
-        "img": "/menu/crispy-corn.jpeg",
+        "img": "/menu/crispy-corn.webp",
         "prices": {
           "Full": 120
         }
       },
       {
         "name": "French Fries",
-        "img": "/menu/french-fries.jpeg",
+        "img": "/menu/french-fries.webp",
         "prices": {
           "Full": 70
         }
       },
       {
         "name": "Honey Chilli Potato",
-        "img": "/menu/honey-chilli-potato.jpeg",
+        "img": "/menu/honey-chilli-potato.webp",
         "prices": {
           "Half": 80,
           "Full": 100
@@ -547,14 +547,14 @@ export const MENU_SECTIONS = [
       },
       {
         "name": "Peri-Peri Fries",
-        "img": "/menu/peri-peri-fries.jpeg",
+        "img": "/menu/peri-peri-fries.webp",
         "prices": {
           "Full": 80
         }
       },
       {
         "name": "Veg Manchurian Dry",
-        "img": "/menu/veg-manchurian-dry.jpeg",
+        "img": "/menu/veg-manchurian-dry.webp",
         "prices": {
           "Half": 80,
           "Full": 120
@@ -562,7 +562,7 @@ export const MENU_SECTIONS = [
       },
       {
         "name": "Veg Manchurian Gravy",
-        "img": "/menu/veg-manchurian-gravy.jpeg",
+        "img": "/menu/veg-manchurian-gravy.webp",
         "prices": {
           "Half": 90,
           "Full": 140
@@ -570,7 +570,7 @@ export const MENU_SECTIONS = [
       },
       {
         "name": "Veg Spring Roll",
-        "img": "/menu/veg-spring-roll.jpeg",
+        "img": "/menu/veg-spring-roll.webp",
         "prices": {
           "Full": 70
         }
@@ -583,7 +583,7 @@ export const MENU_SECTIONS = [
     "items": [
       {
         "name": "Chaap Butter Masala",
-        "img": "/menu/chaap-butter-masala.png",
+        "img": "/menu/chaap-butter-masala.webp",
         "prices": {
           "Half": 110,
           "Full": 180
@@ -591,7 +591,7 @@ export const MENU_SECTIONS = [
       },
       {
         "name": "Dal Fry",
-        "img": "/menu/dal-fry.jpeg",
+        "img": "/menu/dal-fry.webp",
         "prices": {
           "Half": 70,
           "Full": 100
@@ -599,7 +599,7 @@ export const MENU_SECTIONS = [
       },
       {
         "name": "Dal Handi",
-        "img": "/menu/dal-handi.jpeg",
+        "img": "/menu/dal-handi.webp",
         "prices": {
           "Half": 80,
           "Full": 110
@@ -607,7 +607,7 @@ export const MENU_SECTIONS = [
       },
       {
         "name": "Dal Makhani",
-        "img": "/menu/dal-makhani.jpeg",
+        "img": "/menu/dal-makhani.webp",
         "prices": {
           "Half": 100,
           "Full": 180
@@ -615,7 +615,7 @@ export const MENU_SECTIONS = [
       },
       {
         "name": "Dal Tadka",
-        "img": "/menu/dal-tadka.jpeg",
+        "img": "/menu/dal-tadka.webp",
         "prices": {
           "Half": 90,
           "Full": 120
@@ -623,7 +623,7 @@ export const MENU_SECTIONS = [
       },
       {
         "name": "Dum Aloo Kashmiri",
-        "img": "/menu/dum-aloo-kashmiri.jpeg",
+        "img": "/menu/dum-aloo-kashmiri.webp",
         "prices": {
           "Half": 120,
           "Full": 200
@@ -631,7 +631,7 @@ export const MENU_SECTIONS = [
       },
       {
         "name": "Kadhai Chaap",
-        "img": "/menu/kadhai-chaap.jpeg",
+        "img": "/menu/kadhai-chaap.webp",
         "prices": {
           "Half": 130,
           "Full": 220
@@ -639,7 +639,7 @@ export const MENU_SECTIONS = [
       },
       {
         "name": "Kadhai Paneer",
-        "img": "/menu/kadhai-paneer.jpeg",
+        "img": "/menu/kadhai-paneer.webp",
         "prices": {
           "Half": 130,
           "Full": 230
@@ -647,7 +647,7 @@ export const MENU_SECTIONS = [
       },
       {
         "name": "Malai Kofta Red Gravy",
-        "img": "/menu/malai-kofta-red-gravy.jpeg",
+        "img": "/menu/malai-kofta-red-gravy.webp",
         "prices": {
           "Half": 130,
           "Full": 220
@@ -655,7 +655,7 @@ export const MENU_SECTIONS = [
       },
       {
         "name": "Matar Mushroom",
-        "img": "/menu/matar-mushroom.jpeg",
+        "img": "/menu/matar-mushroom.webp",
         "prices": {
           "Half": 115,
           "Full": 190
@@ -663,7 +663,7 @@ export const MENU_SECTIONS = [
       },
       {
         "name": "Matar Paneer",
-        "img": "/menu/matar-paneer.jpeg",
+        "img": "/menu/matar-paneer.webp",
         "prices": {
           "Half": 120,
           "Full": 200
@@ -671,7 +671,7 @@ export const MENU_SECTIONS = [
       },
       {
         "name": "Mix Veg",
-        "img": "/menu/mix-veg.jpeg",
+        "img": "/menu/mix-veg.webp",
         "prices": {
           "Half": 110,
           "Full": 180
@@ -679,7 +679,7 @@ export const MENU_SECTIONS = [
       },
       {
         "name": "Mushroom Do Pyaaza",
-        "img": "/menu/mushroom-do-pyaaza.jpeg",
+        "img": "/menu/mushroom-do-pyaaza.webp",
         "prices": {
           "Half": 120,
           "Full": 200
@@ -687,7 +687,7 @@ export const MENU_SECTIONS = [
       },
       {
         "name": "Paneer Bhurji",
-        "img": "/menu/paneer-bhurji.jpeg",
+        "img": "/menu/paneer-bhurji.webp",
         "prices": {
           "Half": 140,
           "Full": 240
@@ -695,7 +695,7 @@ export const MENU_SECTIONS = [
       },
       {
         "name": "Paneer Butter Masala",
-        "img": "/menu/paneer-butter-masala.jpeg",
+        "img": "/menu/paneer-butter-masala.webp",
         "prices": {
           "Half": 130,
           "Full": 220
@@ -703,7 +703,7 @@ export const MENU_SECTIONS = [
       },
       {
         "name": "Paneer Do Pyaaza",
-        "img": "/menu/paneer-do-pyaaza.jpeg",
+        "img": "/menu/paneer-do-pyaaza.webp",
         "prices": {
           "Half": 120,
           "Full": 210
@@ -711,7 +711,7 @@ export const MENU_SECTIONS = [
       },
       {
         "name": "Paneer Handi",
-        "img": "/menu/paneer-handi.jpeg",
+        "img": "/menu/paneer-handi.webp",
         "prices": {
           "Half": 150,
           "Full": 260
@@ -719,7 +719,7 @@ export const MENU_SECTIONS = [
       },
       {
         "name": "Paneer Lababdar",
-        "img": "/menu/paneer-lababdar.jpeg",
+        "img": "/menu/paneer-lababdar.webp",
         "prices": {
           "Half": 130,
           "Full": 230
@@ -727,7 +727,7 @@ export const MENU_SECTIONS = [
       },
       {
         "name": "Paneer Pasanda",
-        "img": "/menu/paneer-pasanda.jpeg",
+        "img": "/menu/paneer-pasanda.webp",
         "prices": {
           "Half": 140,
           "Full": 240
@@ -735,7 +735,7 @@ export const MENU_SECTIONS = [
       },
       {
         "name": "Paneer Tikka Masala",
-        "img": "/menu/paneer-tikka-masala.png",
+        "img": "/menu/paneer-tikka-masala.webp",
         "prices": {
           "Half": 140,
           "Full": 240
@@ -743,7 +743,7 @@ export const MENU_SECTIONS = [
       },
       {
         "name": "Shahi Paneer",
-        "img": "/menu/shahi-paneer.png",
+        "img": "/menu/shahi-paneer.webp",
         "prices": {
           "Half": 130,
           "Full": 220
@@ -751,7 +751,7 @@ export const MENU_SECTIONS = [
       },
       {
         "name": "Tawa Chaap Curry",
-        "img": "/menu/tawa-chaap-curry.jpeg",
+        "img": "/menu/tawa-chaap-curry.webp",
         "prices": {
           "Half": 130,
           "Full": 220
@@ -765,28 +765,28 @@ export const MENU_SECTIONS = [
     "items": [
       {
         "name": "Cheesy Maggie",
-        "img": "/menu/cheesy-maggie.jpeg",
+        "img": "/menu/cheesy-maggie.webp",
         "prices": {
           "Full": 70
         }
       },
       {
         "name": "Peri-Peri Maggie",
-        "img": "/menu/peri-peri-maggie.jpeg",
+        "img": "/menu/peri-peri-maggie.webp",
         "prices": {
           "Full": 60
         }
       },
       {
         "name": "Plain Maggie",
-        "img": "/menu/plain-maggie.jpeg",
+        "img": "/menu/plain-maggie.webp",
         "prices": {
           "Full": 40
         }
       },
       {
         "name": "Veggie Maggie",
-        "img": "/menu/veggie-maggie.jpeg",
+        "img": "/menu/veggie-maggie.webp",
         "prices": {
           "Full": 50
         }
@@ -799,7 +799,7 @@ export const MENU_SECTIONS = [
     "items": [
       {
         "name": "Paneer Afghani Momo",
-        "img": "/menu/paneer-afghani-momo.jpeg",
+        "img": "/menu/paneer-afghani-momo.webp",
         "prices": {
           "Half": 110,
           "Full": 150
@@ -807,7 +807,7 @@ export const MENU_SECTIONS = [
       },
       {
         "name": "Paneer Fried Momo",
-        "img": "/menu/paneer-fried-momo.png",
+        "img": "/menu/paneer-fried-momo.webp",
         "prices": {
           "Half": 100,
           "Full": 120
@@ -815,7 +815,7 @@ export const MENU_SECTIONS = [
       },
       {
         "name": "Paneer Kurkure Momo",
-        "img": "/menu/paneer-kurkure-momo.png",
+        "img": "/menu/paneer-kurkure-momo.webp",
         "prices": {
           "Half": 110,
           "Full": 130
@@ -823,7 +823,7 @@ export const MENU_SECTIONS = [
       },
       {
         "name": "Paneer Steamed Momo",
-        "img": "/menu/paneer-steamed-momo.jpeg",
+        "img": "/menu/paneer-steamed-momo.webp",
         "prices": {
           "Half": 80,
           "Full": 100
@@ -831,7 +831,7 @@ export const MENU_SECTIONS = [
       },
       {
         "name": "Paneer Tandoori Momo",
-        "img": "/menu/paneer-tandoori-momo.jpeg",
+        "img": "/menu/paneer-tandoori-momo.webp",
         "prices": {
           "Half": 100,
           "Full": 140
@@ -839,7 +839,7 @@ export const MENU_SECTIONS = [
       },
       {
         "name": "Veg Afghani Momo",
-        "img": "/menu/veg-afghani-momo.jpeg",
+        "img": "/menu/veg-afghani-momo.webp",
         "prices": {
           "Half": 110,
           "Full": 140
@@ -847,7 +847,7 @@ export const MENU_SECTIONS = [
       },
       {
         "name": "Veg Fried Momo",
-        "img": "/menu/veg-fried-momo.jpeg",
+        "img": "/menu/veg-fried-momo.webp",
         "prices": {
           "Half": 60,
           "Full": 90
@@ -855,7 +855,7 @@ export const MENU_SECTIONS = [
       },
       {
         "name": "Veg Kurkure Momo",
-        "img": "/menu/veg-kurkure-momo.jpeg",
+        "img": "/menu/veg-kurkure-momo.webp",
         "prices": {
           "Half": 70,
           "Full": 100
@@ -863,7 +863,7 @@ export const MENU_SECTIONS = [
       },
       {
         "name": "Veg Steamed Momo",
-        "img": "/menu/veg-steamed-momo.jpeg",
+        "img": "/menu/veg-steamed-momo.webp",
         "prices": {
           "Half": 50,
           "Full": 70
@@ -871,7 +871,7 @@ export const MENU_SECTIONS = [
       },
       {
         "name": "Veg Tandoori Momo",
-        "img": "/menu/veg-tandoori-momo.jpeg",
+        "img": "/menu/veg-tandoori-momo.webp",
         "prices": {
           "Half": 90,
           "Full": 130
@@ -885,7 +885,7 @@ export const MENU_SECTIONS = [
     "items": [
       {
         "name": "Chilli Garlic Noodles",
-        "img": "/menu/chilli-garlic-noodles.jpeg",
+        "img": "/menu/chilli-garlic-noodles.webp",
         "prices": {
           "Half": 60,
           "Full": 90
@@ -893,7 +893,7 @@ export const MENU_SECTIONS = [
       },
       {
         "name": "Paneer Noodles",
-        "img": "/menu/paneer-noodles.jpeg",
+        "img": "/menu/paneer-noodles.webp",
         "prices": {
           "Half": 80,
           "Full": 100
@@ -901,7 +901,7 @@ export const MENU_SECTIONS = [
       },
       {
         "name": "Singapuri Noodles",
-        "img": "/menu/singapuri-noodles.jpeg",
+        "img": "/menu/singapuri-noodles.webp",
         "prices": {
           "Half": 80,
           "Full": 100
@@ -909,7 +909,7 @@ export const MENU_SECTIONS = [
       },
       {
         "name": "Veg Hakka Noodles",
-        "img": "/menu/veg-hakka-noodles.jpeg",
+        "img": "/menu/veg-hakka-noodles.webp",
         "prices": {
           "Half": 60,
           "Full": 90
@@ -917,7 +917,7 @@ export const MENU_SECTIONS = [
       },
       {
         "name": "Veg Noodles",
-        "img": "/menu/veg-noodles.jpeg",
+        "img": "/menu/veg-noodles.webp",
         "prices": {
           "Half": 50,
           "Full": 80
@@ -931,7 +931,7 @@ export const MENU_SECTIONS = [
     "items": [
       {
         "name": "Chilli Garlic Fried Rice",
-        "img": "/menu/chilli-garlic-fried-rice.jpeg",
+        "img": "/menu/chilli-garlic-fried-rice.webp",
         "prices": {
           "Half": 70,
           "Full": 110
@@ -939,7 +939,7 @@ export const MENU_SECTIONS = [
       },
       {
         "name": "Paneer Fried Rice",
-        "img": "/menu/paneer-fried-rice.jpeg",
+        "img": "/menu/paneer-fried-rice.webp",
         "prices": {
           "Half": 90,
           "Full": 130
@@ -947,7 +947,7 @@ export const MENU_SECTIONS = [
       },
       {
         "name": "Veg Corn Rice",
-        "img": "/menu/veg-corn-rice.jpeg",
+        "img": "/menu/veg-corn-rice.webp",
         "prices": {
           "Half": 80,
           "Full": 120
@@ -955,7 +955,7 @@ export const MENU_SECTIONS = [
       },
       {
         "name": "Veg Fried Rice",
-        "img": "/menu/veg-fried-rice.jpeg",
+        "img": "/menu/veg-fried-rice.webp",
         "prices": {
           "Half": 70,
           "Full": 90
@@ -963,7 +963,7 @@ export const MENU_SECTIONS = [
       },
       {
         "name": "Veg Singapuri Fried Rice",
-        "img": "/menu/veg-singapuri-fried-rice.jpeg",
+        "img": "/menu/veg-singapuri-fried-rice.webp",
         "prices": {
           "Half": 80,
           "Full": 120
@@ -977,42 +977,42 @@ export const MENU_SECTIONS = [
     "items": [
       {
         "name": "Jeera Rice",
-        "img": "/menu/jeera-rice.jpeg",
+        "img": "/menu/jeera-rice.webp",
         "prices": {
           "Full": 90
         }
       },
       {
         "name": "Kashmiri Pulao",
-        "img": "/menu/kashmiri-pulao.jpeg",
+        "img": "/menu/kashmiri-pulao.webp",
         "prices": {
           "Full": 130
         }
       },
       {
         "name": "Mutter Pulao",
-        "img": "/menu/mutter-pulao.jpeg",
+        "img": "/menu/mutter-pulao.webp",
         "prices": {
           "Full": 120
         }
       },
       {
         "name": "Steamed Rice",
-        "img": "/menu/steamed-rice.jpeg",
+        "img": "/menu/steamed-rice.webp",
         "prices": {
           "Full": 80
         }
       },
       {
         "name": "Veg Hyderabadi Biryani",
-        "img": "/menu/veg-hyderabadi-biryani.jpeg",
+        "img": "/menu/veg-hyderabadi-biryani.webp",
         "prices": {
           "Full": 150
         }
       },
       {
         "name": "Veg Pulao",
-        "img": "/menu/veg-pulao.jpeg",
+        "img": "/menu/veg-pulao.webp",
         "prices": {
           "Full": 120
         }
@@ -1025,35 +1025,35 @@ export const MENU_SECTIONS = [
     "items": [
       {
         "name": "Mushroom Onion Pasta (Red Sauce)",
-        "img": "/menu/mushroom-onion-pasta--red-sauce-.jpeg",
+        "img": "/menu/mushroom-onion-pasta--red-sauce-.webp",
         "prices": {
           "Full": 120
         }
       },
       {
         "name": "Mushroom Onion Pasta (White Sauce)",
-        "img": "/menu/mushroom-onion-pasta--white-sauce-.jpeg",
+        "img": "/menu/mushroom-onion-pasta--white-sauce-.webp",
         "prices": {
           "Full": 120
         }
       },
       {
         "name": "Pink Sauce Pasta",
-        "img": "/menu/pink-sauce-pasta.jpeg",
+        "img": "/menu/pink-sauce-pasta.webp",
         "prices": {
           "Full": 130
         }
       },
       {
         "name": "Red Sauce Pasta",
-        "img": "/menu/red-sauce-pasta.jpeg",
+        "img": "/menu/red-sauce-pasta.webp",
         "prices": {
           "Full": 100
         }
       },
       {
         "name": "White Sauce Pasta",
-        "img": "/menu/white-sauce-pasta.jpeg",
+        "img": "/menu/white-sauce-pasta.webp",
         "prices": {
           "Full": 120
         }
@@ -1066,35 +1066,35 @@ export const MENU_SECTIONS = [
     "items": [
       {
         "name": "Hot N Sour Soup",
-        "img": "/menu/hot-n-sour-soup.png",
+        "img": "/menu/hot-n-sour-soup.webp",
         "prices": {
           "Full": 60
         }
       },
       {
         "name": "Manchow Soup",
-        "img": "/menu/manchow-soup.png",
+        "img": "/menu/manchow-soup.webp",
         "prices": {
           "Full": 50
         }
       },
       {
         "name": "Talumein Soup",
-        "img": "/menu/talumein-soup.jpeg",
+        "img": "/menu/talumein-soup.webp",
         "prices": {
           "Full": 60
         }
       },
       {
         "name": "Tomato Soup",
-        "img": "/menu/tomato-soup.jpeg",
+        "img": "/menu/tomato-soup.webp",
         "prices": {
           "Full": 50
         }
       },
       {
         "name": "Veg Sweet Corn Soup",
-        "img": "/menu/veg-sweet-corn-soup.jpeg",
+        "img": "/menu/veg-sweet-corn-soup.webp",
         "prices": {
           "Full": 50
         }
@@ -1107,35 +1107,35 @@ export const MENU_SECTIONS = [
     "items": [
       {
         "name": "China Town",
-        "img": "/menu/china-town.jpeg",
+        "img": "/menu/china-town.webp",
         "prices": {
           "Full": 180
         }
       },
       {
         "name": "Kungfu Bowl",
-        "img": "/menu/kungfu-bowl.jpeg",
+        "img": "/menu/kungfu-bowl.webp",
         "prices": {
           "Full": 99
         }
       },
       {
         "name": "Roll'S Roller",
-        "img": "/menu/roll-s-roller.jpeg",
+        "img": "/menu/roll-s-roller.webp",
         "prices": {
           "Full": 110
         }
       },
       {
         "name": "Sip-N-Roll",
-        "img": "/menu/sip-n-roll.jpeg",
+        "img": "/menu/sip-n-roll.webp",
         "prices": {
           "Full": 110
         }
       },
       {
         "name": "Thaar Roll'S",
-        "img": "/menu/thaar-roll-s.jpeg",
+        "img": "/menu/thaar-roll-s.webp",
         "prices": {
           "Full": 110
         }
@@ -1148,63 +1148,63 @@ export const MENU_SECTIONS = [
     "items": [
       {
         "name": "Chur-Chur Naan Thali",
-        "img": "/menu/chur-chur-naan-thali.png",
+        "img": "/menu/chur-chur-naan-thali.webp",
         "prices": {
           "Full": 110
         }
       },
       {
         "name": "Combo Bowl",
-        "img": "/menu/combo-bowl.png",
+        "img": "/menu/combo-bowl.webp",
         "prices": {
           "Full": 80
         }
       },
       {
         "name": "Delight Combo",
-        "img": "/menu/delight-combo.jpeg",
+        "img": "/menu/delight-combo.webp",
         "prices": {
           "Full": 80
         }
       },
       {
         "name": "Malai Chaap + 2 Rumali + Cold Drink",
-        "img": "/menu/malai-chaap---2-rumali--cold-drink.png",
+        "img": "/menu/malai-chaap---2-rumali--cold-drink.webp",
         "prices": {
           "Full": 180
         }
       },
       {
         "name": "Masala Chaap + 2 Rumali + Cold Drink",
-        "img": "/menu/masala-chaap--2-rumali--cold-drink.png",
+        "img": "/menu/masala-chaap--2-rumali--cold-drink.webp",
         "prices": {
           "Full": 170
         }
       },
       {
         "name": "Paneer Tikka Masala + 2 Rumali + Cold Drink",
-        "img": "/menu/paneer-tikka-masala---2-rumali--cold-drink.png",
+        "img": "/menu/paneer-tikka-masala---2-rumali--cold-drink.webp",
         "prices": {
           "Full": 180
         }
       },
       {
         "name": "Regular Thali",
-        "img": "/menu/regular-thali.jpeg",
+        "img": "/menu/regular-thali.webp",
         "prices": {
           "Full": 150
         }
       },
       {
         "name": "Standard Thali",
-        "img": "/menu/standard-thali.png",
+        "img": "/menu/standard-thali.webp",
         "prices": {
           "Full": 100
         }
       },
       {
         "name": "Super Deluxe Thali",
-        "img": "/menu/super-deluxe-thali.png",
+        "img": "/menu/super-deluxe-thali.webp",
         "prices": {
           "Full": 220
         }
@@ -1232,21 +1232,21 @@ export const MENU_SECTIONS = [
       },
       {
         "name": "Hot Chocolate Milk",
-        "img": "/menu/hot-chocolate-milk.jpeg",
+        "img": "/menu/hot-chocolate-milk.webp",
         "prices": {
           "Full": 50
         }
       },
       {
         "name": "Hot Coffee",
-        "img": "/menu/hot-coffee.jpeg",
+        "img": "/menu/hot-coffee.webp",
         "prices": {
           "Full": 40
         }
       },
       {
         "name": "Masala Tea",
-        "img": "/menu/masala-tea.png",
+        "img": "/menu/masala-tea.webp",
         "prices": {
           "Full": 30
         }
@@ -1258,7 +1258,7 @@ export const MENU_SECTIONS = [
       },
       {
         "name": "Tea",
-        "img": "/menu/tea.jpeg",
+        "img": "/menu/tea.webp",
         "prices": {
           "Full": 15
         }
@@ -1276,63 +1276,63 @@ export const MENU_SECTIONS = [
     "items": [
       {
         "name": "Blood Orange Mojito",
-        "img": "/menu/blood-orange-mojito.jpeg",
+        "img": "/menu/blood-orange-mojito.webp",
         "prices": {
           "Full": 69
         }
       },
       {
         "name": "Blue Lagoon Mojito",
-        "img": "/menu/blue-lagoon-mojito.png",
+        "img": "/menu/blue-lagoon-mojito.webp",
         "prices": {
           "Full": 69
         }
       },
       {
         "name": "Green Apple Mojito",
-        "img": "/menu/green-apple-mojito.png",
+        "img": "/menu/green-apple-mojito.webp",
         "prices": {
           "Full": 69
         }
       },
       {
         "name": "Mango Mojito",
-        "img": "/menu/mango-mojito.jpeg",
+        "img": "/menu/mango-mojito.webp",
         "prices": {
           "Full": 69
         }
       },
       {
         "name": "Peach Mojito",
-        "img": "/menu/peach-mojito.jpeg",
+        "img": "/menu/peach-mojito.webp",
         "prices": {
           "Full": 69
         }
       },
       {
         "name": "Pineapple Mojito",
-        "img": "/menu/pineapple-mojito.jpeg",
+        "img": "/menu/pineapple-mojito.webp",
         "prices": {
           "Full": 69
         }
       },
       {
         "name": "Strawberry Mojito",
-        "img": "/menu/strawberry-mojito.jpeg",
+        "img": "/menu/strawberry-mojito.webp",
         "prices": {
           "Full": 69
         }
       },
       {
         "name": "Virgin Mojito",
-        "img": "/menu/virgin-mojito.jpeg",
+        "img": "/menu/virgin-mojito.webp",
         "prices": {
           "Full": 69
         }
       },
       {
         "name": "Water Melon Mojito",
-        "img": "/menu/water-melon-mojito.jpeg",
+        "img": "/menu/water-melon-mojito.webp",
         "prices": {
           "Full": 69
         }
@@ -1345,63 +1345,63 @@ export const MENU_SECTIONS = [
     "items": [
       {
         "name": "Blueberry Milk Shake",
-        "img": "/menu/blueberry-milk-shake.jpeg",
+        "img": "/menu/blueberry-milk-shake.webp",
         "prices": {
           "Full": 90
         }
       },
       {
         "name": "Chocolate Milk Shake",
-        "img": "/menu/chocolate-milk-shake.jpeg",
+        "img": "/menu/chocolate-milk-shake.webp",
         "prices": {
           "Full": 80
         }
       },
       {
         "name": "Cold Coffee",
-        "img": "/menu/cold-coffee.png",
+        "img": "/menu/cold-coffee.webp",
         "prices": {
           "Full": 70
         }
       },
       {
         "name": "Kit-Kat Milk Shake",
-        "img": "/menu/kit-kat-milk-shake.jpeg",
+        "img": "/menu/kit-kat-milk-shake.webp",
         "prices": {
           "Full": 90
         }
       },
       {
         "name": "Mango Milk Shake",
-        "img": "/menu/mango-milk-shake.jpeg",
+        "img": "/menu/mango-milk-shake.webp",
         "prices": {
           "Full": 90
         }
       },
       {
         "name": "Oreo Milk Shake",
-        "img": "/menu/oreo-milk-shake.jpeg",
+        "img": "/menu/oreo-milk-shake.webp",
         "prices": {
           "Full": 80
         }
       },
       {
         "name": "Pineapple Milk Shake",
-        "img": "/menu/pine-apple-milk-shake.jpeg",
+        "img": "/menu/pine-apple-milk-shake.webp",
         "prices": {
           "Full": 90
         }
       },
       {
         "name": "Strawberry Milk Shake",
-        "img": "/menu/strawberry-milk-shake.jpeg",
+        "img": "/menu/strawberry-milk-shake.webp",
         "prices": {
           "Full": 90
         }
       },
       {
         "name": "Vanilla Milk Shake",
-        "img": "/menu/vanilla-milk-shake.jpeg",
+        "img": "/menu/vanilla-milk-shake.webp",
         "prices": {
           "Full": 70
         }
@@ -1414,14 +1414,14 @@ export const MENU_SECTIONS = [
     "items": [
       {
         "name": "Boondi Raita",
-        "img": "/menu/boondi-raita.jpeg",
+        "img": "/menu/boondi-raita.webp",
         "prices": {
           "Full": 35
         }
       },
       {
         "name": "Fresh Plain Curd",
-        "img": "/menu/fresh-plain-curd.jpeg",
+        "img": "/menu/fresh-plain-curd.webp",
         "prices": {
           "Full": 30
         }
@@ -1434,21 +1434,21 @@ export const MENU_SECTIONS = [
     "items": [
       {
         "name": "Gulab Jamun (Per Pc)",
-        "img": "/menu/gulab-jamun--per-pc-.png",
+        "img": "/menu/gulab-jamun--per-pc-.webp",
         "prices": {
           "Full": 40
         }
       },
       {
         "name": "Special Thandi Kheer",
-        "img": "/menu/special-thandi-kheer.jpeg",
+        "img": "/menu/special-thandi-kheer.webp",
         "prices": {
           "Full": 90
         }
       },
       {
         "name": "Sponge Rasgulla (Per Pc)",
-        "img": "/menu/sponge-rasgulla--per-pc-.png",
+        "img": "/menu/sponge-rasgulla--per-pc-.webp",
         "prices": {
           "Full": 50
         }
@@ -1456,3 +1456,4 @@ export const MENU_SECTIONS = [
     ]
   }
 ];
+

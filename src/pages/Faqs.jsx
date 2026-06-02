@@ -106,7 +106,7 @@ const Faqs = () => {
 
                             
                             <div className="cta-contact-btn">
-                                <a href="tel:9217014763" className="btn-default btn-highlighted"><i className="fas fa-phone"></i> +91 92170 14763</a>
+                                <a href="tel:9217014763" className="btn-default btn-highlighted" style={{display:'flex',alignItems:'center',gap:'8px'}}><i className="fas fa-phone"></i> +91 92170 14763</a>
                             </div>
                             
                         </div>

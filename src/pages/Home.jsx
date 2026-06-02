@@ -1,4 +1,4 @@
-
+﻿
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { googleReviews } from '../data/googleReviews';
@@ -55,48 +55,48 @@ const Home = () => {
             id: 'tandoor',
             label: 'Tandoor',
             items: [
-                { title: 'Achari Chaap', image: '/menu/achari-chaap.jpeg', price: formatPrice(120), description: 'Tandoor-grilled chaap with bold achari spices and a smoky, tangy finish.' },
-                { title: 'Achari Mushroom Tikka', image: '/menu/achari-mushroom-tikka.jpeg', price: formatPrice(220), description: 'Tender mushrooms roasted with achari masala for a spicy North Indian bite.' },
-                { title: 'Achari Paneer Tikka', image: '/menu/achari-paneer-tikka.jpeg', price: formatPrice(130), description: 'Soft paneer cubes marinated in achari spices and charred until aromatic.' },
-                { title: 'Afghani Chaap', image: '/menu/afghani-chaap.jpeg', price: formatPrice(130), description: 'Creamy Afghani-style chaap with mild spices and rich tandoori flavor.' },
-                { title: 'Dahi Ke Sholey', image: '/menu/dahi-ke-sholey.jpeg', price: formatPrice(150), description: 'Crispy yogurt-filled rolls finished golden and lightly spiced for a warm starter.' },
-                { title: 'Haryali Chaap', image: '/menu/haryali-chaap.jpeg', price: formatPrice(120), description: 'Chaap marinated with mint, coriander, and green masala for a fresh herbaceous taste.' },
+                { title: 'Achari Chaap', image: '/menu/achari-chaap.webp', price: formatPrice(120), description: 'Tandoor-grilled chaap with bold achari spices and a smoky, tangy finish.' },
+                { title: 'Achari Mushroom Tikka', image: '/menu/achari-mushroom-tikka.webp', price: formatPrice(220), description: 'Tender mushrooms roasted with achari masala for a spicy North Indian bite.' },
+                { title: 'Achari Paneer Tikka', image: '/menu/achari-paneer-tikka.webp', price: formatPrice(130), description: 'Soft paneer cubes marinated in achari spices and charred until aromatic.' },
+                { title: 'Afghani Chaap', image: '/menu/afghani-chaap.webp', price: formatPrice(130), description: 'Creamy Afghani-style chaap with mild spices and rich tandoori flavor.' },
+                { title: 'Dahi Ke Sholey', image: '/menu/dahi-ke-sholey.webp', price: formatPrice(150), description: 'Crispy yogurt-filled rolls finished golden and lightly spiced for a warm starter.' },
+                { title: 'Haryali Chaap', image: '/menu/haryali-chaap.webp', price: formatPrice(120), description: 'Chaap marinated with mint, coriander, and green masala for a fresh herbaceous taste.' },
             ],
         },
         {
             id: 'wrap-roll',
             label: 'Wrap & Roll',
             items: [
-                { title: 'Afghani Chaap Roll', image: '/menu/afghani-chaap-roll.jpeg', price: formatPrice(90), description: 'Soft roll stuffed with creamy Afghani chaap and gentle Indian spices.' },
-                { title: 'Chilli Mushroom Wrap', image: '/menu/chilli-mushroom-wrap.jpeg', price: formatPrice(90), description: 'Mushrooms tossed in chilli masala and wrapped for a bold, spicy snack.' },
-                { title: 'Chilli Paneer Wrap', image: '/menu/chilli-paneer-wrap.jpeg', price: formatPrice(90), description: 'Paneer in tangy chilli gravy wrapped street-style for a satisfying bite.' },
-                { title: 'Malai Chaap Roll', image: '/menu/malai-chaap-roll.png', price: formatPrice(90), description: 'Creamy malai chaap rolled into a soft wrap with rich, smooth flavor.' },
-                { title: 'Paneer Roll', image: '/menu/paneer-roll.png', price: formatPrice(70), description: 'Paneer and masala rolled together for an easy, filling Indian handheld.' },
-                { title: 'Tandoori Chaap Roll', image: '/menu/tandoori-chaap-roll.jpeg', price: formatPrice(80), description: 'Smoky tandoori chaap wrapped with spices for a hearty and flavorful roll.' },
+                { title: 'Afghani Chaap Roll', image: '/menu/afghani-chaap-roll.webp', price: formatPrice(90), description: 'Soft roll stuffed with creamy Afghani chaap and gentle Indian spices.' },
+                { title: 'Chilli Mushroom Wrap', image: '/menu/chilli-mushroom-wrap.webp', price: formatPrice(90), description: 'Mushrooms tossed in chilli masala and wrapped for a bold, spicy snack.' },
+                { title: 'Chilli Paneer Wrap', image: '/menu/chilli-paneer-wrap.webp', price: formatPrice(90), description: 'Paneer in tangy chilli gravy wrapped street-style for a satisfying bite.' },
+                { title: 'Malai Chaap Roll', image: '/menu/malai-chaap-roll.webp', price: formatPrice(90), description: 'Creamy malai chaap rolled into a soft wrap with rich, smooth flavor.' },
+                { title: 'Paneer Roll', image: '/menu/paneer-roll.webp', price: formatPrice(70), description: 'Paneer and masala rolled together for an easy, filling Indian handheld.' },
+                { title: 'Tandoori Chaap Roll', image: '/menu/tandoori-chaap-roll.webp', price: formatPrice(80), description: 'Smoky tandoori chaap wrapped with spices for a hearty and flavorful roll.' },
             ],
         },
         {
             id: 'roti-rasoi',
             label: 'Roti Rasoi',
             items: [
-                { title: 'Aloo Naan', image: '/menu/aloo-naan.jpeg', price: formatPrice(45), description: 'Stuffed naan filled with spiced potato and baked soft in the tandoor.' },
-                { title: 'Aloo Paratha', image: '/menu/aloo-paratha.jpeg', price: formatPrice(40), description: 'Classic stuffed paratha with seasoned potato filling and homestyle warmth.' },
-                { title: 'Aloo Pyaaz Paratha', image: '/menu/aloo-pyaaz-paratha.jpeg', price: formatPrice(60), description: 'Potato and onion stuffed paratha with a hearty North Indian taste.' },
-                { title: 'Amritsari Kulcha', image: '/menu/amritsari-kulcha.png', price: formatPrice(80), description: 'Fluffy Amritsari kulcha baked golden and served with rich traditional flavor.' },
-                { title: 'Butter Naan', image: '/menu/butter-naan.jpeg', price: formatPrice(40), description: 'Soft tandoor-baked naan brushed with butter for a comforting side.' },
-                { title: 'Classic Boondi Raita', image: '/menu/classic-boondi-raita.jpeg', price: formatPrice(56), description: 'Cooling yogurt raita with boondi, ideal to balance rich Indian dishes.' },
+                { title: 'Aloo Naan', image: '/menu/aloo-naan.webp', price: formatPrice(45), description: 'Stuffed naan filled with spiced potato and baked soft in the tandoor.' },
+                { title: 'Aloo Paratha', image: '/menu/aloo-paratha.webp', price: formatPrice(40), description: 'Classic stuffed paratha with seasoned potato filling and homestyle warmth.' },
+                { title: 'Aloo Pyaaz Paratha', image: '/menu/aloo-pyaaz-paratha.webp', price: formatPrice(60), description: 'Potato and onion stuffed paratha with a hearty North Indian taste.' },
+                { title: 'Amritsari Kulcha', image: '/menu/amritsari-kulcha.webp', price: formatPrice(80), description: 'Fluffy Amritsari kulcha baked golden and served with rich traditional flavor.' },
+                { title: 'Butter Naan', image: '/menu/butter-naan.webp', price: formatPrice(40), description: 'Soft tandoor-baked naan brushed with butter for a comforting side.' },
+                { title: 'Classic Boondi Raita', image: '/menu/classic-boondi-raita.webp', price: formatPrice(56), description: 'Cooling yogurt raita with boondi, ideal to balance rich Indian dishes.' },
             ],
         },
         {
             id: 'sandwiches-burgers',
             label: 'Sandwiches & Burgers',
             items: [
-                { title: 'Aloo Sandwich', image: '/menu/aloo-sandwich.jpeg', price: formatPrice(50), description: 'Toasted sandwich with spiced aloo filling and crisp, familiar Indian flavors.' },
-                { title: 'Cheese Burger', image: '/menu/cheese-burger.jpeg', price: formatPrice(60), description: 'Juicy burger layered with cheese for a rich and satisfying bite.' },
-                { title: 'Cheese Corn Sandwich', image: '/menu/cheese-corn-sandwich.jpeg', price: formatPrice(60), description: 'Creamy cheese and sweet corn tucked into a toasted sandwich with mild spice.' },
-                { title: 'Chilli Paneer Sandwich', image: '/menu/chilli-paneer-sandwich.jpeg', price: formatPrice(70), description: 'Paneer tossed in chilli masala and packed into a bold, spicy sandwich.' },
-                { title: 'Double Patty Burger', image: '/menu/double-patty-burger.jpeg', price: formatPrice(80), description: 'Hearty burger with two patties made for a bigger and more filling meal.' },
-                { title: 'Grilled Sandwich', image: '/menu/grilled-sandwich.jpeg', price: formatPrice(70), description: 'Golden grilled sandwich with a crisp crust and warm savory stuffing.' },
+                { title: 'Aloo Sandwich', image: '/menu/aloo-sandwich.webp', price: formatPrice(50), description: 'Toasted sandwich with spiced aloo filling and crisp, familiar Indian flavors.' },
+                { title: 'Cheese Burger', image: '/menu/cheese-burger.webp', price: formatPrice(60), description: 'Juicy burger layered with cheese for a rich and satisfying bite.' },
+                { title: 'Cheese Corn Sandwich', image: '/menu/cheese-corn-sandwich.webp', price: formatPrice(60), description: 'Creamy cheese and sweet corn tucked into a toasted sandwich with mild spice.' },
+                { title: 'Chilli Paneer Sandwich', image: '/menu/chilli-paneer-sandwich.webp', price: formatPrice(70), description: 'Paneer tossed in chilli masala and packed into a bold, spicy sandwich.' },
+                { title: 'Double Patty Burger', image: '/menu/double-patty-burger.webp', price: formatPrice(80), description: 'Hearty burger with two patties made for a bigger and more filling meal.' },
+                { title: 'Grilled Sandwich', image: '/menu/grilled-sandwich.webp', price: formatPrice(70), description: 'Golden grilled sandwich with a crisp crust and warm savory stuffing.' },
             ],
         },
     ];
@@ -875,7 +875,7 @@ const Home = () => {
                                     <div className="col-lg-12">
                                         <div className="reserve-table-btn">
                                             <button type="submit" className="btn-default" disabled={bookingStatus === 'submitting'}>
-                                                {bookingStatus === 'submitting' ? 'Reserving…' : 'reserve now'}
+                                                {bookingStatus === 'submitting' ? 'Reservingâ€¦' : 'reserve now'}
                                             </button>
                                         </div>
                                     </div>
@@ -897,4 +897,5 @@ const Home = () => {
 };
 
 export default Home;
+
 

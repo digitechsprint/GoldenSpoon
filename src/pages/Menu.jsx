@@ -4,6 +4,8 @@ import { supabase } from '../lib/supabase';
 import { useCart } from '../context/CartContext';
 import { MENU_SECTIONS } from '../data/menuData';
 
+const toWebp = (url) => url ? url.replace(/\.(png|jpe?g)($|\?)/i, '.webp$2') : url;
+
 const Menu = () => {
     const { content: pageContent = {} } = usePageData();
     const header = pageContent.header || {};
@@ -192,9 +194,9 @@ const Menu = () => {
                                     <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(320px,1fr))',gap:'12px 20px',padding:'8px 0'}}>
                                         {catItems.map(item => (
                                             <div key={item.id} style={{display:'flex',alignItems:'center',gap:14,padding:'14px 16px',background:'var(--secondary-color,rgba(255,255,255,0.03))',borderRadius:14,border:'1px solid rgba(128,128,128,0.1)'}}>
-                                                <img src={item.image_url || '/images/logo.png'}
+                                                <img src={toWebp(item.image_url) || '/images/logo.png'}
                                                     style={{width:72,height:72,objectFit:'cover',borderRadius:'50%',flexShrink:0}}
-                                                    alt={item.name} />
+                                                    alt={item.name} loading="lazy" decoding="async" />
                                                 <div style={{flex:1,minWidth:0}}>
                                                     <div style={{display:'flex',alignItems:'center',gap:6,flexWrap:'wrap'}}>
                                                         <span style={{fontWeight:700,fontSize:15}}>
@@ -245,7 +247,7 @@ const Menu = () => {
                             <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(320px,1fr))',gap:'12px 20px',padding:'8px 0'}}>
                                         {section.items.map((item) => (
                                             <div key={item.name} style={{display:'flex',alignItems:'center',gap:14,padding:'14px 16px',background:'var(--secondary-color,rgba(255,255,255,0.03))',borderRadius:14,border:'1px solid rgba(128,128,128,0.1)'}}>
-                                                <img src={item.img} style={{width:72,height:72,objectFit:'cover',borderRadius:'50%',flexShrink:0}} alt={item.name} onError={e => { e.target.src = '/images/logo.png' }} />
+                                                <img src={item.img} style={{width:72,height:72,objectFit:'cover',borderRadius:'50%',flexShrink:0}} alt={item.name} loading="lazy" decoding="async" onError={e => { e.target.src = '/images/logo.png' }} />
                                                 <div style={{flex:1,minWidth:0}}>
                                                     <span style={{fontWeight:700,fontSize:15}}>{item.name}</span>
                                                     <div style={{display:'flex',alignItems:'center',gap:8,marginTop:8,flexWrap:'wrap'}}>
