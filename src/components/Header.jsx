@@ -33,8 +33,11 @@ const Header = () => {
     const [theme, setTheme] = useState(getInitialTheme);
     const [menuOpen, setMenuOpen] = useState(false);
     const [openDropdown, setOpenDropdown] = useState(null);
+    const [isMounted, setIsMounted] = useState(false);
     const { itemCount, setIsOpen } = useCart();
     const isDark = theme === 'dark';
+
+    useEffect(() => { setIsMounted(true); }, []);
 
     useEffect(() => {
         document.documentElement.dataset.theme = theme;
@@ -311,9 +314,8 @@ const Header = () => {
 
             </header>
 
-            {/* Portal: render overlay + drawer directly on body so position:fixed
-                isn't clipped by the header's transform/backdrop-filter */}
-            {createPortal(
+            {/* Portal: only renders client-side (after hydration) to avoid SSR document.body access */}
+            {isMounted && createPortal(
                 <>
                     <div className={`gs-mobile-overlay${menuOpen ? ' open' : ''}`} onClick={() => setMenuOpen(false)} />
                     <nav className={`gs-mobile-menu${menuOpen ? ' open' : ''}`} aria-label="Mobile navigation">

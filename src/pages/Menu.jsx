@@ -58,7 +58,11 @@ const Menu = () => {
     }
 
     function itemsByCategory(categoryId) {
-        return dbItems.filter(item => item.category_id === categoryId);
+        return dbItems.filter(item => {
+            const inCat = item.category_id === categoryId;
+            const matchSearch = !search || item.name.toLowerCase().includes(search.toLowerCase());
+            return inCat && matchSearch;
+        });
     }
 
     const filteredSections = MENU_SECTIONS
@@ -73,7 +77,7 @@ const Menu = () => {
 
     return (
         <main>
-            <div className="page-header" style={{ position: 'relative', overflow: 'hidden', backgroundImage: 'none', height: '100vh' }}>
+            <div className="page-header" style={{ position: 'relative', overflow: 'hidden', backgroundImage: 'none', height: '380px' }}>
                 <video 
                     ref={videoRef}
                     autoPlay 
@@ -100,30 +104,33 @@ const Menu = () => {
                 </div>
             </div>
 
-            <div className="page-menu">
+            <div className="page-menu" style={{paddingTop:32,paddingBottom:8}}>
                 <div className="container">
-                    <div className="row section-row">
-                        <div className="col-lg-12">
-                            <div className="section-title">
-                                <h3 className="wow fadeInUp">taste the best that surprise you</h3>
-                                <h2 className="text-anime-style-2" data-cursor="-opaque">our special <span>menu</span></h2>
-                                <p className="wow fadeInUp" data-wow-delay="0.2s">Enjoy the unique dishes from the Golden Spoon restaurant that only our restaurant has.</p>
-                            </div>
-                        </div>
-                    </div>
-                    
                     {/* ── Search Bar ── */}
-                    <div className="row wow fadeInUp" style={{marginBottom:16}}>
+                    <div className="row wow fadeInUp" style={{marginBottom:20}}>
                         <div className="col-lg-6 col-md-8 mx-auto">
                             <div style={{position:'relative'}}>
-                                <i className="fas fa-search" style={{position:'absolute',left:16,top:'50%',transform:'translateY(-50%)',opacity:0.4,zIndex:1}}></i>
+                                <i className="fas fa-search" style={{position:'absolute',left:16,top:'50%',transform:'translateY(-50%)',color:'#d4a843',zIndex:1}}></i>
                                 <input
                                     type="text"
                                     value={search}
                                     onChange={e => setSearch(e.target.value)}
                                     placeholder="Search menu items…"
-                                    style={{width:'100%',padding:'12px 16px 12px 44px',border:'1.5px solid rgba(255,255,255,0.12)',borderRadius:50,background:'rgba(255,255,255,0.05)',color:'inherit',fontSize:15,outline:'none',boxSizing:'border-box'}}
+                                    style={{
+                                        width:'100%', padding:'13px 16px 13px 46px',
+                                        border:'1.5px solid #d4a843', borderRadius:50,
+                                        background:'var(--secondary-color, #fff)',
+                                        color:'var(--primary-color, #111)',
+                                        fontSize:15, outline:'none', boxSizing:'border-box',
+                                        boxShadow:'0 2px 12px rgba(212,168,67,0.12)',
+                                    }}
                                 />
+                                {search && (
+                                    <button onClick={() => setSearch('')}
+                                        style={{position:'absolute',right:16,top:'50%',transform:'translateY(-50%)',background:'none',border:'none',cursor:'pointer',color:'inherit',fontSize:16,opacity:0.6}}>
+                                        ✕
+                                    </button>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -156,9 +163,19 @@ const Menu = () => {
             </div>
 
             {/* ── Dynamic menu from Supabase (admin-managed) ─────────── */}
-            {menuLoaded && dbCategories.length > 0 && (
+            {menuLoaded && dbCategories.length > 0 && (() => {
+                const visibleCats = dbCategories.filter(cat => activeCategory === "all" || (cat.slug||cat.id) === activeCategory);
+                const hasResults = visibleCats.some(cat => itemsByCategory(cat.id).length > 0);
+                if (!hasResults && search) return (
+                    <div style={{textAlign:'center',padding:'60px 20px',opacity:0.6}}>
+                        <i className="fas fa-search" style={{fontSize:32,marginBottom:12,display:'block',color:'#d4a843'}}></i>
+                        <p style={{fontSize:16}}>No items found for "<strong>{search}</strong>"</p>
+                        <button onClick={() => setSearch('')} style={{marginTop:12,background:'#d4a843',border:'none',borderRadius:50,padding:'8px 24px',fontWeight:700,cursor:'pointer',color:'#111'}}>Clear Search</button>
+                    </div>
+                );
+                return (
                 <div className="our-food-menu">
-                    {dbCategories.filter(cat => activeCategory === "all" || (cat.slug||cat.id) === activeCategory).map(cat => {
+                    {visibleCats.map(cat => {
                         const catItems = itemsByCategory(cat.id);
                         if (catItems.length === 0) return null;
                         return (
@@ -232,7 +249,8 @@ const Menu = () => {
                         );
                     })}
                 </div>
-            )}
+                );
+            })()}
 
             {/* ── Legacy hardcoded menu (shown when Supabase has no data) ── */}
 
