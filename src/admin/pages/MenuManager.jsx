@@ -1,6 +1,39 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import AdminLayout from '../AdminLayout'
 import { supabase } from '../../lib/supabase'
+
+// Compress any image file to WebP using the browser Canvas API (no library needed)
+async function compressToWebP(file, maxPx = 400, quality = 0.82) {
+  return new Promise((resolve, reject) => {
+    const img = new Image()
+    const objectUrl = URL.createObjectURL(file)
+    img.onload = () => {
+      URL.revokeObjectURL(objectUrl)
+      const ratio = Math.min(maxPx / img.width, maxPx / img.height, 1)
+      const w = Math.round(img.width * ratio)
+      const h = Math.round(img.height * ratio)
+      const canvas = document.createElement('canvas')
+      canvas.width = w; canvas.height = h
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h)
+      canvas.toBlob(
+        blob => blob ? resolve(blob) : reject(new Error('WebP conversion failed')),
+        'image/webp', quality
+      )
+    }
+    img.onerror = () => { URL.revokeObjectURL(objectUrl); reject(new Error('Image load failed')) }
+    img.src = objectUrl
+  })
+}
+
+async function uploadToStorage(blob, baseName) {
+  const path = `menu/${Date.now()}-${baseName}.webp`
+  const { error } = await supabase.storage
+    .from('menu-images')
+    .upload(path, blob, { contentType: 'image/webp', upsert: false })
+  if (error) throw error
+  const { data } = supabase.storage.from('menu-images').getPublicUrl(path)
+  return data.publicUrl
+}
 
 const EMPTY_CAT = { name: '', slug: '', description: '', image_url: '', sort_order: 0, is_active: true }
 const EMPTY_ITEM = { name: '', category_id: '', description: '', price: '', price_half: '', image_url: '', is_vegetarian: true, is_featured: false, sort_order: 0, is_active: true }
@@ -18,6 +51,7 @@ export default function MenuManager() {
   const [form, setForm] = useState(EMPTY_CAT)
   const [editingId, setEditingId] = useState(null)
   const [saving, setSaving] = useState(false)
+  const [uploading, setUploading] = useState(false)
   const [toast, setToast] = useState('')
 
   useEffect(() => { fetchData() }, [])
@@ -50,6 +84,32 @@ export default function MenuManager() {
   function closeModal() { setModal(null); setEditingId(null) }
 
   function showToast(msg) { setToast(msg); setTimeout(() => setToast(''), 3000) }
+
+  async function handleImagePick(e) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setUploading(true)
+    try {
+      const blob = await compressToWebP(file, 400, 0.82)
+      const originalKB = Math.round(file.size / 1024)
+      const compressedKB = Math.round(blob.size / 1024)
+      let publicUrl
+      try {
+        publicUrl = await uploadToStorage(blob, file.name.replace(/\.[^.]+$/, ''))
+      } catch (storageErr) {
+        // Storage bucket not configured — fall back to object URL preview only
+        showToast(`Storage error: ${storageErr.message}. Check Supabase Storage setup.`)
+        setUploading(false)
+        return
+      }
+      setField('image_url', publicUrl)
+      showToast(`Uploaded! ${originalKB}KB → ${compressedKB}KB (WebP)`)
+    } catch (err) {
+      showToast(`Image error: ${err.message}`)
+    }
+    setUploading(false)
+    e.target.value = ''
+  }
 
   async function saveCat(e) {
     e.preventDefault(); setSaving(true)
@@ -230,10 +290,29 @@ export default function MenuManager() {
                       <textarea value={form.description} onChange={e => setField('description', e.target.value)} rows={2} />
                     </div>
                   </div>
-                  <div className="col-md-8">
+                  <div className="col-12">
                     <div className="admin-form-group">
-                      <label>Image URL</label>
-                      <input value={form.image_url} onChange={e => setField('image_url', e.target.value)} placeholder="/menu/category.jpg" />
+                      <label>Image</label>
+                      <div style={{display:'flex',gap:8,alignItems:'center',flexWrap:'wrap'}}>
+                        <label style={{
+                          display:'inline-flex',alignItems:'center',gap:6,
+                          background:'var(--admin-accent)',color:'#111',
+                          borderRadius:6,padding:'7px 14px',fontSize:13,fontWeight:600,
+                          cursor: uploading ? 'wait' : 'pointer',opacity: uploading ? 0.7 : 1,
+                          whiteSpace:'nowrap',flexShrink:0,
+                        }}>
+                          <i className={`fas ${uploading ? 'fa-spinner fa-spin' : 'fa-upload'}`}></i>
+                          {uploading ? ' Compressing…' : ' Upload Image'}
+                          <input type="file" accept="image/*" style={{display:'none'}} disabled={uploading} onChange={handleImagePick} />
+                        </label>
+                        <input value={form.image_url} onChange={e => setField('image_url', e.target.value)}
+                          placeholder="or paste URL" style={{flex:1,minWidth:120}} />
+                        {form.image_url && (
+                          <img src={form.image_url} alt="" style={{width:40,height:40,objectFit:'cover',borderRadius:6,flexShrink:0}}
+                            onError={e => { e.target.style.display='none' }} />
+                        )}
+                      </div>
+                      <p style={{fontSize:11,opacity:0.5,margin:'4px 0 0'}}>Auto-compressed to WebP on upload</p>
                     </div>
                   </div>
                   <div className="col-md-4">
@@ -305,10 +384,29 @@ export default function MenuManager() {
                       <textarea value={form.description} onChange={e => setField('description', e.target.value)} rows={3} />
                     </div>
                   </div>
-                  <div className="col-md-8">
+                  <div className="col-12">
                     <div className="admin-form-group">
-                      <label>Image URL</label>
-                      <input value={form.image_url} onChange={e => setField('image_url', e.target.value)} placeholder="/menu/item.jpg" />
+                      <label>Image</label>
+                      <div style={{display:'flex',gap:8,alignItems:'center',flexWrap:'wrap'}}>
+                        <label style={{
+                          display:'inline-flex',alignItems:'center',gap:6,
+                          background:'var(--admin-accent)',color:'#111',
+                          borderRadius:6,padding:'7px 14px',fontSize:13,fontWeight:600,
+                          cursor: uploading ? 'wait' : 'pointer',opacity: uploading ? 0.7 : 1,
+                          whiteSpace:'nowrap',flexShrink:0,
+                        }}>
+                          <i className={`fas ${uploading ? 'fa-spinner fa-spin' : 'fa-upload'}`}></i>
+                          {uploading ? ' Compressing…' : ' Upload Image'}
+                          <input type="file" accept="image/*" style={{display:'none'}} disabled={uploading} onChange={handleImagePick} />
+                        </label>
+                        <input value={form.image_url} onChange={e => setField('image_url', e.target.value)}
+                          placeholder="or paste URL" style={{flex:1,minWidth:120}} />
+                        {form.image_url && (
+                          <img src={form.image_url} alt="" style={{width:40,height:40,objectFit:'cover',borderRadius:6,flexShrink:0}}
+                            onError={e => { e.target.style.display='none' }} />
+                        )}
+                      </div>
+                      <p style={{fontSize:11,opacity:0.5,margin:'4px 0 0'}}>Auto-compressed to WebP on upload</p>
                     </div>
                   </div>
                   <div className="col-md-4">
