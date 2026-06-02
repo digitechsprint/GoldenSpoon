@@ -5,6 +5,7 @@ import { usePageData } from '../context/PageDataContext';
 import { supabase } from '../lib/supabase';
 
 const TODAY = new Date().toISOString().split('T')[0];
+const MAX_DATE = new Date(Date.now() + 28 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
 
 const Faqs = () => {
     const { content: pageContent = {} } = usePageData();
@@ -106,7 +107,7 @@ const Faqs = () => {
 
                             
                             <div className="cta-contact-btn">
-                                <a href="tel:9217014763" className="btn-default btn-highlighted" style={{display:'flex',alignItems:'center',gap:'8px'}}><i className="fas fa-phone"></i> +91 92170 14763</a>
+                                <a href="tel:9217014763" className="btn-default btn-highlighted" style={{display:'inline-flex',alignItems:'center',gap:'8px',padding:'13px 24px'}}><i className="fas fa-phone"></i> +91 92170 14763</a>
                             </div>
                             
                         </div>
@@ -528,10 +529,9 @@ const Faqs = () => {
                                     <div className="form-group col-md-4 mb-4">
                                         <label className="form-label">date</label>
                                         <input type="date" className="form-control" required
-                                            min={TODAY}
+                                            min={TODAY} max={MAX_DATE}
                                             value={faqBooking.date}
-                                            onChange={e => setFaqField('date', e.target.value)}
-                                            onKeyDown={e => e.preventDefault()} />
+                                            onChange={e => setFaqField('date', e.target.value)} />
                                     </div>
 
                                     <div className="form-group col-md-4 mb-4">

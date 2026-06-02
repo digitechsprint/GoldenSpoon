@@ -249,8 +249,8 @@ const Header = () => {
                 <div className="header-sticky">
                     <div className="gs-nav">
                         {/* Logo */}
-                        <Link className="gs-logo" to="/" aria-label="Golden Spoon Restaurant home">
-                            <img src="/images/golden-spoon-logo.png" alt="Golden Spoon Restaurant" loading="eager" />
+                        <Link className="gs-logo" to="/" aria-label="Golden Spoon Restaurrant home">
+                            <img src="/images/golden-spoon-logo.png" alt="Golden Spoon Restaurrant" loading="eager" />
                         </Link>
 
                         {/* Desktop Nav */}

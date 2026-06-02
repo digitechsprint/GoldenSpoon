@@ -4,7 +4,7 @@ import { supabase } from '../../lib/supabase'
 
 const SETTING_KEYS = [
   { key: 'upi_id',           label: 'UPI ID',              type: 'text',     placeholder: 'e.g. goldenspoon@paytm',     desc: 'Your UPI ID that customers will pay to' },
-  { key: 'upi_name',         label: 'Merchant Name',       type: 'text',     placeholder: 'Golden Spoon Restaurant',    desc: 'Name shown in UPI apps when customer pays' },
+  { key: 'upi_name',         label: 'Merchant Name',       type: 'text',     placeholder: 'Golden Spoon Restaurrant',    desc: 'Name shown in UPI apps when customer pays' },
   { key: 'upi_qr_image',     label: 'UPI QR Code URL',     type: 'url',      placeholder: 'https://…/qr-code.png',      desc: 'URL to your UPI QR code image (upload to Supabase Storage)' },
   { key: 'ordering_enabled', label: 'Enable Online Orders', type: 'toggle',  placeholder: '',                           desc: 'Turn this off to disable the online ordering system' },
   { key: 'min_order_amount', label: 'Minimum Order (₹)',   type: 'number',   placeholder: '0',                          desc: 'Minimum cart value required to place an order (0 = no minimum)' },

@@ -51,15 +51,15 @@ const BlogSingle = () => {
                     <div className="post-content">
                         
                         <div className="post-entry">
-                            <p className="wow fadeInUp">Dining is more than just a meal; it's an experience that brings people together, celebrates flavors, and creates lasting memories. At Golden Spoon Restaurant, we believe in elevating this experience through carefully crafted dishes, thoughtful presentation, and a warm, welcoming ambiance. Every bite tells a story, every flavor is a journey, and every visit is an opportunity to connect with the essence of good food</p>
+                            <p className="wow fadeInUp">Dining is more than just a meal; it's an experience that brings people together, celebrates flavors, and creates lasting memories. At Golden Spoon Restaurrant, we believe in elevating this experience through carefully crafted dishes, thoughtful presentation, and a warm, welcoming ambiance. Every bite tells a story, every flavor is a journey, and every visit is an opportunity to connect with the essence of good food</p>
 
                             <p className="wow fadeInUp" data-wow-delay="0.2s">From selecting the finest ingredients to perfecting each recipe, the art of dining is at the heart of everything we do. Whether you're enjoying a quiet dinner or hosting a grand celebration, our goal is to make every moment exceptional. Let us take you on a culinary adventure where passion meets creativity, and dining becomes a true art form.</p>
                             
                             <blockquote className="wow fadeInUp" data-wow-delay="0.4s">
-                                <p>Dining is more than just eating; it's an experience that combines the artistry of flavors, the warmth of ambiance, and the beauty of human connection. At Golden Spoon Restaurant, we go beyond serving food—we create moments that linger in the heart and on the palate.</p>
+                                <p>Dining is more than just eating; it's an experience that combines the artistry of flavors, the warmth of ambiance, and the beauty of human connection. At Golden Spoon Restaurrant, we go beyond serving food—we create moments that linger in the heart and on the palate.</p>
                             </blockquote>
 
-                            <p className="wow fadeInUp" data-wow-delay="0.6s">Dining is more than just enjoying a meal; it's an experience that blends flavor, ambiance, and connection. At Golden Spoon Restaurant, we transform every visit into a memorable journey by combining the finest ingredients, skillful preparation, and a welcoming atmosphere. Whether it's an intimate dinner or a lively celebration, we believe in crafting moments that celebrate the true essence of good food and great company.</p>
+                            <p className="wow fadeInUp" data-wow-delay="0.6s">Dining is more than just enjoying a meal; it's an experience that blends flavor, ambiance, and connection. At Golden Spoon Restaurrant, we transform every visit into a memorable journey by combining the finest ingredients, skillful preparation, and a welcoming atmosphere. Whether it's an intimate dinner or a lively celebration, we believe in crafting moments that celebrate the true essence of good food and great company.</p>
 
                             <h2 className="wow fadeInUp" data-wow-delay="0.8s">Maximize Flavors with Mobile-Friendly Dining</h2>
 

@@ -5,6 +5,7 @@ import { usePageData } from '../context/PageDataContext';
 import { supabase } from '../lib/supabase';
 
 const TODAY = new Date().toISOString().split('T')[0];
+const MAX_DATE = new Date(Date.now() + 28 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
 
 const About = () => {
     const { content: pageContent = {} } = usePageData();
@@ -224,7 +225,7 @@ const About = () => {
                                             <div className="section-title">
                                                 <h3 className="wow fadeInUp">our mission</h3>
                                                 <h2 className="text-anime-style-2" data-cursor="-opaque">creating moments around flavor</h2>
-                                                <p className="wow fadeInUp" data-wow-delay="0.2s">At Golden Spoon Restaurant, our vision is to redefine the dining experience by bringing people together over authentic, flavorful meals crafted with love and passion. We aim to be a beacon of culinary excellence, where every dish tells a story of tradition, innovation, and uncompromising quality.</p>
+                                                <p className="wow fadeInUp" data-wow-delay="0.2s">At Golden Spoon Restaurrant, our vision is to redefine the dining experience by bringing people together over authentic, flavorful meals crafted with love and passion. We aim to be a beacon of culinary excellence, where every dish tells a story of tradition, innovation, and uncompromising quality.</p>
                                             </div>
                                             
 
@@ -263,7 +264,7 @@ const About = () => {
                                             <div className="section-title">
                                                 <h3>our vision</h3>
                                                 <h2 data-cursor="-opaque">creating moments around flavor</h2>
-                                                <p>At Golden Spoon Restaurant, our vision is to redefine the dining experience by bringing people together over authentic, flavorful meals crafted with love and passion. We aim to be a beacon of culinary excellence, where every dish tells a story of tradition, innovation, and uncompromising quality.</p>
+                                                <p>At Golden Spoon Restaurrant, our vision is to redefine the dining experience by bringing people together over authentic, flavorful meals crafted with love and passion. We aim to be a beacon of culinary excellence, where every dish tells a story of tradition, innovation, and uncompromising quality.</p>
                                             </div>
                                             
 
@@ -302,7 +303,7 @@ const About = () => {
                                             <div className="section-title">
                                                 <h3>our value</h3>
                                                 <h2 data-cursor="-opaque">creating moments around flavor</h2>
-                                                <p>At Golden Spoon Restaurant, our vision is to redefine the dining experience by bringing people together over authentic, flavorful meals crafted with love and passion. We aim to be a beacon of culinary excellence, where every dish tells a story of tradition, innovation, and uncompromising quality.</p>
+                                                <p>At Golden Spoon Restaurrant, our vision is to redefine the dining experience by bringing people together over authentic, flavorful meals crafted with love and passion. We aim to be a beacon of culinary excellence, where every dish tells a story of tradition, innovation, and uncompromising quality.</p>
                                             </div>
                                             
 
@@ -723,10 +724,9 @@ I recommended this place to everyone for your craving</p>
                                     </div>
                                     <div className="form-group col-md-4 mb-4">
                                         <label className="form-label">date</label>
-                                        <input type="date" className="form-control" required min={TODAY}
+                                        <input type="date" className="form-control" required min={TODAY} max={MAX_DATE}
                                             value={bookingForm.date}
-                                            onChange={e => setBookingField('date', e.target.value)}
-                                            onKeyDown={e => e.preventDefault()} />
+                                            onChange={e => setBookingField('date', e.target.value)} />
                                     </div>
                                     <div className="form-group col-md-4 mb-4">
                                         <label className="form-label">time</label>

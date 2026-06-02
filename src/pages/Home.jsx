@@ -1,4 +1,4 @@
-﻿
+
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { googleReviews } from '../data/googleReviews';
@@ -6,6 +6,7 @@ import { usePageData } from '../context/PageDataContext';
 import { supabase } from '../lib/supabase';
 
 const TODAY = new Date().toISOString().split('T')[0];
+const MAX_DATE = new Date(Date.now() + 28 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
 
 const Home = () => {
     const { content = {} } = usePageData();
@@ -114,7 +115,7 @@ const Home = () => {
                     
                     <div className="hero-content">
                         <div className="section-title">
-                            <h3 className="wow fadeInUp">{(hero.badge || 'Golden Spoon Restaurrant, Noida').replace('Restaurant', 'Restaurrant')}</h3>
+                            <h3 className="wow fadeInUp">{(hero.badge || 'Golden Spoon Restaurrant, Noida')}</h3>
                             <h1 className="text-anime-style-2" data-cursor="-opaque">
                                 {(hero.title || 'Dining in Noida,\nMade Memorable').split('\n').map((line, i) => (
                                     <span key={i}>{i === 1 ? <span>{line}</span> : line}{i === 0 && <br />}</span>
@@ -139,7 +140,7 @@ const Home = () => {
                         
                         <div className="hero-image">
                             <figure className="image-anime">
-                                <img src="/images/anual.png" alt="Golden Spoon Restaurant interior" />
+                                <img src="/images/anual.png" alt="Golden Spoon Restaurrant interior" />
                             </figure>                            
                         </div>  
                             
@@ -177,7 +178,7 @@ const Home = () => {
                         
                         <div className="about-us-img">
                             <figure className="image-anime">
-                                <img src="/images/Home side.png" alt="Golden Spoon Restaurant annual party area" />
+                                <img src="/images/Home side.png" alt="Golden Spoon Restaurrant annual party area" />
                             </figure>
                         </div>
                         
@@ -839,10 +840,9 @@ const Home = () => {
                                     </div>
                                     <div className="form-group col-md-4 mb-4">
                                         <label className="form-label">date</label>
-                                        <input type="date" className="form-control" required min={TODAY}
+                                        <input type="date" className="form-control" required min={TODAY} max={MAX_DATE}
                                             value={bookingForm.date}
-                                            onChange={e => setBookingField('date', e.target.value)}
-                                            onKeyDown={e => e.preventDefault()} />
+                                            onChange={e => setBookingField('date', e.target.value)} />
                                     </div>
                                     <div className="form-group col-md-4 mb-4">
                                         <label className="form-label">time</label>

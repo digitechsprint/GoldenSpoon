@@ -112,7 +112,7 @@ const ChefSingle = () => {
                             <div className="team-single-sidebar">
                                 <div className="team-single-image">
                                     <figure className="image-anime">
-                                        <img src={chef.image} alt={`${chef.name} - Golden Spoon Restaurant chef`} />
+                                        <img src={chef.image} alt={`${chef.name} - Golden Spoon Restaurrant chef`} />
                                     </figure>
                                 </div>
 

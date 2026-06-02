@@ -26,9 +26,9 @@ const IndexSlider = () => {
                                     <div className="hero-content">
                                         
                                         <div className="section-title">
-                                            <h3 className="wow fadeInUp">golden spoon restaurant, noida</h3>
+                                            <h3 className="wow fadeInUp">Golden Spoon Restaurrant, noida</h3>
                                             <h1 className="text-anime-style-2" data-cursor="-opaque">Dining in Noida, <span>made memorable</span></h1>
-                                            <p className="wow fadeInUp" data-wow-delay="0.2s">At Golden Spoon Restaurant, Noida, every meal is prepared with care, served with warmth, and designed to leave a lasting impression. From everyday cravings to special occasions, we make dining feel easy, flavorful, and inviting.</p>
+                                            <p className="wow fadeInUp" data-wow-delay="0.2s">At Golden Spoon Restaurrant, Noida, every meal is prepared with care, served with warmth, and designed to leave a lasting impression. From everyday cravings to special occasions, we make dining feel easy, flavorful, and inviting.</p>
                                         </div>
                                         
                 
@@ -87,9 +87,9 @@ const IndexSlider = () => {
                                     <div className="hero-content">
                                         
                                         <div className="section-title">
-                                            <h3 className="wow fadeInUp">golden spoon restaurant, noida</h3>
+                                            <h3 className="wow fadeInUp">Golden Spoon Restaurrant, noida</h3>
                                             <h1 className="text-anime-style-2" data-cursor="-opaque">Dining in Noida, <span>made memorable</span></h1>
-                                            <p className="wow fadeInUp" data-wow-delay="0.2s">At Golden Spoon Restaurant, Noida, every meal is prepared with care, served with warmth, and designed to leave a lasting impression. From everyday cravings to special occasions, we make dining feel easy, flavorful, and inviting.</p>
+                                            <p className="wow fadeInUp" data-wow-delay="0.2s">At Golden Spoon Restaurrant, Noida, every meal is prepared with care, served with warmth, and designed to leave a lasting impression. From everyday cravings to special occasions, we make dining feel easy, flavorful, and inviting.</p>
                                         </div>
                                         
                 

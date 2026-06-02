@@ -304,7 +304,7 @@ export default function Checkout() {
                           }}>
                             <strong>Amount to pay: ₹{total.toFixed(0)}</strong>
                             <br />
-                            <span style={{ opacity: 0.7 }}>Pay to: {upiSettings.upi_name || 'Golden Spoon Restaurant'}</span>
+                            <span style={{ opacity: 0.7 }}>Pay to: {upiSettings.upi_name || 'Golden Spoon Restaurrant'}</span>
                           </div>
                           {upiLink && (
                             <a

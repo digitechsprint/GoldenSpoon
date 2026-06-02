@@ -155,7 +155,7 @@ const Contact = () => {
                                     <ul>
                                         <li style={{display:'flex',alignItems:'flex-start',gap:10}}>
                                             <i className="fas fa-map-marker-alt" style={{color:'#d4a843',marginTop:3,flexShrink:0}}></i>
-                                            <span>Golden Spoon Restaurant, 111, F Block, Sector 8, Noida, Uttar Pradesh 201301</span>
+                                            <span>Golden Spoon Restaurrant, 111, F Block, Sector 8, Noida, Uttar Pradesh 201301</span>
                                         </li>
                                         <li style={{display:'flex',alignItems:'center',gap:10}}>
                                             <i className="fas fa-phone" style={{color:'#d4a843',flexShrink:0}}></i>

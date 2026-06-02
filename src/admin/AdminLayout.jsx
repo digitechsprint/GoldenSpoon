@@ -73,7 +73,7 @@ export default function AdminLayout({ children, title }) {
           <h5>{title || 'Admin Panel'}</h5>
           <span style={{fontSize: 13, color: 'var(--admin-text-muted)'}}>
             <i className="fas fa-circle" style={{fontSize: 8, color: 'var(--admin-success)', marginRight: 6}}></i>
-            Golden Spoon Restaurant
+            Golden Spoon Restaurrant
           </span>
         </header>
         <div className="admin-content">

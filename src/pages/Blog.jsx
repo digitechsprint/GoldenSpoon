@@ -4,6 +4,7 @@ import { usePageData } from '../context/PageDataContext';
 import { supabase } from '../lib/supabase';
 
 const TODAY = new Date().toISOString().split('T')[0];
+const MAX_DATE = new Date(Date.now() + 28 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
 
 const FALLBACK_POSTS = [
   { id: '1', title: '5 Tips for Perfecting Your Home Dining Experience', slug: '5-tips-perfecting-home-dining', featured_image: '/images/post-1.jpg', excerpt: '' },
@@ -190,10 +191,9 @@ const Blog = () => {
                                             </div>
                                             <div className="form-group col-md-4 mb-4">
                                                 <label className="form-label">date</label>
-                                                <input type="date" className="form-control" required min={TODAY}
+                                                <input type="date" className="form-control" required min={TODAY} max={MAX_DATE}
                                                     value={bookingForm.date}
-                                                    onChange={e => setBookingField('date', e.target.value)}
-                                                    onKeyDown={e => e.preventDefault()} />
+                                                    onChange={e => setBookingField('date', e.target.value)} />
                                             </div>
                                             <div className="form-group col-md-4 mb-4">
                                                 <label className="form-label">time</label>

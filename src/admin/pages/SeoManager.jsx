@@ -72,7 +72,7 @@ export default function SeoManager() {
   }
 
   // Google SERP preview
-  const previewTitle = (form.title || 'Page Title') + ' | Golden Spoon Restaurant'
+  const previewTitle = (form.title || 'Page Title') + ' | Golden Spoon Restaurrant'
   const previewDesc = form.meta_description || 'Page description will appear here in Google search results.'
   const previewUrl = 'goldenspoon.in' + (form.page_slug || '/')
 
@@ -153,7 +153,7 @@ export default function SeoManager() {
                   <div className="col-12">
                     <div className="admin-form-group">
                       <label>SEO Title <span style={{fontWeight:400, color:'var(--admin-text-muted)'}}>(50–60 chars recommended)</span></label>
-                      <input value={form.title} onChange={e => setField('title', e.target.value)} placeholder="Golden Spoon Restaurant | Best Indian Food in Noida" maxLength={70} />
+                      <input value={form.title} onChange={e => setField('title', e.target.value)} placeholder="Golden Spoon Restaurrant | Best Indian Food in Noida" maxLength={70} />
                       <div className="admin-form-hint">{form.title?.length || 0} / 70 characters</div>
                     </div>
                   </div>
