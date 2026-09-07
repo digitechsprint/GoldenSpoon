@@ -6,7 +6,7 @@
   "framework": null,
   "functions": {
     "api/index.js": {
-      "includeFiles": "dist/server/**,dist/index.html,dist/admin.html",
+      "includeFiles": "dist/server/**,dist/ssr-template.html,dist/admin.html",
       "maxDuration": 30
     }
   },

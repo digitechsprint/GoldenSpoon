@@ -3,6 +3,7 @@ import express from 'express'
 import compression from 'compression'
 import fs from 'fs'
 import path from 'path'
+import { pathToFileURL } from 'url'
 import { getPageData, buildHead, clearSiteContentCache } from './lib/pageData.js'
 
 // process.cwd() is the project root both locally and on Vercel (/var/task)
@@ -104,8 +105,8 @@ ${allRoutes.map(r => `  <url><loc>${siteUrl}${r}</loc><changefreq>weekly</change
         template = await vite.transformIndexHtml(url, template)
         render = (await vite.ssrLoadModule('/src/entry-server.jsx')).render
       } else {
-        template = fs.readFileSync(path.join(root, 'dist/index.html'), 'utf-8')
-        render = (await import(path.join(root, 'dist/server/entry-server.js'))).render
+        template = fs.readFileSync(path.join(root, 'dist/ssr-template.html'), 'utf-8')
+        render = (await import(pathToFileURL(path.join(root, 'dist/server/entry-server.js')).href)).render
       }
 
       const appHtml = await render(url, pageData)

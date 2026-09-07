@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "node server/index.js",
-    "build": "npm run build:client && npm run build:server",
+    "build": "npm run build:client && npm run build:server && node scripts/rename-ssr-template.cjs",
     "build:client": "vite build",
     "build:server": "vite build --ssr src/entry-server.jsx --outDir dist/server",
     "preview": "NODE_ENV=production node server/index.js",
