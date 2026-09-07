@@ -5,6 +5,11 @@ const CartContext = createContext(null)
 export function CartProvider({ children }) {
   const [items, setItems] = useState([])
   const [isOpen, setIsOpen] = useState(false)
+  // Distinguishes "cart is empty" from "haven't read localStorage yet" — a
+  // page landed on directly (hard refresh / direct URL) mounts with items:[]
+  // for one tick before this runs; consumers that redirect on an empty cart
+  // (e.g. Checkout) need to wait for this instead of trusting items right away.
+  const [hydrated, setHydrated] = useState(false)
 
   // Hydrate cart from localStorage after mount (SSR-safe)
   useEffect(() => {
@@ -12,6 +17,7 @@ export function CartProvider({ children }) {
       const saved = JSON.parse(localStorage.getItem('gs-cart') || '[]')
       if (Array.isArray(saved)) setItems(saved)
     } catch { /* ignore */ }
+    setHydrated(true)
   }, [])
 
   // Persist to localStorage on change
@@ -51,7 +57,7 @@ export function CartProvider({ children }) {
   return (
     <CartContext.Provider value={{
       items, addItem, removeItem, updateQuantity, clearCart,
-      total, itemCount,
+      total, itemCount, hydrated,
       isOpen, setIsOpen
     }}>
       {children}

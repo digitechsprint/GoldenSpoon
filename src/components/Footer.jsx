@@ -61,7 +61,7 @@ const Footer = () => {
                             <div className="footer-social-icon">
                                 <ul>
                                     <li><a href="https://www.instagram.com/golden_spoon_restaurrant?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer"><i className="fa-brands fa-instagram"></i></a></li>
-                                    <li><a href="#"><i className="fab fa-facebook-f"></i></a></li>
+                                    <li><a href="https://www.facebook.com/people/Golden-Spoon-Restaurrant/61588904188460/" target="_blank" rel="noopener noreferrer"><i className="fab fa-facebook-f"></i></a></li>
                                 </ul>
                             </div>
                             {/* Footer Social Icon End */}

@@ -227,10 +227,6 @@ body {
 	color: var(--dark-divider-color);
 }
 
-html[data-theme='light'] .btn-default:hover {
-	color: #FFFFFF !important;
-}
-
 html[data-theme='light'] .btn-default:hover:after {
 	filter: none !important;
 }
@@ -2498,6 +2494,15 @@ html[data-theme='light'] .customer-image.add-more:hover i {
 	font-weight: 400;
 	text-transform: initial;
 	color: var(--text-color);
+}
+
+.reserve-table-body ul li span.reserve-table-day {
+	width: auto;
+	white-space: nowrap;
+	flex-shrink: 0;
+	text-transform: capitalize;
+	color: inherit;
+	font-weight: 700;
 }
 
 .reserve-table-form {

@@ -282,7 +282,7 @@ const Header = () => {
                         <div className="gs-controls">
                             {/* Social – hidden on small */}
                             <div className="gs-social">
-                                <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                                <a href="https://www.facebook.com/people/Golden-Spoon-Restaurrant/61588904188460/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
                                     <i className="fa-brands fa-facebook-f"></i>
                                 </a>
                                 <a href="https://www.instagram.com/golden_spoon_restaurrant?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
@@ -291,7 +291,7 @@ const Header = () => {
                             </div>
 
                             {/* Book a Table – hidden on mobile */}
-                            <Link to="/contact" className="gs-book-btn">
+                            <Link to="/#reserve-table" className="gs-book-btn">
                                 Book A Table <i className="fas fa-arrow-right"></i>
                             </Link>
 
@@ -362,11 +362,11 @@ const Header = () => {
                         </ul>
 
                         <div className="gs-mobile-footer">
-                            <Link to="/contact" className="gs-mobile-book" onClick={() => setMenuOpen(false)}>
+                            <Link to="/#reserve-table" className="gs-mobile-book" onClick={() => setMenuOpen(false)}>
                                 Book A Table
                             </Link>
                             <div className="gs-mobile-social">
-                                <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                                <a href="https://www.facebook.com/people/Golden-Spoon-Restaurrant/61588904188460/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
                                     <i className="fa-brands fa-facebook-f"></i>
                                 </a>
                                 <a href="https://www.instagram.com/golden_spoon_restaurrant?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer" aria-label="Instagram">

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { api } from '../lib/api'
 import { useCart } from '../context/CartContext'
@@ -25,7 +25,7 @@ function loadRazorpayScript() {
 
 export default function Checkout() {
   const navigate = useNavigate()
-  const { items, total, clearCart } = useCart()
+  const { items, total, clearCart, hydrated: cartHydrated } = useCart()
   const { user, loading: authLoading, openAuthModal, requireAuth } = useAuth()
   const [form, setForm] = useState(EMPTY_FORM)
   const [razorpayKeyId, setRazorpayKeyId] = useState('')
@@ -34,9 +34,23 @@ export default function Checkout() {
 
   useEffect(() => {
     window.scrollTo(0, 0)
-    if (items.length === 0) navigate('/order')
     api.get('/settings').then(({ data }) => { if (data?.razorpay_key_id) setRazorpayKeyId(data.razorpay_key_id) })
   }, [])
+
+  // Wait for the cart to actually finish reading localStorage before
+  // deciding it's empty — on a hard refresh/direct load of this page,
+  // items is [] for one render before hydration runs, which would
+  // otherwise bounce a real cart straight back to /order. Checked only
+  // once, right after hydration — NOT on every later items change, since
+  // a successful order intentionally empties the cart via clearCart()
+  // right before navigating to the confirmation page, and re-checking
+  // then would race that navigation and bounce the user to /order instead.
+  const checkedEmptyCart = useRef(false)
+  useEffect(() => {
+    if (!cartHydrated || checkedEmptyCart.current) return
+    checkedEmptyCart.current = true
+    if (items.length === 0) navigate('/order')
+  }, [cartHydrated, items.length])
 
   useEffect(() => {
     if (user) setField('name', form.name || user.name || '')

@@ -173,7 +173,7 @@ const Contact = () => {
 
                                 <div className="contact-social-list wow fadeInUp" data-wow-delay="0.6s">
                                     <ul>
-                                        <li><a href="#"><i className="fa-brands fa-facebook-f"></i></a></li>
+                                        <li><a href="https://www.facebook.com/people/Golden-Spoon-Restaurrant/61588904188460/" target="_blank" rel="noopener noreferrer"><i className="fa-brands fa-facebook-f"></i></a></li>
                                         <li><a href="https://www.instagram.com/golden_spoon_restaurrant?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer"><i className="fa-brands fa-instagram"></i></a></li>
                                     </ul>
                                 </div>
