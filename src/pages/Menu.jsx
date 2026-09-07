@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { usePageData } from '../context/PageDataContext';
-import { supabase } from '../lib/supabase';
+import { api } from '../lib/api';
 import { useCart } from '../context/CartContext';
 import { MENU_SECTIONS } from '../data/menuData';
 
@@ -25,7 +25,7 @@ const Menu = () => {
             name: item.name,
             price: parseFloat(item.price) || 0,
             image: item.image_url,
-            category: item.menu_categories?.name || '',
+            category: item.category || '',
         });
         setAdded(a => ({ ...a, [item.id]: true }));
         setTimeout(() => setAdded(a => ({ ...a, [item.id]: false })), 1200);
@@ -51,8 +51,8 @@ const Menu = () => {
 
     async function fetchMenu() {
         const [catsRes, itemsRes] = await Promise.all([
-            supabase.from('menu_categories').select('*').eq('is_active', true).order('sort_order'),
-            supabase.from('menu_items').select('*, menu_categories(name, slug)').eq('is_active', true).order('sort_order'),
+            api.get('/menu-categories'),
+            api.get('/menu'),
         ]);
         if (!catsRes.error && catsRes.data?.length > 0) {
             setDbCategories(catsRes.data);
@@ -67,9 +67,9 @@ const Menu = () => {
         setMenuLoaded(true);
     }
 
-    function itemsByCategory(categoryId) {
+    function itemsByCategory(categoryName) {
         return dbItems.filter(item => {
-            const inCat = item.category_id === categoryId;
+            const inCat = item.category === categoryName;
             const matchSearch = !search || item.name.toLowerCase().includes(search.toLowerCase());
             return inCat && matchSearch;
         });
@@ -171,10 +171,10 @@ const Menu = () => {
                 </div>
             </div>
 
-            {/* ── Dynamic menu from Supabase (admin-managed) ─────────── */}
+            {/* ── Dynamic menu from the backend (admin-managed) ─────────── */}
             {menuLoaded && dbCategories.length > 0 && (() => {
                 const visibleCats = dbCategories.filter(cat => activeCategory === "all" || (cat.slug||cat.id) === activeCategory);
-                const hasResults = visibleCats.some(cat => itemsByCategory(cat.id).length > 0);
+                const hasResults = visibleCats.some(cat => itemsByCategory(cat.name).length > 0);
                 if (!hasResults && search) return (
                     <div style={{textAlign:'center',padding:'60px 20px',opacity:0.6}}>
                         <i className="fas fa-search" style={{fontSize:32,marginBottom:12,display:'block',color:'#d4a843'}}></i>
@@ -185,7 +185,7 @@ const Menu = () => {
                 return (
                 <div style={{padding:'0 0 40px'}}>
                     {visibleCats.map(cat => {
-                        const catItems = itemsByCategory(cat.id);
+                        const catItems = itemsByCategory(cat.name);
                         if (catItems.length === 0) return null;
                         return (
                             <div key={cat.id} id={cat.slug} style={{marginTop:8}}>
@@ -201,7 +201,7 @@ const Menu = () => {
                                                     <div style={{display:'flex',alignItems:'center',gap:6,flexWrap:'wrap'}}>
                                                         <span style={{fontWeight:700,fontSize:15}}>
                                                             {item.name}
-                                                            {item.is_vegetarian && <span style={{marginLeft:4,fontSize:11}}>🌱</span>}
+                                                            {item.is_veg && <span style={{marginLeft:4,fontSize:11}}>🌱</span>}
                                                         </span>
                                                     </div>
                                                     {item.description && <p style={{margin:'3px 0 0',fontSize:12,opacity:0.6,lineHeight:1.4,display:'-webkit-box',WebkitLineClamp:2,WebkitBoxOrient:'vertical',overflow:'hidden'}}>{item.description}</p>}
@@ -236,7 +236,7 @@ const Menu = () => {
                 );
             })()}
 
-            {/* ── Legacy hardcoded menu (shown when Supabase has no data) ── */}
+            {/* ── Legacy hardcoded menu (shown when the backend has no data) ── */}
 
             {/* ── Hardcoded menu with Add-to-Cart ── */}
             {(!menuLoaded || dbCategories.length === 0) && (

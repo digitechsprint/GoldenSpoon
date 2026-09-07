@@ -2,7 +2,9 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout';
 import { CartProvider } from './context/CartContext';
+import { AuthProvider } from './context/AuthContext';
 import CartDrawer from './components/CartDrawer';
+import AuthModal from './components/AuthModal';
 import Home from './pages/Home';
 import About from './pages/About';
 import Menu from './pages/Menu';
@@ -25,8 +27,10 @@ import OrderConfirmation from './pages/OrderConfirmation';
 
 function App() {
   return (
+    <AuthProvider>
     <CartProvider>
       <CartDrawer />
+      <AuthModal />
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
@@ -52,6 +56,7 @@ function App() {
         </Route>
       </Routes>
     </CartProvider>
+    </AuthProvider>
   );
 }
 

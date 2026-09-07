@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import AdminLayout from '../AdminLayout'
-import { supabase } from '../../lib/supabase'
+import { adminApi } from '../lib/api'
 
-const STATUS_OPTIONS = ['pending', 'confirmed', 'cancelled']
+const STATUS_OPTIONS = ['requested', 'confirmed', 'cancelled']
 
 export default function BookingsManager() {
-  const [bookings, setBookings] = useState([])
+  const [allBookings, setAllBookings] = useState([])
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState('all')
   const [selected, setSelected] = useState(null)
@@ -16,20 +16,18 @@ export default function BookingsManager() {
 
   async function fetchBookings() {
     setLoading(true)
-    let query = supabase.from('bookings').select('*').order('created_at', { ascending: false })
-    if (filter !== 'all') query = query.eq('status', filter)
-    const { data } = await query
-    setBookings(data || [])
+    const { data } = await adminApi.get('/admin/bookings')
+    setAllBookings(data || [])
     setLoading(false)
   }
 
-  useEffect(() => { fetchBookings() }, [filter])
+  const bookings = filter === 'all' ? allBookings : allBookings.filter(b => b.status === filter)
 
   function showToast(msg) { setToast(msg); setTimeout(() => setToast(''), 3000) }
 
   async function updateStatus(id, status) {
     setUpdating(true)
-    await supabase.from('bookings').update({ status }).eq('id', id)
+    await adminApi.put(`/admin/bookings/${id}/status`, { status })
     setUpdating(false)
     showToast(`Booking marked as ${status}`)
     if (selected?.id === id) setSelected(s => ({ ...s, status }))
@@ -38,7 +36,7 @@ export default function BookingsManager() {
 
   async function deleteBooking(id) {
     if (!confirm('Delete this booking permanently?')) return
-    await supabase.from('bookings').delete().eq('id', id)
+    await adminApi.del(`/admin/bookings/${id}`)
     if (selected?.id === id) setSelected(null)
     fetchBookings()
   }
@@ -47,15 +45,15 @@ export default function BookingsManager() {
   const formatDateTime = d => d ? new Date(d).toLocaleString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '—'
 
   const statusBadge = (status) => {
-    const map = { pending: 'badge-pending', confirmed: 'badge-confirmed', cancelled: 'badge-cancelled' }
+    const map = { requested: 'badge-pending', pending: 'badge-pending', confirmed: 'badge-confirmed', cancelled: 'badge-cancelled' }
     return <span className={`badge-status ${map[status] || 'badge-draft'}`}>{status}</span>
   }
 
   const counts = {
-    all: bookings.length,
-    pending: bookings.filter(b => b.status === 'pending').length,
-    confirmed: bookings.filter(b => b.status === 'confirmed').length,
-    cancelled: bookings.filter(b => b.status === 'cancelled').length,
+    all: allBookings.length,
+    requested: allBookings.filter(b => b.status === 'requested').length,
+    confirmed: allBookings.filter(b => b.status === 'confirmed').length,
+    cancelled: allBookings.filter(b => b.status === 'cancelled').length,
   }
 
   return (
@@ -64,7 +62,7 @@ export default function BookingsManager() {
 
       {/* Filter tabs */}
       <div className="tabs-admin">
-        {['all', 'pending', 'confirmed', 'cancelled'].map(s => (
+        {['all', 'requested', 'confirmed', 'cancelled'].map(s => (
           <button
             key={s}
             className={`tab-admin ${filter === s ? 'active' : ''}`}
@@ -72,13 +70,13 @@ export default function BookingsManager() {
             style={{textTransform:'capitalize'}}
           >
             {s.charAt(0).toUpperCase() + s.slice(1)}
-            {s === 'pending' && counts.pending > 0 && (
+            {s === 'requested' && counts.requested > 0 && (
               <span style={{
                 background:'var(--admin-warning)', color:'#fff',
                 borderRadius:'50%', fontSize:10, width:18, height:18,
                 display:'inline-flex', alignItems:'center', justifyContent:'center',
                 marginLeft:6
-              }}>{counts.pending}</span>
+              }}>{counts.requested}</span>
             )}
           </button>
         ))}
@@ -121,8 +119,8 @@ export default function BookingsManager() {
                           <div style={{fontSize:12,color:'var(--admin-text-muted)'}}>{b.phone || b.email}</div>
                         </td>
                         <td>
-                          <div>{formatDate(b.booking_date)}</div>
-                          <div style={{fontSize:12,color:'var(--admin-text-muted)'}}>{b.booking_time || 'Any time'}</div>
+                          <div>{formatDate(b.date)}</div>
+                          <div style={{fontSize:12,color:'var(--admin-text-muted)'}}>{b.time || 'Any time'}</div>
                         </td>
                         <td>{b.guests} pax</td>
                         <td>{statusBadge(b.status)}</td>
@@ -175,8 +173,8 @@ export default function BookingsManager() {
                   { icon: 'fa-user', label: 'Guest Name', value: selected.name },
                   { icon: 'fa-envelope', label: 'Email', value: selected.email },
                   { icon: 'fa-phone', label: 'Phone', value: selected.phone },
-                  { icon: 'fa-calendar', label: 'Date', value: formatDate(selected.booking_date) },
-                  { icon: 'fa-clock', label: 'Time', value: selected.booking_time || 'Not specified' },
+                  { icon: 'fa-calendar', label: 'Date', value: formatDate(selected.date) },
+                  { icon: 'fa-clock', label: 'Time', value: selected.time || 'Not specified' },
                   { icon: 'fa-users', label: 'Guests', value: `${selected.guests} person(s)` },
                 ].map(row => (
                   <div key={row.label} style={{display:'flex',gap:12,marginBottom:12,fontSize:14}}>
@@ -190,13 +188,13 @@ export default function BookingsManager() {
                   </div>
                 ))}
 
-                {selected.message && (
+                {selected.notes && (
                   <div style={{marginTop:12}}>
                     <div style={{fontSize:11,color:'var(--admin-text-muted)',textTransform:'uppercase',letterSpacing:'0.05em',marginBottom:4}}>
-                      <i className="fas fa-comment" style={{marginRight:6,color:'var(--admin-accent)'}}></i>Message
+                      <i className="fas fa-comment" style={{marginRight:6,color:'var(--admin-accent)'}}></i>Notes
                     </div>
                     <div style={{fontSize:14,background:'#f9fafb',padding:'10px 14px',borderRadius:7,lineHeight:1.5}}>
-                      {selected.message}
+                      {selected.notes}
                     </div>
                   </div>
                 )}

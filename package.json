@@ -13,7 +13,6 @@
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
-    "@supabase/supabase-js": "^2.106.1",
     "compression": "^1.8.1",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",

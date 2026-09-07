@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import AdminLayout from '../AdminLayout'
-import { supabase } from '../../lib/supabase'
+import { adminApi } from '../lib/api'
 
 const EMPTY_POST = {
   title: '', slug: '', content: '', excerpt: '', featured_image: '',
@@ -26,7 +26,7 @@ export default function BlogManager() {
 
   async function fetchPosts() {
     setLoading(true)
-    const { data } = await supabase.from('blog_posts').select('id,title,slug,is_published,author,created_at,excerpt').order('created_at', { ascending: false })
+    const { data } = await adminApi.get('/admin/blog')
     setPosts(data || [])
     setLoading(false)
   }
@@ -40,9 +40,9 @@ export default function BlogManager() {
     setView('edit')
   }
 
-  async function openEdit(id) {
-    const { data } = await supabase.from('blog_posts').select('*').eq('id', id).single()
-    if (data) { setForm(data); setEditingId(id) }
+  function openEdit(id) {
+    const post = posts.find(p => p.id === id)
+    if (post) { setForm(post); setEditingId(id) }
     setActiveTab('content')
     setView('edit')
   }
@@ -55,12 +55,11 @@ export default function BlogManager() {
       ...form,
       slug: form.slug || slugify(form.title),
       is_published: publish !== null ? publish : form.is_published,
-      published_at: (publish === true && !form.published_at) ? new Date().toISOString() : form.published_at,
     }
 
     const { error } = editingId
-      ? await supabase.from('blog_posts').update(payload).eq('id', editingId)
-      : await supabase.from('blog_posts').insert([payload])
+      ? await adminApi.put(`/admin/blog/${editingId}`, payload)
+      : await adminApi.post('/admin/blog', payload)
 
     setSaving(false)
     if (error) return alert(error.message)
@@ -71,15 +70,12 @@ export default function BlogManager() {
 
   async function deletePost(id) {
     if (!confirm('Delete this blog post? This cannot be undone.')) return
-    await supabase.from('blog_posts').delete().eq('id', id)
+    await adminApi.del(`/admin/blog/${id}`)
     fetchPosts()
   }
 
-  async function togglePublish(id, current) {
-    await supabase.from('blog_posts').update({
-      is_published: !current,
-      published_at: !current ? new Date().toISOString() : null
-    }).eq('id', id)
+  async function togglePublish(post) {
+    await adminApi.put(`/admin/blog/${post.id}`, { ...post, is_published: !post.is_published })
     fetchPosts()
   }
 
@@ -246,7 +242,7 @@ export default function BlogManager() {
                   </td>
                   <td>
                     <button
-                      onClick={() => togglePublish(p.id, p.is_published)}
+                      onClick={() => togglePublish(p)}
                       className={`badge-status ${p.is_published ? 'badge-published' : 'badge-draft'}`}
                       style={{border:'none',cursor:'pointer',background:'none',padding:0}}
                     >

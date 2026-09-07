@@ -2,7 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { usePageData } from '../context/PageDataContext';
-import { supabase } from '../lib/supabase';
+import { api } from '../lib/api';
+import { useAuth } from '../context/AuthContext';
 
 const TODAY = new Date().toISOString().split('T')[0];
 const MAX_DATE = new Date(Date.now() + 28 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
@@ -12,6 +13,7 @@ const About = () => {
     const header = pageContent.header || {};
     const story = pageContent.story || {};
     const values = pageContent.values || {};
+    const { requireAuth } = useAuth();
     const [bookingForm, setBookingForm] = useState({ name: '', email: '', phone: '', date: TODAY, time: '', person: '1' });
     const [bookingStatus, setBookingStatus] = useState('');
 
@@ -24,16 +26,20 @@ const About = () => {
             alert('For groups larger than 6, please call us at +91 92170 14763 for special arrangements.');
             return;
         }
+        try {
+            await requireAuth();
+        } catch {
+            return;
+        }
         setBookingStatus('submitting');
-        const { error } = await supabase.from('bookings').insert([{
+        const { error } = await api.post('/bookings', {
             name: bookingForm.name,
             email: bookingForm.email,
             phone: bookingForm.phone,
-            booking_date: bookingForm.date,
-            booking_time: bookingForm.time || null,
+            date: bookingForm.date,
+            time: bookingForm.time || '',
             guests: persons,
-            status: 'pending',
-        }]);
+        });
         if (error) {
             setBookingStatus('error');
         } else {

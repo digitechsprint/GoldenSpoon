@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import AdminLayout from '../AdminLayout'
-import { supabase } from '../../lib/supabase'
+import { adminApi } from '../lib/api'
 
 export default function Dashboard() {
   const [stats, setStats] = useState({ menu: 0, blog: 0, bookings: 0, pending: 0 })
@@ -9,28 +9,27 @@ export default function Dashboard() {
 
   useEffect(() => {
     async function fetchStats() {
-      const [menuRes, blogRes, bookingsRes, pendingRes, recentRes] = await Promise.all([
-        supabase.from('menu_items').select('id', { count: 'exact', head: true }),
-        supabase.from('blog_posts').select('id', { count: 'exact', head: true }),
-        supabase.from('bookings').select('id', { count: 'exact', head: true }),
-        supabase.from('bookings').select('id', { count: 'exact', head: true }).eq('status', 'pending'),
-        supabase.from('bookings').select('*').order('created_at', { ascending: false }).limit(5),
+      const [menuRes, blogRes, bookingsRes] = await Promise.all([
+        adminApi.get('/admin/menu'),
+        adminApi.get('/admin/blog'),
+        adminApi.get('/admin/bookings'),
       ])
+      const bookings = bookingsRes.data || []
 
       setStats({
-        menu: menuRes.count || 0,
-        blog: blogRes.count || 0,
-        bookings: bookingsRes.count || 0,
-        pending: pendingRes.count || 0,
+        menu: (menuRes.data || []).length,
+        blog: (blogRes.data || []).length,
+        bookings: bookings.length,
+        pending: bookings.filter(b => b.status === 'requested').length,
       })
-      setRecentBookings(recentRes.data || [])
+      setRecentBookings(bookings.slice(0, 5))
       setLoading(false)
     }
     fetchStats()
   }, [])
 
   const statusBadge = (status) => {
-    const map = { pending: 'badge-pending', confirmed: 'badge-confirmed', cancelled: 'badge-cancelled' }
+    const map = { requested: 'badge-pending', pending: 'badge-pending', confirmed: 'badge-confirmed', cancelled: 'badge-cancelled' }
     return <span className={`badge-status ${map[status] || 'badge-draft'}`}>{status}</span>
   }
 
@@ -81,7 +80,7 @@ export default function Dashboard() {
       {/* Quick links */}
       <div className="row g-3 mb-4">
         {[
-          { icon: 'fas fa-search', label: 'Update SEO', href: '/admin/seo', color: 'gold' },
+          { icon: 'fas fa-file-alt', label: 'Edit Pages', href: '/admin/pages', color: 'gold' },
           { icon: 'fas fa-utensils', label: 'Manage Menu', href: '/admin/menu', color: 'blue' },
           { icon: 'fas fa-blog', label: 'Write Blog Post', href: '/admin/blog', color: 'green' },
           { icon: 'fas fa-calendar-check', label: 'View Bookings', href: '/admin/bookings', color: 'red' },
@@ -125,8 +124,8 @@ export default function Dashboard() {
                       <div style={{fontWeight: 500}}>{b.name}</div>
                       <div style={{fontSize: 12, color: 'var(--admin-text-muted)'}}>{b.email}</div>
                     </td>
-                    <td>{formatDate(b.booking_date)}</td>
-                    <td>{b.booking_time || '—'}</td>
+                    <td>{formatDate(b.date)}</td>
+                    <td>{b.time || '—'}</td>
                     <td>{b.guests}</td>
                     <td>{statusBadge(b.status)}</td>
                   </tr>

@@ -3,13 +3,13 @@ import express from 'express'
 import compression from 'compression'
 import fs from 'fs'
 import path from 'path'
-import { createSupabaseServerClient } from './lib/supabase.js'
 import { getPageData, buildHead, clearSiteContentCache } from './lib/pageData.js'
 
 // process.cwd() is the project root both locally and on Vercel (/var/task)
 const root = process.cwd()
 const isProd = process.env.NODE_ENV === 'production'
 const port = process.env.PORT || 3000
+const API_URL = (process.env.VITE_API_URL || 'https://api.goldenspoonrestro.com').replace(/\/$/, '')
 
 export async function createApp() {
   const app = express()
@@ -32,16 +32,16 @@ export async function createApp() {
   // ── Sitemap ───────────────────────────────────────────────────────────────
   app.get('/sitemap.xml', async (req, res) => {
     const siteUrl = process.env.SITE_URL || `${req.protocol}://${req.get('host')}`
-    const supabase = createSupabaseServerClient()
     const staticRoutes = ['/', '/about', '/menu', '/contact', '/services',
       '/order', '/blog', '/faqs', '/image-gallery', '/video-gallery',
       '/testimonial', '/chefs']
 
     let blogSlugs = []
-    if (supabase) {
-      const { data } = await supabase.from('blog_posts').select('slug').eq('is_published', true)
-      blogSlugs = (data || []).map(p => `/blog/${p.slug}`)
-    }
+    try {
+      const r = await fetch(`${API_URL}/api/blog`)
+      const posts = r.ok ? await r.json() : []
+      blogSlugs = posts.map(p => `/blog/${p.slug}`)
+    } catch { /* backend unreachable — sitemap still serves the static routes */ }
 
     const allRoutes = [...staticRoutes, ...blogSlugs]
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
@@ -64,6 +64,10 @@ ${allRoutes.map(r => `  <url><loc>${siteUrl}${r}</loc><changefreq>weekly</change
     clearSiteContentCache()
     res.json({ ok: true })
   })
+
+  // Razorpay order creation + payment verification now happen directly
+  // against the FastAPI backend (POST /api/orders, POST /api/orders/{id}/verify-payment),
+  // called from the browser — no proxy routes needed here anymore.
 
   // ── Admin panel SPA ───────────────────────────────────────────────────────
   app.use('/admin', async (req, res) => {

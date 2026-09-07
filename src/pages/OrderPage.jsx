@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { usePageData } from '../context/PageDataContext';
-import { supabase } from '../lib/supabase'
+import { api } from '../lib/api'
 import { useCart } from '../context/CartContext'
 
 export default function OrderPage() {
@@ -22,8 +22,8 @@ export default function OrderPage() {
 
   async function fetchMenu() {
     const [catsRes, itemsRes] = await Promise.all([
-      supabase.from('menu_categories').select('*').eq('is_active', true).order('sort_order'),
-      supabase.from('menu_items').select('*, menu_categories(name)').eq('is_active', true).order('sort_order'),
+      api.get('/menu-categories'),
+      api.get('/menu'),
     ])
     setCategories(catsRes.data || [])
     setItems(itemsRes.data || [])
@@ -36,14 +36,15 @@ export default function OrderPage() {
       name: item.name,
       price: parseFloat(item.price) || 0,
       image: item.image_url,
-      category: item.menu_categories?.name || '',
+      category: item.category || '',
     })
     setAdded(a => ({ ...a, [item.id]: true }))
     setTimeout(() => setAdded(a => ({ ...a, [item.id]: false })), 1200)
   }
 
+  const activeCategoryName = categories.find(c => c.id === activeCategory)?.name
   const filtered = items.filter(item => {
-    const matchCat = activeCategory === 'all' || item.category_id === activeCategory
+    const matchCat = activeCategory === 'all' || item.category === activeCategoryName
     const matchSearch = !search || item.name.toLowerCase().includes(search.toLowerCase())
     return matchCat && matchSearch
   })
@@ -185,14 +186,14 @@ export default function OrderPage() {
                         onMouseLeave={e => e.target.style.transform = 'scale(1)'}
                         onError={e => { e.target.src = '/images/logo.png' }}
                       />
-                      {item.is_vegetarian && (
+                      {item.is_veg && (
                         <span style={{
                           position: 'absolute', top: 12, left: 12,
                           background: '#16a34a', color: '#fff', borderRadius: 20,
                           fontSize: 11, fontWeight: 700, padding: '3px 10px',
                         }}>🌱 VEG</span>
                       )}
-                      {item.is_featured && (
+                      {item.is_popular && (
                         <span style={{
                           position: 'absolute', top: 12, right: 12,
                           background: '#d4a843', color: '#111', borderRadius: 20,
@@ -203,9 +204,9 @@ export default function OrderPage() {
 
                     {/* Content */}
                     <div style={{ padding: '18px 20px 20px', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                      {item.menu_categories?.name && (
+                      {item.category && (
                         <span style={{ fontSize: 11, fontWeight: 600, color: '#d4a843', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
-                          {item.menu_categories.name}
+                          {item.category}
                         </span>
                       )}
                       <h3 style={{ margin: '6px 0 8px', fontSize: 17, fontWeight: 700, lineHeight: 1.3 }}>
@@ -218,33 +219,17 @@ export default function OrderPage() {
                       )}
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 'auto' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
-                          {item.price_half && (
-                            <button
-                              onClick={() => handleAdd({ ...item, id: item.id + '-half', name: item.name + ' (Half)', price: parseFloat(item.price_half) })}
-                              style={{
-                                background: added[item.id + '-half'] ? '#16a34a' : 'transparent',
-                                color: added[item.id + '-half'] ? '#fff' : '#d4a843',
-                                border: '1.5px solid #d4a843', borderRadius: 8,
-                                padding: '7px 14px', fontSize: 13, fontWeight: 700,
-                                cursor: 'pointer', transition: 'all 0.2s', whiteSpace: 'nowrap',
-                              }}
-                            >
-                              {added[item.id + '-half'] ? '✓' : '+'} Half ₹{parseFloat(item.price_half).toFixed(0)}
-                            </button>
-                          )}
                           {item.price ? (
                             <button
-                              onClick={() => handleAdd({ ...item, id: item.id + (item.price_half ? '-full' : ''), name: item.name + (item.price_half ? ' (Full)' : ''), price: parseFloat(item.price) })}
+                              onClick={() => handleAdd(item)}
                               style={{
-                                background: added[item.id + (item.price_half ? '-full' : '')] ? '#16a34a' : '#d4a843',
+                                background: added[item.id] ? '#16a34a' : '#d4a843',
                                 color: '#111', border: 'none', borderRadius: 8,
                                 padding: '7px 14px', fontSize: 13, fontWeight: 700,
                                 cursor: 'pointer', transition: 'all 0.2s', whiteSpace: 'nowrap',
                               }}
                             >
-                              {added[item.id + (item.price_half ? '-full' : '')]
-                                ? '✓ Added'
-                                : (item.price_half ? `Full ₹${parseFloat(item.price).toFixed(0)}` : `+ Add ₹${parseFloat(item.price).toFixed(0)}`)}
+                              {added[item.id] ? '✓ Added' : `+ Add ₹${parseFloat(item.price).toFixed(0)}`}
                             </button>
                           ) : (
                             <span style={{ fontSize: 13, opacity: 0.5 }}>Price on request</span>

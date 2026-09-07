@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { supabase } from '../../lib/supabase'
+import { adminApi, setAdminToken } from '../lib/api'
 
 export default function Login() {
   const [email, setEmail] = useState('')
@@ -12,12 +12,20 @@ export default function Login() {
     setLoading(true)
     setError('')
 
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
+    const { data, error } = await adminApi.post('/auth/login', { email, password })
 
     if (error) {
       setError(error.message)
+      setLoading(false)
+      return
     }
-    setLoading(false)
+    if (!data.user.is_admin) {
+      setError('This account does not have admin access.')
+      setLoading(false)
+      return
+    }
+    setAdminToken(data.token)
+    window.location.href = '/admin/dashboard'
   }
 
   return (
@@ -66,7 +74,7 @@ export default function Login() {
         </form>
 
         <p style={{fontSize: 12, color: 'var(--admin-text-muted)', marginTop: 24}}>
-          Create admin user via Supabase Dashboard → Authentication → Users
+          Use your Golden Spoon account — it needs admin access enabled on the backend.
         </p>
       </div>
     </div>

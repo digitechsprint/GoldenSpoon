@@ -1,4 +1,4 @@
-import { createSupabaseServerClient } from './supabase.js'
+const API_URL = (process.env.VITE_API_URL || 'https://api.goldenspoonrestro.com').replace(/\/$/, '')
 
 // Route → page slug mapping
 const SLUG_MAP = {
@@ -22,6 +22,17 @@ function routeToSlug(url) {
   return SLUG_MAP[path] || path
 }
 
+async function apiGet(path) {
+  try {
+    const r = await fetch(`${API_URL}/api${path}`)
+    if (!r.ok) return null
+    return await r.json()
+  } catch (e) {
+    console.error(`[SSR] fetch failed for ${path}:`, e.message)
+    return null
+  }
+}
+
 // Cached site_content so we don't fetch it on every request
 let siteContentCache = null
 let siteContentCachedAt = 0
@@ -31,12 +42,10 @@ export async function getSiteContent() {
   if (siteContentCache && Date.now() - siteContentCachedAt < SITE_CACHE_TTL) {
     return siteContentCache
   }
-  const supabase = createSupabaseServerClient()
-  if (!supabase) return {}
-  const { data } = await supabase.from('site_content').select('content_key, content_value, content_type')
-  if (!data) return {}
+  const rows = await apiGet('/site-content')
+  if (!rows) return {}
   const map = {}
-  for (const row of data) map[row.content_key] = row.content_value
+  for (const row of rows) map[row.content_key] = row.content_value
   siteContentCache = map
   siteContentCachedAt = Date.now()
   return map
@@ -48,19 +57,13 @@ export function clearSiteContentCache() {
 
 export async function getPageData(url) {
   const slug = routeToSlug(url)
-  const supabase = createSupabaseServerClient()
-  if (!supabase) return { slug, content: {}, seo: {}, siteContent: {} }
+  const pathSegment = slug === '/' ? '' : slug.replace(/^\//, '')
 
-  const [pageRes, siteContent] = await Promise.all([
-    supabase
-      .from('page_content')
-      .select('slug, content, seo, is_published')
-      .eq('slug', slug)
-      .maybeSingle(),
+  const [page, siteContent] = await Promise.all([
+    apiGet(`/page-content/${pathSegment}`),
     getSiteContent(),
   ])
 
-  const page = pageRes.data
   return {
     slug,
     content: page?.content || {},

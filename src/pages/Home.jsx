@@ -1,15 +1,18 @@
 
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { googleReviews } from '../data/googleReviews';
 import { usePageData } from '../context/PageDataContext';
-import { supabase } from '../lib/supabase';
+import { api } from '../lib/api';
+import { useAuth } from '../context/AuthContext';
 
 const TODAY = new Date().toISOString().split('T')[0];
 const MAX_DATE = new Date(Date.now() + 28 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
 
 const Home = () => {
+    const location = useLocation();
     const { content = {} } = usePageData();
+    const { requireAuth } = useAuth();
     const hero = content.hero || {};
     const about = content.about || {};
     const stats = content.stats || [];
@@ -27,16 +30,20 @@ const Home = () => {
             alert('For groups larger than 6, please call us at +91 92170 14763 for special arrangements.');
             return;
         }
+        try {
+            await requireAuth();
+        } catch {
+            return;
+        }
         setBookingStatus('submitting');
-        const { error } = await supabase.from('bookings').insert([{
+        const { error } = await api.post('/bookings', {
             name: bookingForm.name,
             email: bookingForm.email,
             phone: bookingForm.phone,
-            booking_date: bookingForm.date,
-            booking_time: bookingForm.time || null,
+            date: bookingForm.date,
+            time: bookingForm.time || '',
             guests: persons,
-            status: 'pending',
-        }]);
+        });
         if (error) {
             setBookingStatus('error');
         } else {
@@ -46,8 +53,13 @@ const Home = () => {
     }
 
     useEffect(() => {
+        if (location.hash === '#reserve-table') {
+            const scrollToReserveTable = () => document.getElementById('reserve-table')?.scrollIntoView({ behavior: 'smooth' });
+            const timer = setTimeout(scrollToReserveTable, 100);
+            return () => clearTimeout(timer);
+        }
         window.scrollTo(0, 0);
-    }, []);
+    }, [location.hash]);
 
     const formatPrice = (amount) => `\u20B9${amount}`;
 
@@ -802,7 +814,7 @@ const Home = () => {
                         <div className="reserve-table-body wow fadeInUp" data-wow-delay="0.2s">
                             <h3>open hours</h3>
                             <ul>
-                                <li>Mon - Sun <span>09:00 AM - 10:00 PM</span></li>
+                                <li><span className="reserve-table-day">Mon - Sun</span><span>09:00 AM - 10:00 PM</span></li>
                             </ul>
                         </div>
                         
@@ -846,7 +858,7 @@ const Home = () => {
                                     </div>
                                     <div className="form-group col-md-4 mb-4">
                                         <label className="form-label">time</label>
-                                        <select className="form-control form-select" value={bookingForm.time} onChange={e => setBookingField('time', e.target.value)}>
+                                        <select className="form-control form-select" required value={bookingForm.time} onChange={e => setBookingField('time', e.target.value)}>
                                             <option value="">Select time</option>
                                             <option value="09:00">09:00 AM</option>
                                             <option value="10:00">10:00 AM</option>

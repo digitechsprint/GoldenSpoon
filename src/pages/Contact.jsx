@@ -2,12 +2,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { usePageData } from '../context/PageDataContext';
-import { supabase } from '../lib/supabase';
+import { api } from '../lib/api';
+import { useAuth } from '../context/AuthContext';
 
 const Contact = () => {
     const { content: pageContent = {} } = usePageData();
     const header = pageContent.header || {};
     const videoRef = useRef(null);
+    const { requireAuth } = useAuth();
 
     // Contact form state
     const [contactForm, setContactForm] = useState({ name: '', email: '', phone: '', message: '' });
@@ -35,17 +37,22 @@ const Contact = () => {
 
     async function handleContact(e) {
         e.preventDefault();
+        try {
+            await requireAuth();
+        } catch {
+            return;
+        }
         setContactStatus('submitting');
         // Store inquiry as a booking with a message note
-        const { error } = await supabase.from('bookings').insert([{
+        const { error } = await api.post('/bookings', {
             name: contactForm.name,
             email: contactForm.email,
             phone: contactForm.phone,
-            booking_date: new Date().toISOString().split('T')[0],
+            date: new Date().toISOString().split('T')[0],
+            time: '',
             guests: 1,
-            message: contactForm.message || null,
-            status: 'pending',
-        }]);
+            notes: contactForm.message || '',
+        });
         if (error) {
             setContactStatus('error');
         } else {

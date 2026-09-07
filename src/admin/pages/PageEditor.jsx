@@ -1,7 +1,11 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import AdminLayout from '../AdminLayout'
-import { supabase } from '../../lib/supabase'
+import { adminApi } from '../lib/api'
+
+function slugToPath(slug) {
+  return slug === '/' ? '' : slug.replace(/^\//, '')
+}
 
 // ── Section schemas ─────────────────────────────────────────────────────────
 // Each page slug maps to an array of editable sections.
@@ -437,7 +441,7 @@ function SiteContentEditor() {
   const [saved, setSaved] = useState(false)
 
   useEffect(() => {
-    supabase.from('site_content').select('*').order('section').order('sort_order').then(({ data }) => {
+    adminApi.get('/admin/site-content').then(({ data }) => {
       setRows(data || [])
       setLoading(false)
     })
@@ -449,9 +453,9 @@ function SiteContentEditor() {
 
   async function save() {
     setSaving(true)
-    for (const row of rows) {
-      await supabase.from('site_content').update({ content_value: row.content_value }).eq('id', row.id)
-    }
+    await adminApi.put('/admin/site-content', {
+      items: rows.map(r => ({ content_key: r.content_key, content_value: r.content_value })),
+    })
     // Clear server cache
     try { await fetch('/api/admin/clear-cache', { method: 'POST' }) } catch {}
     setSaving(false)
@@ -535,19 +539,14 @@ export default function PageEditor() {
   const [expandedSection, setExpandedSection] = useState(null)
 
   useEffect(() => {
-    supabase
-      .from('page_content')
-      .select('*')
-      .eq('slug', slug)
-      .maybeSingle()
-      .then(({ data }) => {
-        if (data) {
-          setPage(data)
-          setContent(data.content || {})
-          setSeo(data.seo || {})
-        }
-        setLoading(false)
-      })
+    adminApi.get(`/admin/page-content/${slugToPath(slug)}`).then(({ data }) => {
+      if (data) {
+        setPage(data)
+        setContent(data.content || {})
+        setSeo(data.seo || {})
+      }
+      setLoading(false)
+    })
   }, [slug])
 
   const schema = SECTION_SCHEMAS[slug] || DEFAULT_SCHEMA
@@ -575,9 +574,9 @@ export default function PageEditor() {
 
   async function save() {
     setSaving(true)
-    await supabase
-      .from('page_content')
-      .upsert({ slug, page_title: page?.page_title || slug, content, seo, is_published: page?.is_published ?? true })
+    await adminApi.put('/admin/page-content', {
+      slug, page_title: page?.page_title || slug, content, seo, is_published: page?.is_published ?? true,
+    })
     setSaving(false)
     setSaved(true)
     setTimeout(() => setSaved(false), 2500)

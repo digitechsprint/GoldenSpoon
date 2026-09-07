@@ -1,12 +1,11 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import AdminLayout from '../AdminLayout'
-import { supabase } from '../../lib/supabase'
+import { adminApi } from '../lib/api'
 
-const STATUS_OPTIONS = ['pending', 'confirmed', 'preparing', 'ready', 'delivered', 'cancelled']
-const PAYMENT_STATUS_OPTIONS = ['pending', 'paid', 'failed']
+const STATUS_OPTIONS = ['placed', 'confirmed', 'preparing', 'ready', 'delivered', 'cancelled']
 
 const STATUS_COLORS = {
-  pending:   { bg: 'rgba(245,158,11,0.15)', color: '#f59e0b' },
+  placed:    { bg: 'rgba(245,158,11,0.15)', color: '#f59e0b' },
   confirmed: { bg: 'rgba(59,130,246,0.15)', color: '#3b82f6' },
   preparing: { bg: 'rgba(168,85,247,0.15)', color: '#a855f7' },
   ready:     { bg: 'rgba(16,185,129,0.15)', color: '#10b981' },
@@ -15,9 +14,10 @@ const STATUS_COLORS = {
 }
 
 const PAYMENT_COLORS = {
-  pending: { bg: 'rgba(245,158,11,0.15)', color: '#f59e0b' },
-  paid:    { bg: 'rgba(16,185,129,0.15)',  color: '#10b981' },
-  failed:  { bg: 'rgba(239,68,68,0.15)',   color: '#ef4444' },
+  pending:     { bg: 'rgba(245,158,11,0.15)', color: '#f59e0b' },
+  cod_pending: { bg: 'rgba(107,114,128,0.15)', color: '#9ca3af' },
+  paid:        { bg: 'rgba(16,185,129,0.15)',  color: '#10b981' },
+  failed:      { bg: 'rgba(239,68,68,0.15)',   color: '#ef4444' },
 }
 
 function Badge({ text, map }) {
@@ -40,45 +40,34 @@ export default function OrdersManager() {
   const [saving, setSaving] = useState(false)
 
   const fetchOrders = useCallback(async () => {
-    const { data } = await supabase
-      .from('orders')
-      .select('*')
-      .order('created_at', { ascending: false })
+    const { data } = await adminApi.get('/admin/orders')
     setOrders(data || [])
     setLoading(false)
   }, [])
 
   useEffect(() => { fetchOrders() }, [fetchOrders])
 
-  async function openOrder(order) {
+  function openOrder(order) {
     setSelected(order)
-    const { data } = await supabase
-      .from('order_items')
-      .select('*')
-      .eq('order_id', order.id)
-    setOrderItems(data || [])
+    setOrderItems(order.items || [])
   }
 
-  async function updateOrderStatus(field, value) {
+  async function updateOrderStatus(status) {
     if (!selected) return
     setSaving(true)
-    const { data } = await supabase
-      .from('orders')
-      .update({ [field]: value })
-      .eq('id', selected.id)
-      .select()
-      .single()
-    if (data) {
-      setSelected(data)
-      setOrders(prev => prev.map(o => o.id === data.id ? data : o))
+    const { error } = await adminApi.put(`/admin/orders/${selected.id}/status`, { status })
+    if (!error) {
+      const updated = { ...selected, status }
+      setSelected(updated)
+      setOrders(prev => prev.map(o => o.id === updated.id ? updated : o))
     }
     setSaving(false)
   }
 
-  const displayed = filter === 'all' ? orders : orders.filter(o => o.order_status === filter)
+  const displayed = filter === 'all' ? orders : orders.filter(o => o.status === filter)
 
   const stats = STATUS_OPTIONS.reduce((acc, s) => {
-    acc[s] = orders.filter(o => o.order_status === s).length
+    acc[s] = orders.filter(o => o.status === s).length
     return acc
   }, {})
 
@@ -94,7 +83,7 @@ export default function OrdersManager() {
       <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 24 }}>
         {[
           { label: 'Total', count: orders.length, color: '#d4a843' },
-          { label: 'Pending', count: stats.pending, color: '#f59e0b' },
+          { label: 'Placed', count: stats.placed, color: '#f59e0b' },
           { label: 'Confirmed', count: stats.confirmed, color: '#3b82f6' },
           { label: 'Preparing', count: stats.preparing, color: '#a855f7' },
           { label: 'Ready', count: stats.ready, color: '#10b981' },
@@ -154,24 +143,24 @@ export default function OrdersManager() {
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 8 }}>
                     <div>
                       <div style={{ fontWeight: 700, fontSize: 14, fontFamily: 'monospace', color: '#d4a843' }}>
-                        {order.order_number}
+                        {order.id.slice(0, 10).toUpperCase()}
                       </div>
-                      <div style={{ fontSize: 13, fontWeight: 600, marginTop: 2 }}>{order.customer_name}</div>
+                      <div style={{ fontSize: 13, fontWeight: 600, marginTop: 2 }}>{order.customer_name || '—'}</div>
                       <div style={{ fontSize: 12, opacity: 0.5 }}>{order.customer_phone}</div>
                     </div>
                     <div style={{ textAlign: 'right' }}>
-                      <div style={{ fontWeight: 800, fontSize: 15, color: '#d4a843' }}>₹{parseFloat(order.total).toFixed(0)}</div>
+                      <div style={{ fontWeight: 800, fontSize: 15, color: '#d4a843' }}>₹{order.total}</div>
                       <div style={{ fontSize: 11, opacity: 0.5, marginTop: 2 }}>
                         {new Date(order.created_at).toLocaleString('en-IN', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
                       </div>
                     </div>
                   </div>
                   <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-                    <Badge text={order.order_status} map={STATUS_COLORS} />
-                    <Badge text={order.payment_method} map={{ upi: { bg: 'rgba(59,130,246,0.15)', color: '#3b82f6' }, cod: { bg: 'rgba(107,114,128,0.15)', color: '#9ca3af' } }} />
+                    <Badge text={order.status} map={STATUS_COLORS} />
+                    <Badge text={order.payment_method} map={{ razorpay: { bg: 'rgba(59,130,246,0.15)', color: '#3b82f6' }, cod: { bg: 'rgba(107,114,128,0.15)', color: '#9ca3af' } }} />
                     <Badge text={order.payment_status} map={PAYMENT_COLORS} />
                     <span style={{ fontSize: 12, opacity: 0.5, textTransform: 'capitalize', padding: '3px 0' }}>
-                      {order.order_type?.replace('-', ' ')}
+                      {order.order_type}
                     </span>
                   </div>
                 </div>
@@ -186,7 +175,7 @@ export default function OrdersManager() {
             <div style={{ ...card, position: 'sticky', top: 20 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
                 <h3 style={{ margin: 0, fontSize: 17, fontWeight: 700, color: '#d4a843', fontFamily: 'monospace' }}>
-                  {selected.order_number}
+                  {selected.id.slice(0, 10).toUpperCase()}
                 </h3>
                 <button
                   onClick={() => setSelected(null)}
@@ -202,10 +191,8 @@ export default function OrdersManager() {
                   ['Name', selected.customer_name],
                   ['Phone', selected.customer_phone],
                   ['Email', selected.customer_email || '—'],
-                  ['Type', selected.order_type?.replace('-', ' ')],
-                  selected.table_number ? ['Table', selected.table_number] : null,
-                  selected.delivery_address ? ['Address', selected.delivery_address] : null,
-                  selected.utr_number ? ['UTR', selected.utr_number] : null,
+                  ['Type', selected.order_type],
+                  selected.address?.line1 ? ['Address', selected.address.line1] : null,
                   ['Placed', new Date(selected.created_at).toLocaleString('en-IN')],
                 ].filter(Boolean).map(([lbl, val]) => (
                   <div key={lbl}>
@@ -220,8 +207,8 @@ export default function OrdersManager() {
                 <div style={{ flex: 1, minWidth: 140 }}>
                   <label style={{ fontSize: 12, opacity: 0.6, display: 'block', marginBottom: 6 }}>Order Status</label>
                   <select
-                    value={selected.order_status}
-                    onChange={e => updateOrderStatus('order_status', e.target.value)}
+                    value={selected.status}
+                    onChange={e => updateOrderStatus(e.target.value)}
                     disabled={saving}
                     style={{
                       width: '100%', padding: '8px 12px', borderRadius: 8, fontSize: 14,
@@ -234,18 +221,9 @@ export default function OrdersManager() {
                 </div>
                 <div style={{ flex: 1, minWidth: 140 }}>
                   <label style={{ fontSize: 12, opacity: 0.6, display: 'block', marginBottom: 6 }}>Payment Status</label>
-                  <select
-                    value={selected.payment_status}
-                    onChange={e => updateOrderStatus('payment_status', e.target.value)}
-                    disabled={saving}
-                    style={{
-                      width: '100%', padding: '8px 12px', borderRadius: 8, fontSize: 14,
-                      background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.15)',
-                      color: 'inherit', cursor: 'pointer',
-                    }}
-                  >
-                    {PAYMENT_STATUS_OPTIONS.map(s => <option key={s} value={s} style={{ background: '#222' }}>{s}</option>)}
-                  </select>
+                  <div style={{ padding: '8px 12px' }}>
+                    <Badge text={selected.payment_status} map={PAYMENT_COLORS} />
+                  </div>
                 </div>
               </div>
 
@@ -258,8 +236,8 @@ export default function OrdersManager() {
                     padding: '8px 0', borderBottom: '1px solid rgba(255,255,255,0.05)',
                     fontSize: 13,
                   }}>
-                    <span>{item.item_name} <span style={{ opacity: 0.5 }}>× {item.quantity}</span></span>
-                    <span style={{ fontWeight: 700 }}>₹{parseFloat(item.subtotal).toFixed(0)}</span>
+                    <span>{item.name} <span style={{ opacity: 0.5 }}>× {item.quantity}</span></span>
+                    <span style={{ fontWeight: 700 }}>₹{item.price * item.quantity}</span>
                   </div>
                 ))}
                 <div style={{
@@ -269,17 +247,17 @@ export default function OrdersManager() {
                   fontWeight: 800, fontSize: 16,
                 }}>
                   <span>Total</span>
-                  <span style={{ color: '#d4a843' }}>₹{parseFloat(selected.total).toFixed(0)}</span>
+                  <span style={{ color: '#d4a843' }}>₹{selected.total}</span>
                 </div>
               </div>
 
-              {selected.special_instructions && (
+              {selected.instructions && (
                 <div style={{
                   background: 'rgba(255,255,255,0.04)', borderRadius: 8,
                   padding: '10px 14px', fontSize: 13,
                 }}>
                   <div style={{ opacity: 0.5, fontSize: 11, marginBottom: 4 }}>SPECIAL INSTRUCTIONS</div>
-                  <div>{selected.special_instructions}</div>
+                  <div>{selected.instructions}</div>
                 </div>
               )}
             </div>

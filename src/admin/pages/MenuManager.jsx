@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import AdminLayout from '../AdminLayout'
-import { supabase } from '../../lib/supabase'
+import { adminApi } from '../lib/api'
 
 // Compress any image file to WebP using the browser Canvas API (no library needed)
 async function compressToWebP(file, maxPx = 400, quality = 0.82) {
@@ -26,17 +26,15 @@ async function compressToWebP(file, maxPx = 400, quality = 0.82) {
 }
 
 async function uploadToStorage(blob, baseName) {
-  const path = `menu/${Date.now()}-${baseName}.webp`
-  const { error } = await supabase.storage
-    .from('menu-images')
-    .upload(path, blob, { contentType: 'image/webp', upsert: false })
-  if (error) throw error
-  const { data } = supabase.storage.from('menu-images').getPublicUrl(path)
-  return data.publicUrl
+  const formData = new FormData()
+  formData.append('file', blob, `${baseName}.webp`)
+  const { data, error } = await adminApi.upload('/admin/upload', formData)
+  if (error) throw new Error(error.message)
+  return data.url
 }
 
 const EMPTY_CAT = { name: '', slug: '', description: '', image_url: '', sort_order: 0, is_active: true }
-const EMPTY_ITEM = { name: '', category_id: '', description: '', price: '', price_half: '', image_url: '', is_vegetarian: true, is_featured: false, sort_order: 0, is_active: true }
+const EMPTY_ITEM = { name: '', category: '', description: '', price: '', image_url: '', is_veg: true, is_popular: false, is_available: true }
 
 function slugify(str) {
   return str.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
@@ -59,8 +57,8 @@ export default function MenuManager() {
   async function fetchData() {
     setLoading(true)
     const [catsRes, itemsRes] = await Promise.all([
-      supabase.from('menu_categories').select('*').order('sort_order'),
-      supabase.from('menu_items').select('*, menu_categories(name)').order('sort_order'),
+      adminApi.get('/admin/menu-categories'),
+      adminApi.get('/admin/menu'),
     ])
     setCategories(catsRes.data || [])
     setItems(itemsRes.data || [])
@@ -98,7 +96,7 @@ export default function MenuManager() {
         publicUrl = await uploadToStorage(blob, file.name.replace(/\.[^.]+$/, ''))
       } catch (storageErr) {
         // Storage bucket not configured — fall back to object URL preview only
-        showToast(`Storage error: ${storageErr.message}. Check Supabase Storage setup.`)
+        showToast(`Upload error: ${storageErr.message}`)
         setUploading(false)
         return
       }
@@ -115,8 +113,8 @@ export default function MenuManager() {
     e.preventDefault(); setSaving(true)
     const payload = { ...form, slug: form.slug || slugify(form.name) }
     const { error } = editingId
-      ? await supabase.from('menu_categories').update(payload).eq('id', editingId)
-      : await supabase.from('menu_categories').insert([payload])
+      ? await adminApi.put(`/admin/menu-categories/${editingId}`, payload)
+      : await adminApi.post('/admin/menu-categories', payload)
     setSaving(false)
     if (error) return alert(error.message)
     showToast('Category saved!')
@@ -125,10 +123,10 @@ export default function MenuManager() {
 
   async function saveItem(e) {
     e.preventDefault(); setSaving(true)
-    const payload = { ...form, price: parseFloat(form.price) || null, price_half: parseFloat(form.price_half) || null }
+    const payload = { ...form, price: parseInt(form.price) || 0 }
     const { error } = editingId
-      ? await supabase.from('menu_items').update(payload).eq('id', editingId)
-      : await supabase.from('menu_items').insert([payload])
+      ? await adminApi.put(`/admin/menu/${editingId}`, payload)
+      : await adminApi.post('/admin/menu', payload)
     setSaving(false)
     if (error) return alert(error.message)
     showToast('Menu item saved!')
@@ -137,18 +135,23 @@ export default function MenuManager() {
 
   async function deleteCat(id) {
     if (!confirm('Delete this category? All items in it will lose their category.')) return
-    await supabase.from('menu_categories').delete().eq('id', id)
+    await adminApi.del(`/admin/menu-categories/${id}`)
     fetchData()
   }
 
   async function deleteItem(id) {
     if (!confirm('Delete this menu item?')) return
-    await supabase.from('menu_items').delete().eq('id', id)
+    await adminApi.del(`/admin/menu/${id}`)
     fetchData()
   }
 
-  async function toggleActive(table, id, current) {
-    await supabase.from(table).update({ is_active: !current }).eq('id', id)
+  async function toggleCatActive(cat) {
+    await adminApi.put(`/admin/menu-categories/${cat.id}`, { ...cat, is_active: !cat.is_active })
+    fetchData()
+  }
+
+  async function toggleItemActive(item) {
+    await adminApi.put(`/admin/menu/${item.id}`, { ...item, is_available: !item.is_available })
     fetchData()
   }
 
@@ -190,7 +193,7 @@ export default function MenuManager() {
                     <td>{c.sort_order}</td>
                     <td>
                       <button
-                        onClick={() => toggleActive('menu_categories', c.id, c.is_active)}
+                        onClick={() => toggleCatActive(c)}
                         className={c.is_active ? 'badge-status badge-published' : 'badge-status badge-draft'}
                         style={{border:'none',cursor:'pointer',background:'none',padding:0}}
                       >
@@ -232,19 +235,19 @@ export default function MenuManager() {
                       {item.image_url && <img src={item.image_url} alt={item.name} style={{width:36,height:36,objectFit:'cover',borderRadius:6,marginRight:10}} />}
                       <div style={{display:'inline-block'}}>
                         <div style={{fontWeight:500}}>{item.name}</div>
-                        {item.is_featured && <span className="badge-status" style={{background:'rgba(212,168,67,0.12)',color:'var(--admin-accent)',fontSize:11}}>Featured</span>}
+                        {item.is_popular && <span className="badge-status" style={{background:'rgba(212,168,67,0.12)',color:'var(--admin-accent)',fontSize:11}}>Featured</span>}
                       </div>
                     </td>
-                    <td>{item.menu_categories?.name || '—'}</td>
-                    <td style={{whiteSpace:'nowrap'}}>{item.price_half ? 'Half: ₹'+item.price_half+' / Full: ₹'+item.price : item.price ? '₹'+item.price : '—'}</td>
-                    <td>{item.is_vegetarian ? '🌱' : '🍖'}</td>
+                    <td>{item.category || '—'}</td>
+                    <td style={{whiteSpace:'nowrap'}}>{item.price ? '₹'+item.price : '—'}</td>
+                    <td>{item.is_veg ? '🌱' : '🍖'}</td>
                     <td>
                       <button
-                        onClick={() => toggleActive('menu_items', item.id, item.is_active)}
-                        className={item.is_active ? 'badge-status badge-published' : 'badge-status badge-draft'}
+                        onClick={() => toggleItemActive(item)}
+                        className={item.is_available ? 'badge-status badge-published' : 'badge-status badge-draft'}
                         style={{border:'none',cursor:'pointer',background:'none',padding:0}}
                       >
-                        {item.is_active ? 'Active' : 'Hidden'}
+                        {item.is_available ? 'Active' : 'Hidden'}
                       </button>
                     </td>
                     <td>
@@ -359,22 +362,16 @@ export default function MenuManager() {
                   </div>
                   <div className="col-md-4">
                     <div className="admin-form-group">
-                      <label>Full Price (₹)</label>
-                      <input type="number" step="0.01" value={form.price} onChange={e => setField('price', e.target.value)} placeholder="0.00" />
-                    </div>
-                  </div>
-                  <div className="col-md-4">
-                    <div className="admin-form-group">
-                      <label>Half Price (₹) <span style={{fontWeight:400,opacity:0.5}}>(optional)</span></label>
-                      <input type="number" step="0.01" value={form.price_half || '' } onChange={e => setField('price_half', e.target.value)} placeholder="0.00" />
+                      <label>Price (₹)</label>
+                      <input type="number" step="1" value={form.price} onChange={e => setField('price', e.target.value)} placeholder="0" />
                     </div>
                   </div>
                   <div className="col-12">
                     <div className="admin-form-group">
                       <label>Category</label>
-                      <select value={form.category_id} onChange={e => setField('category_id', e.target.value)}>
+                      <select value={form.category} onChange={e => setField('category', e.target.value)}>
                         <option value="">— Select Category —</option>
-                        {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+                        {categories.map(c => <option key={c.id} value={c.name}>{c.name}</option>)}
                       </select>
                     </div>
                   </div>
@@ -409,23 +406,17 @@ export default function MenuManager() {
                       <p style={{fontSize:11,opacity:0.5,margin:'4px 0 0'}}>Auto-compressed to WebP on upload</p>
                     </div>
                   </div>
-                  <div className="col-md-4">
-                    <div className="admin-form-group">
-                      <label>Sort Order</label>
-                      <input type="number" value={form.sort_order} onChange={e => setField('sort_order', parseInt(e.target.value))} />
-                    </div>
-                  </div>
                   <div className="col-12" style={{display:'flex',gap:20,flexWrap:'wrap'}}>
                     <label style={{display:'flex',alignItems:'center',gap:8,cursor:'pointer',fontSize:14}}>
-                      <input type="checkbox" checked={form.is_vegetarian} onChange={e => setField('is_vegetarian', e.target.checked)} />
+                      <input type="checkbox" checked={form.is_veg} onChange={e => setField('is_veg', e.target.checked)} />
                       <span>🌱 Vegetarian</span>
                     </label>
                     <label style={{display:'flex',alignItems:'center',gap:8,cursor:'pointer',fontSize:14}}>
-                      <input type="checkbox" checked={form.is_featured} onChange={e => setField('is_featured', e.target.checked)} />
+                      <input type="checkbox" checked={form.is_popular} onChange={e => setField('is_popular', e.target.checked)} />
                       <span>⭐ Featured</span>
                     </label>
                     <label style={{display:'flex',alignItems:'center',gap:8,cursor:'pointer',fontSize:14}}>
-                      <input type="checkbox" checked={form.is_active} onChange={e => setField('is_active', e.target.checked)} />
+                      <input type="checkbox" checked={form.is_available} onChange={e => setField('is_available', e.target.checked)} />
                       <span>Active (visible)</span>
                     </label>
                   </div>

@@ -1,12 +1,12 @@
 import React from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
-import { supabase } from '../lib/supabase'
+import { setAdminToken } from './lib/api'
 
 export default function AdminLayout({ children, title }) {
   const navigate = useNavigate()
 
   const handleLogout = async () => {
-    await supabase.auth.signOut()
+    setAdminToken(null)
     navigate('/admin/login')
   }
 
@@ -35,9 +35,6 @@ export default function AdminLayout({ children, title }) {
           <NavLink to="/admin/blog" className={({ isActive }) => isActive ? 'active' : ''}>
             <i className="fas fa-blog"></i> Blog Manager
           </NavLink>
-          <NavLink to="/admin/seo" className={({ isActive }) => isActive ? 'active' : ''}>
-            <i className="fas fa-search"></i> SEO Manager
-          </NavLink>
 
           <div className="admin-nav-label" style={{marginTop: 8}}>Operations</div>
           <NavLink to="/admin/orders" className={({ isActive }) => isActive ? 'active' : ''}>
@@ -48,9 +45,6 @@ export default function AdminLayout({ children, title }) {
           </NavLink>
 
           <div className="admin-nav-label" style={{marginTop: 8}}>Site</div>
-          <NavLink to="/admin/settings" className={({ isActive }) => isActive ? 'active' : ''}>
-            <i className="fas fa-cog"></i> Settings
-          </NavLink>
           <a href="/" target="_blank" rel="noreferrer">
             <i className="fas fa-external-link-alt"></i> View Site
           </a>

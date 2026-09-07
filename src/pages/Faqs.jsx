@@ -2,7 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { usePageData } from '../context/PageDataContext';
-import { supabase } from '../lib/supabase';
+import { api } from '../lib/api';
+import { useAuth } from '../context/AuthContext';
 
 const TODAY = new Date().toISOString().split('T')[0];
 const MAX_DATE = new Date(Date.now() + 28 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
@@ -10,6 +11,7 @@ const MAX_DATE = new Date(Date.now() + 28 * 24 * 60 * 60 * 1000).toISOString().s
 const Faqs = () => {
     const { content: pageContent = {} } = usePageData();
     const header = pageContent.header || {};
+    const { requireAuth } = useAuth();
 
     const [faqBooking, setFaqBooking] = useState({ name: '', email: '', phone: '', date: TODAY, time: '', person: '1' });
     const [faqBookingStatus, setFaqBookingStatus] = useState('');
@@ -23,16 +25,20 @@ const Faqs = () => {
             alert('For groups larger than 6, please call us directly at +91 92170 14763 for special arrangements.');
             return;
         }
+        try {
+            await requireAuth();
+        } catch {
+            return;
+        }
         setFaqBookingStatus('submitting');
-        const { error } = await supabase.from('bookings').insert([{
+        const { error } = await api.post('/bookings', {
             name: faqBooking.name,
             email: faqBooking.email,
             phone: faqBooking.phone,
-            booking_date: faqBooking.date,
-            booking_time: faqBooking.time || null,
+            date: faqBooking.date,
+            time: faqBooking.time || '',
             guests: persons,
-            status: 'pending',
-        }]);
+        });
         if (error) {
             setFaqBookingStatus('error');
         } else {

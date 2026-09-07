@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import AdminLayout from '../AdminLayout'
-import { supabase } from '../../lib/supabase'
+import { adminApi } from '../lib/api'
+
+function slugToPath(slug) {
+  return slug === '/' ? '' : slug.replace(/^\//, '')
+}
 
 const PAGE_SLUGS = [
   { slug: '/',              label: 'Home',          icon: 'fa-home' },
@@ -28,10 +32,7 @@ export default function PagesManager() {
 
   async function fetchPages() {
     setLoading(true)
-    const { data } = await supabase
-      .from('page_content')
-      .select('slug, page_title, is_published, updated_at')
-      .order('slug')
+    const { data } = await adminApi.get('/admin/page-content')
     setPages(data || [])
     setLoading(false)
   }
@@ -40,7 +41,7 @@ export default function PagesManager() {
     setCreating(true)
     const exists = pages.find(p => p.slug === slug)
     if (!exists) {
-      await supabase.from('page_content').insert({
+      await adminApi.put('/admin/page-content', {
         slug, page_title: label, content: {}, seo: {}, is_published: true,
       })
       await fetchPages()
@@ -48,8 +49,10 @@ export default function PagesManager() {
     setCreating(false)
   }
 
-  async function togglePublish(slug, current) {
-    await supabase.from('page_content').update({ is_published: !current }).eq('slug', slug)
+  async function togglePublish(page) {
+    const { data: full } = await adminApi.get(`/admin/page-content/${slugToPath(page.slug)}`)
+    if (!full) return
+    await adminApi.put('/admin/page-content', { ...full, is_published: !page.is_published })
     fetchPages()
   }
 
@@ -126,7 +129,7 @@ export default function PagesManager() {
                       Edit Page
                     </Link>
                     <button
-                      onClick={() => togglePublish(slug, isPublished)}
+                      onClick={() => togglePublish({ slug, is_published: isPublished })}
                       title={isPublished ? 'Hide page' : 'Publish page'}
                       style={{
                         background: 'var(--admin-input-bg)', color: 'inherit',

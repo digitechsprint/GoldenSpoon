@@ -1,107 +1,143 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { supabase } from '../lib/supabase'
+import { api } from '../lib/api'
 import { useCart } from '../context/CartContext'
-
-function generateOrderNumber() {
-  const d = new Date()
-  const date = `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}`
-  const rand = Math.floor(Math.random() * 9000 + 1000)
-  return `GS-${date}-${rand}`
-}
+import { useAuth } from '../context/AuthContext'
 
 const EMPTY_FORM = {
-  name: '', phone: '', email: '',
+  name: '', phone: '',
   orderType: 'takeaway', // takeaway | delivery
-  tableNumber: '',
   address: '',
-  paymentMethod: 'cod', // upi | cod
-  utr: '',
+  paymentMethod: 'razorpay', // razorpay | cod
   instructions: '',
+}
+
+function loadRazorpayScript() {
+  return new Promise(resolve => {
+    if (window.Razorpay) return resolve(true)
+    const script = document.createElement('script')
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js'
+    script.onload = () => resolve(true)
+    script.onerror = () => resolve(false)
+    document.body.appendChild(script)
+  })
 }
 
 export default function Checkout() {
   const navigate = useNavigate()
   const { items, total, clearCart } = useCart()
+  const { user, loading: authLoading, openAuthModal, requireAuth } = useAuth()
   const [form, setForm] = useState(EMPTY_FORM)
-  const [upiSettings, setUpiSettings] = useState({ upi_id: '', upi_name: '', upi_qr_image: '' })
+  const [razorpayKeyId, setRazorpayKeyId] = useState('')
   const [placing, setPlacing] = useState(false)
   const [error, setError] = useState('')
 
   useEffect(() => {
     window.scrollTo(0, 0)
     if (items.length === 0) navigate('/order')
-    fetchUpiSettings()
+    api.get('/settings').then(({ data }) => { if (data?.razorpay_key_id) setRazorpayKeyId(data.razorpay_key_id) })
   }, [])
 
-  async function fetchUpiSettings() {
-    const { data } = await supabase.from('site_settings')
-      .select('key, value')
-      .in('key', ['upi_id', 'upi_name', 'upi_qr_image'])
-    if (data) {
-      const map = {}
-      data.forEach(r => { map[r.key] = r.value })
-      setUpiSettings(map)
-    }
-  }
+  useEffect(() => {
+    if (user) setField('name', form.name || user.name || '')
+    if (user) setField('phone', form.phone || user.phone || '')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user])
 
   function setField(k, v) { setForm(f => ({ ...f, [k]: v })) }
 
   async function handlePlaceOrder(e) {
     e.preventDefault()
     if (!form.name || !form.phone) return setError('Name and phone are required.')
-    if (form.paymentMethod === 'upi' && !form.utr) return setError('Please enter the UTR / transaction ID after making UPI payment.')
+    if (form.orderType === 'delivery' && !form.address) return setError('Please enter a delivery address.')
+
+    if (!user) {
+      try {
+        await requireAuth()
+      } catch {
+        return // user dismissed the sign-in prompt
+      }
+    }
 
     setPlacing(true)
     setError('')
 
-    const orderNumber = generateOrderNumber()
-
-    const { data: order, error: orderErr } = await supabase.from('orders').insert([{
-      order_number: orderNumber,
-      customer_name: form.name,
-      customer_phone: form.phone,
-      customer_email: form.email || null,
+    const orderPayload = {
+      items: items.map(i => ({ id: i.id, quantity: i.quantity })),
       order_type: form.orderType,
-      table_number: form.orderType === 'dine-in' ? form.tableNumber : null,
       delivery_address: form.orderType === 'delivery' ? form.address : null,
       payment_method: form.paymentMethod,
-      payment_status: form.paymentMethod === 'cod' ? 'pending' : 'pending',
-      utr_number: form.paymentMethod === 'upi' ? form.utr : null,
-      order_status: 'pending',
-      subtotal: total,
-      total: total,
-      special_instructions: form.instructions || null,
-    }]).select().single()
-
-    if (orderErr || !order) {
-      setPlacing(false)
-      return setError('Could not place order. Please try again.')
+      instructions: form.instructions || null,
     }
 
-    // Insert order items
-    const orderItems = items.map(item => ({
-      order_id: order.id,
-      item_name: item.name,
-      item_id: item.id,
-      quantity: item.quantity,
-      unit_price: parseFloat(item.price) || 0,
-      subtotal: (parseFloat(item.price) || 0) * item.quantity,
-    }))
+    const { data: result, error: orderErr } = await api.post('/orders', orderPayload)
+    if (orderErr || !result) {
+      setPlacing(false)
+      return setError(orderErr?.message || 'Could not place order. Please try again.')
+    }
 
-    await supabase.from('order_items').insert(orderItems)
+    if (form.paymentMethod === 'cod') {
+      clearCart()
+      setPlacing(false)
+      navigate(`/order-confirmation?order=${result.order.id}`)
+      return
+    }
 
-    clearCart()
-    setPlacing(false)
-    navigate(`/order-confirmation?order=${orderNumber}&method=${form.paymentMethod}`)
+    // Razorpay flow
+    try {
+      const loaded = await loadRazorpayScript()
+      if (!loaded) throw new Error('Could not load payment gateway. Check your connection.')
+
+      const payment = await new Promise((resolve, reject) => {
+        const rzp = new window.Razorpay({
+          key: razorpayKeyId,
+          amount: result.order.total * 100,
+          currency: 'INR',
+          name: 'Golden Spoon Restaurant',
+          description: `Order #${result.order.id.slice(0, 8)}`,
+          image: '/images/logo.png',
+          order_id: result.order.razorpay_order_id,
+          handler: resolve,
+          prefill: { name: form.name, contact: form.phone },
+          theme: { color: '#d4a843' },
+          modal: { ondismiss: () => reject(new Error('cancelled')) },
+        })
+        rzp.on('payment.failed', r => reject(new Error(r.error?.description || 'Payment failed')))
+        rzp.open()
+      })
+
+      const { data: verified, error: verifyErr } = await api.post(`/orders/${result.order.id}/verify-payment`, {
+        razorpay_payment_id: payment.razorpay_payment_id,
+        razorpay_order_id: payment.razorpay_order_id,
+        razorpay_signature: payment.razorpay_signature,
+      })
+      if (verifyErr || !verified) throw new Error(verifyErr?.message || 'Payment verification failed')
+
+      clearCart()
+      setPlacing(false)
+      navigate(`/order-confirmation?order=${result.order.id}`)
+    } catch (err) {
+      setPlacing(false)
+      if (err.message !== 'cancelled') setError(err.message || 'Payment failed. Please try again.')
+    }
   }
 
-  // UPI deep link
-  const upiLink = upiSettings.upi_id
-    ? `upi://pay?pa=${encodeURIComponent(upiSettings.upi_id)}&pn=${encodeURIComponent(upiSettings.upi_name || 'Golden Spoon')}&am=${total.toFixed(2)}&cu=INR`
-    : null
-
   if (items.length === 0) return null
+
+  if (!authLoading && !user) {
+    return (
+      <main>
+        <div style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '60px 20px' }}>
+          <div style={{ textAlign: 'center', maxWidth: 360 }}>
+            <i className="fas fa-user-lock" style={{ fontSize: 44, color: '#d4a843', marginBottom: 18, display: 'block' }}></i>
+            <h2 style={{ marginBottom: 10 }}>Sign in to checkout</h2>
+            <p style={{ opacity: 0.7, marginBottom: 24 }}>Create a free account or sign in to place your order.</p>
+            <button onClick={openAuthModal} className="btn-default">Sign In / Create Account</button>
+          </div>
+        </div>
+      </main>
+    )
+  }
 
   return (
     <main>
@@ -157,10 +193,6 @@ export default function Checkout() {
                     <div className="col-md-6">
                       <label className="form-label">Phone Number *</label>
                       <input className="form-control" value={form.phone} onChange={e => setField('phone', e.target.value)} placeholder="+91 98765 43210" required />
-                    </div>
-                    <div className="col-12">
-                      <label className="form-label">Email (optional)</label>
-                      <input className="form-control" type="email" value={form.email} onChange={e => setField('email', e.target.value)} placeholder="For order updates" />
                     </div>
                   </div>
                 </div>
@@ -218,8 +250,8 @@ export default function Checkout() {
                   </h3>
                   <div style={{ display: 'flex', gap: 14, marginBottom: 20, flexWrap: 'wrap' }}>
                     {[
-                      { value: 'upi', label: 'UPI Payment', icon: '/images/upi-icon.png', fallbackIcon: 'fa-mobile-alt', desc: 'Pay via any UPI app' },
-                      { value: 'cod', label: form.orderType === 'takeaway' ? 'Pay on Pickup' : 'Cash on Delivery', icon: null, fallbackIcon: 'fa-money-bill-wave', desc: form.orderType === 'takeaway' ? 'Pay cash when you pick up' : 'Pay on delivery' },
+                      { value: 'razorpay', label: 'Pay Online', fallbackIcon: 'fa-credit-card', desc: 'Cards, UPI, Netbanking & Wallets' },
+                      { value: 'cod', label: form.orderType === 'takeaway' ? 'Pay on Pickup' : 'Cash on Delivery', fallbackIcon: 'fa-money-bill-wave', desc: form.orderType === 'takeaway' ? 'Pay cash when you pick up' : 'Pay on delivery' },
                     ].map(method => (
                       <div
                         key={method.value}
@@ -247,96 +279,28 @@ export default function Checkout() {
                     ))}
                   </div>
 
-                  {/* UPI details */}
-                  {form.paymentMethod === 'upi' && (
+                  {/* Razorpay info */}
+                  {form.paymentMethod === 'razorpay' && (
                     <div style={{
                       background: 'rgba(212,168,67,0.06)',
                       border: '1.5px solid rgba(212,168,67,0.2)',
-                      borderRadius: 12, padding: '20px',
+                      borderRadius: 12, padding: '18px 20px',
+                      display: 'flex', alignItems: 'center', gap: 14,
                     }}>
-                      <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap', alignItems: 'flex-start' }}>
-                        {/* QR Code */}
-                        {upiSettings.upi_qr_image ? (
-                          <div style={{ textAlign: 'center' }}>
-                            <img
-                              src={upiSettings.upi_qr_image}
-                              alt="UPI QR Code"
-                              style={{ width: 160, height: 160, objectFit: 'contain', borderRadius: 10, background: '#fff', padding: 8 }}
-                            />
-                            <div style={{ fontSize: 12, opacity: 0.6, marginTop: 6 }}>Scan QR to pay</div>
-                          </div>
-                        ) : (
-                          <div style={{
-                            width: 160, height: 160, borderRadius: 10,
-                            border: '2px dashed rgba(212,168,67,0.3)',
-                            display: 'flex', flexDirection: 'column',
-                            alignItems: 'center', justifyContent: 'center',
-                            color: '#d4a843', opacity: 0.7, flexShrink: 0,
-                          }}>
-                            <i className="fas fa-qrcode" style={{ fontSize: 48, marginBottom: 8 }}></i>
-                            <span style={{ fontSize: 12 }}>QR not set</span>
-                          </div>
-                        )}
-                        <div style={{ flex: 1, minWidth: 180 }}>
-                          {upiSettings.upi_id && (
-                            <div style={{ marginBottom: 16 }}>
-                              <div style={{ fontSize: 12, opacity: 0.6, marginBottom: 4 }}>UPI ID</div>
-                              <div style={{
-                                background: 'rgba(0,0,0,0.2)', borderRadius: 8,
-                                padding: '10px 14px', fontSize: 15, fontWeight: 700,
-                                fontFamily: 'monospace', letterSpacing: '0.04em',
-                                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                              }}>
-                                <span>{upiSettings.upi_id}</span>
-                                <button type="button"
-                                  onClick={() => navigator.clipboard?.writeText(upiSettings.upi_id)}
-                                  style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#d4a843', fontSize: 14 }}
-                                  title="Copy UPI ID"
-                                >
-                                  <i className="fas fa-copy"></i>
-                                </button>
-                              </div>
-                            </div>
-                          )}
-                          <div style={{
-                            background: 'rgba(212,168,67,0.15)', borderRadius: 8,
-                            padding: '12px 14px', marginBottom: 16, fontSize: 13,
-                          }}>
-                            <strong>Amount to pay: ₹{total.toFixed(0)}</strong>
-                            <br />
-                            <span style={{ opacity: 0.7 }}>Pay to: {upiSettings.upi_name || 'Golden Spoon Restaurrant'}</span>
-                          </div>
-                          {upiLink && (
-                            <a
-                              href={upiLink}
-                              style={{
-                                display: 'block', textAlign: 'center',
-                                background: '#d4a843', color: '#111',
-                                padding: '10px', borderRadius: 8,
-                                fontWeight: 700, fontSize: 14,
-                                textDecoration: 'none', marginBottom: 14,
-                              }}
-                            >
-                              <i className="fas fa-mobile-alt" style={{ marginRight: 8 }}></i>
-                              Open UPI App
-                            </a>
-                          )}
-                          <div>
-                            <label className="form-label" style={{ fontSize: 13 }}>
-                              UTR / Transaction ID *
-                              <span style={{ opacity: 0.6, fontWeight: 400 }}> (after payment)</span>
-                            </label>
-                            <input
-                              className="form-control"
-                              value={form.utr}
-                              onChange={e => setField('utr', e.target.value)}
-                              placeholder="e.g. 318452983751"
-                              style={{ fontFamily: 'monospace' }}
-                            />
-                            <div style={{ fontSize: 12, opacity: 0.5, marginTop: 4 }}>
-                              Find the UTR in your UPI app under transaction details
-                            </div>
-                          </div>
+                      <i className="fas fa-shield-alt" style={{ fontSize: 28, color: '#d4a843', flexShrink: 0 }}></i>
+                      <div>
+                        <div style={{ fontWeight: 700, marginBottom: 4 }}>Secure Razorpay Checkout</div>
+                        <div style={{ fontSize: 13, opacity: 0.7 }}>
+                          Pay with UPI, credit/debit cards, netbanking, or wallets. Your payment is processed securely by Razorpay.
+                        </div>
+                        <div style={{ marginTop: 10, display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                          {['UPI', 'Visa', 'Mastercard', 'RuPay', 'Netbanking', 'Wallets'].map(label => (
+                            <span key={label} style={{
+                              fontSize: 11, fontWeight: 700, padding: '3px 8px',
+                              background: 'rgba(255,255,255,0.08)', borderRadius: 4,
+                              border: '1px solid rgba(255,255,255,0.12)',
+                            }}>{label}</span>
+                          ))}
                         </div>
                       </div>
                     </div>
@@ -351,7 +315,7 @@ export default function Checkout() {
                     }}>
                       <i className="fas fa-check-circle" style={{ color: '#10b981', marginRight: 8 }}></i>
                       No payment needed now. Pay in cash when you{' '}
-                      {form.orderType === 'dine-in' ? 'settle your bill' : form.orderType === 'delivery' ? 'receive your order' : 'pick up your order'}.
+                      {form.orderType === 'delivery' ? 'receive your order' : 'pick up your order'}.
                     </div>
                   )}
                 </div>
@@ -411,15 +375,9 @@ export default function Checkout() {
                       <span>Subtotal</span>
                       <span>₹{total.toFixed(0)}</span>
                     </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6, fontSize: 14, opacity: 0.7 }}>
-                      <span>Delivery charges</span>
-                      <span style={{ color: '#10b981' }}>Free</span>
+                    <div style={{ fontSize: 12, opacity: 0.5, marginTop: 6 }}>
+                      Final total (incl. taxes{form.orderType === 'delivery' ? ' & delivery' : ''}) is calculated at checkout.
                     </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 12, paddingTop: 12, borderTop: '1px solid rgba(255,255,255,0.08)' }}>
-                      <span style={{ fontSize: 18, fontWeight: 800 }}>Total</span>
-                      <span style={{ fontSize: 22, fontWeight: 900, color: '#d4a843' }}>₹{total.toFixed(0)}</span>
-                    </div>
-                    <div style={{ fontSize: 12, opacity: 0.5, marginTop: 6 }}>Inclusive of all taxes</div>
                   </div>
 
                   <button
@@ -434,10 +392,12 @@ export default function Checkout() {
                     }}
                   >
                     {placing ? (
-                      <><i className="fas fa-spinner fa-spin" style={{ marginRight: 8 }}></i>Placing Order…</>
+                      <><i className="fas fa-spinner fa-spin" style={{ marginRight: 8 }}></i>
+                        {form.paymentMethod === 'razorpay' ? 'Processing Payment…' : 'Placing Order…'}
+                      </>
                     ) : (
-                      <><i className={`fas ${form.paymentMethod === 'upi' ? 'fa-check-circle' : 'fa-paper-plane'}`} style={{ marginRight: 8 }}></i>
-                        {form.paymentMethod === 'upi' ? 'Confirm Order' : 'Place Order'}
+                      <><i className={`fas ${form.paymentMethod === 'razorpay' ? 'fa-lock' : 'fa-paper-plane'}`} style={{ marginRight: 8 }}></i>
+                        {form.paymentMethod === 'razorpay' ? 'Proceed to Payment' : 'Place Order'}
                       </>
                     )}
                   </button>

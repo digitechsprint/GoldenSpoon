@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import { supabase } from '../lib/supabase'
+import { adminApi, getAdminToken, setAdminToken } from './lib/api'
 import './admin.css'
 
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
-import SeoManager from './pages/SeoManager'
 import MenuManager from './pages/MenuManager'
 import BlogManager from './pages/BlogManager'
 import BookingsManager from './pages/BookingsManager'
 import OrdersManager from './pages/OrdersManager'
-import Settings from './pages/Settings'
 import PagesManager from './pages/PagesManager'
 import PageEditor from './pages/PageEditor'
 
@@ -23,15 +21,12 @@ export default function AdminApp() {
   const [session, setSession] = useState(undefined) // undefined = loading
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session)
+    const token = getAdminToken()
+    if (!token) { setSession(null); return }
+    adminApi.get('/auth/me').then(({ data, error }) => {
+      if (data && data.is_admin && !error) setSession(data)
+      else { setAdminToken(null); setSession(null) }
     })
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session)
-    })
-
-    return () => subscription.unsubscribe()
   }, [])
 
   if (session === undefined) {
@@ -62,9 +57,6 @@ export default function AdminApp() {
         <Route path="/admin/dashboard" element={
           <ProtectedRoute session={session}><Dashboard /></ProtectedRoute>
         } />
-        <Route path="/admin/seo" element={
-          <ProtectedRoute session={session}><SeoManager /></ProtectedRoute>
-        } />
         <Route path="/admin/menu" element={
           <ProtectedRoute session={session}><MenuManager /></ProtectedRoute>
         } />
@@ -76,9 +68,6 @@ export default function AdminApp() {
         } />
         <Route path="/admin/orders" element={
           <ProtectedRoute session={session}><OrdersManager /></ProtectedRoute>
-        } />
-        <Route path="/admin/settings" element={
-          <ProtectedRoute session={session}><Settings /></ProtectedRoute>
         } />
         <Route path="/admin/pages" element={
           <ProtectedRoute session={session}><PagesManager /></ProtectedRoute>

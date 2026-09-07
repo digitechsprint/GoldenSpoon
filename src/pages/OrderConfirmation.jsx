@@ -1,36 +1,24 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
-import { supabase } from '../lib/supabase'
+import { api } from '../lib/api'
+import { useAuth } from '../context/AuthContext'
 
 export default function OrderConfirmation() {
   const [params] = useSearchParams()
-  const orderNumber = params.get('order')
-  const method = params.get('method')
+  const orderId = params.get('order')
+  const { user } = useAuth()
   const [order, setOrder] = useState(null)
-  const [orderItems, setOrderItems] = useState([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     window.scrollTo(0, 0)
-    if (orderNumber) fetchOrder()
+    if (orderId) fetchOrder()
     else setLoading(false)
-  }, [orderNumber])
+  }, [orderId])
 
   async function fetchOrder() {
-    const { data: ord } = await supabase
-      .from('orders')
-      .select('*')
-      .eq('order_number', orderNumber)
-      .single()
-
-    if (ord) {
-      setOrder(ord)
-      const { data: items } = await supabase
-        .from('order_items')
-        .select('*')
-        .eq('order_id', ord.id)
-      setOrderItems(items || [])
-    }
+    const { data } = await api.get(`/orders/${orderId}`)
+    if (data) setOrder(data)
     setLoading(false)
   }
 
@@ -51,7 +39,7 @@ export default function OrderConfirmation() {
     )
   }
 
-  if (!orderNumber || !order) {
+  if (!orderId || !order) {
     return (
       <main style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div style={{ textAlign: 'center' }}>
@@ -63,7 +51,8 @@ export default function OrderConfirmation() {
     )
   }
 
-  const isUpi = method === 'upi'
+  const isRazorpay = order.payment_method === 'razorpay'
+  const isPaid = order.payment_status === 'paid'
 
   return (
     <main>
@@ -106,7 +95,7 @@ export default function OrderConfirmation() {
                   <i className="fas fa-check" style={{ fontSize: 32, color: '#10b981' }}></i>
                 </div>
                 <h2 style={{ fontSize: 24, fontWeight: 800, margin: '0 0 10px' }}>
-                  Thank you, {order.customer_name.split(' ')[0]}!
+                  Thank you{user?.name ? `, ${user.name.split(' ')[0]}` : ''}!
                 </h2>
                 <p style={{ opacity: 0.7, fontSize: 15, margin: '0 0 18px' }}>
                   Your order has been placed successfully.
@@ -116,28 +105,28 @@ export default function OrderConfirmation() {
                   background: 'rgba(0,0,0,0.2)', borderRadius: 10,
                   padding: '10px 24px',
                 }}>
-                  <div style={{ fontSize: 12, opacity: 0.6, marginBottom: 2 }}>Order Number</div>
-                  <div style={{ fontSize: 20, fontWeight: 900, color: '#d4a843', fontFamily: 'monospace', letterSpacing: '0.06em' }}>
-                    {order.order_number}
+                  <div style={{ fontSize: 12, opacity: 0.6, marginBottom: 2 }}>Order Reference</div>
+                  <div style={{ fontSize: 18, fontWeight: 900, color: '#d4a843', fontFamily: 'monospace', letterSpacing: '0.04em' }}>
+                    {order.id.slice(0, 10).toUpperCase()}
                   </div>
                 </div>
               </div>
 
-              {/* UPI pending notice */}
-              {isUpi && (
+              {/* Payment status */}
+              {isRazorpay && (
                 <div className="wow fadeInUp" style={{
                   ...card,
-                  borderColor: 'rgba(212,168,67,0.3)',
-                  background: 'rgba(212,168,67,0.06)',
+                  borderColor: isPaid ? 'rgba(16,185,129,0.3)' : 'rgba(212,168,67,0.3)',
+                  background: isPaid ? 'rgba(16,185,129,0.06)' : 'rgba(212,168,67,0.06)',
                 }}>
-                  <h3 style={{ fontSize: 16, fontWeight: 700, margin: '0 0 10px', color: '#d4a843' }}>
-                    <i className="fas fa-mobile-alt" style={{ marginRight: 8 }}></i>Payment Verification Pending
+                  <h3 style={{ fontSize: 16, fontWeight: 700, margin: '0 0 6px', color: isPaid ? '#10b981' : '#d4a843' }}>
+                    <i className={`fas ${isPaid ? 'fa-check-circle' : 'fa-hourglass-half'}`} style={{ marginRight: 8 }}></i>
+                    {isPaid ? 'Payment Received' : 'Payment Pending'}
                   </h3>
                   <p style={{ fontSize: 14, opacity: 0.8, margin: 0 }}>
-                    Your UPI payment is being verified. We'll confirm your order once the payment is verified.
-                    {order.utr_number && (
-                      <> UTR: <span style={{ fontFamily: 'monospace', color: '#d4a843' }}>{order.utr_number}</span></>
-                    )}
+                    {isPaid
+                      ? 'Your payment was captured successfully via Razorpay. Your order is confirmed and being prepared.'
+                      : 'We\'re still confirming your payment. This page will update shortly.'}
                   </p>
                 </div>
               )}
@@ -150,12 +139,10 @@ export default function OrderConfirmation() {
 
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px 20px', marginBottom: 20, fontSize: 14 }}>
                   {[
-                    ['Order Type', order.order_type?.replace('-', ' ')],
+                    ['Order Type', order.order_type],
                     ['Payment', order.payment_method?.toUpperCase()],
-                    ['Phone', order.customer_phone],
-                    ['Status', order.order_status],
-                    order.table_number ? ['Table', order.table_number] : null,
-                    order.delivery_address ? ['Address', order.delivery_address] : null,
+                    ['Status', order.status],
+                    order.address?.line1 ? ['Address', order.address.line1] : null,
                   ].filter(Boolean).map(([label, val]) => (
                     <div key={label}>
                       <div style={{ opacity: 0.5, fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 2 }}>{label}</div>
@@ -166,14 +153,14 @@ export default function OrderConfirmation() {
 
                 {/* Items */}
                 <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: 16 }}>
-                  {orderItems.map(item => (
+                  {(order.items || []).map(item => (
                     <div key={item.id} style={{
                       display: 'flex', justifyContent: 'space-between',
                       padding: '8px 0', borderBottom: '1px solid rgba(255,255,255,0.05)',
                       fontSize: 14,
                     }}>
-                      <span>{item.item_name} <span style={{ opacity: 0.5 }}>× {item.quantity}</span></span>
-                      <span style={{ fontWeight: 700 }}>₹{parseFloat(item.subtotal).toFixed(0)}</span>
+                      <span>{item.name} <span style={{ opacity: 0.5 }}>× {item.quantity}</span></span>
+                      <span style={{ fontWeight: 700 }}>₹{(item.price * item.quantity).toFixed(0)}</span>
                     </div>
                   ))}
                   <div style={{
@@ -183,9 +170,15 @@ export default function OrderConfirmation() {
                     fontWeight: 800, fontSize: 17,
                   }}>
                     <span>Total</span>
-                    <span style={{ color: '#d4a843' }}>₹{parseFloat(order.total).toFixed(0)}</span>
+                    <span style={{ color: '#d4a843' }}>₹{order.total}</span>
                   </div>
                 </div>
+                {order.instructions && (
+                  <div style={{ marginTop: 16, paddingTop: 16, borderTop: '1px solid rgba(255,255,255,0.08)', fontSize: 13 }}>
+                    <div style={{ opacity: 0.5, fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 4 }}>Special Instructions</div>
+                    <div>{order.instructions}</div>
+                  </div>
+                )}
               </div>
 
               {/* What's next */}
@@ -197,7 +190,7 @@ export default function OrderConfirmation() {
                   {[
                     { icon: 'fa-check-circle', color: '#10b981', text: 'Order received by our kitchen' },
                     { icon: 'fa-fire', color: '#f59e0b', text: 'We\'ll start preparing your food shortly' },
-                    { icon: order.order_type === 'delivery' ? 'fa-motorcycle' : 'fa-bell', color: '#d4a843', text: order.order_type === 'delivery' ? 'Your order will be delivered' : order.order_type === 'dine-in' ? 'Food will be served at your table' : 'We\'ll notify you when it\'s ready for pickup' },
+                    { icon: order.order_type === 'delivery' ? 'fa-motorcycle' : 'fa-bell', color: '#d4a843', text: order.order_type === 'delivery' ? 'Your order will be delivered' : 'We\'ll notify you when it\'s ready for pickup' },
                   ].map((step, i) => (
                     <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 14 }}>
                       <i className={`fas ${step.icon}`} style={{ color: step.color, fontSize: 18, width: 24, flexShrink: 0 }}></i>
